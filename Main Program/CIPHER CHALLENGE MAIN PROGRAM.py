@@ -5,7 +5,7 @@
 import random
 import time
 mainMenuFormat = '''----------------------------------------
- 1  -  Substition Cipher sovler
+ 1  -  Substition Cipher solver
  2  -  Text Manipulator
 ----------- PROGRAM SELECT: ------------
 '''
@@ -45,7 +45,7 @@ freqWords = ["the","of","to","and","a","in","is","it","you","that","he","was","f
              "moon","island","foot","yet","busy","test","record","boat","common","gold","possible","plane","age","dry","wonder","laugh","thousand","ago","ran","check","game","shape","yes","hot","miss","brought","heat","snow",
              "bed","bring","sit","perhaps","fill","east","weight","language","among","nasa","harry","cipher","nuclear","war","catastrophe","apollo","one","two","three","four","five","six","seven","eight","nine","ten","eleven",
              "twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eightteen","nineteen","twenty","apollo","lunar","mission","phase","orbit","orbital","prime","objective","spacecraft","meg","file","luna","programme",
-             "state","deparment","united","states","america","usa","uk","britain","americas","gene","conscience","plot","navigation","niel","file","files","coincidence","once","twice","wisdom",]
+             "state","department","united","states","america","usa","uk","britain","americas","gene","conscience","plot","navigation","neil","file","files","coincidence","once","twice","wisdom",]
 # COPY-PASTE for adding words to freqWords array: "",
 # Add extra words to the array to get better accuracy when detecting english
 alphabetASCII = [97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122]
@@ -55,13 +55,13 @@ alphabetCHARACTER = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
 #                                                       TEXT MANIPULATION AND REPEATED USE FUNCTIONS - DO NOT EDIT
 #==============================================================================================================================================================
 
-def convertToASCII(text): #Converts an array of characters into an array of their ASCII equivilant numbers
+def convertToASCII(text): #Converts an array of characters into an array of their ASCII equivalent numbers
     perm = 0
     while perm < len(text): #goes through each array index and turns it from Character to ASCII
         text[perm] = ord(text[perm])
         perm = perm + 1
     return text
-def convertToCHARACTER(text): #Converts an array of ASCII equivilant numbers into an array of their ASCII equivilant characters
+def convertToCHARACTER(text): #Converts an array of ASCII equivalent numbers into an array of their ASCII equivalent characters
     perm = 0
     while perm < len(text): #goes through each array index and turns it from ASCII number to Character
         text[perm] = chr(text[perm])
@@ -138,19 +138,19 @@ def search(itemToCheckFor,listToSearchFrom): #Searches to see if there are repea
         position = position + 1
     return found
 #######################################################################################################################################################
-def characterFrequency(encrpyted_text):
+def characterFrequency(encrypted_text):
 
     #2D array consisting of alphabet: ["letter",no. of lowercase instances, no. of uppercase instances]
     #alphabet[26][1]: number of spaces
-    #aplhabet[26][2]: number of unknown characters
+    #alphabet[26][2]: number of unknown characters
     
     alphabet=[["a",0,0],["b",0,0],["c",0,0],["d",0,0],["e",0,0],["f",0,0],["g",0,0],["h",0,0],["i",0,0],["j",0,0],["k",0,0],["l",0,0],["m",0,0],["n",0,0],["o",0,0],["p",0,0],["q",0,0],["r",0,0],["s",0,0],["t",0,0],["u",0,0],["v",0,0],["w",0,0],["x",0,0],["y",0,0],["z",0,0],["space_or_unknown_char",0,0]]
 
-    """encrpyted_text= input("enter cipher text")"""#TESTING PURPOSES ONLY
+    """encrypted_text= input("enter cipher text")"""#TESTING PURPOSES ONLY
 
 
     #iterates through each character in encrypted_cipher text
-    for i in encrpyted_text:
+    for i in encrypted_text:
         letter = 0 #element index set at 0
 
 
@@ -174,7 +174,7 @@ def characterFrequency(encrpyted_text):
         #if character in encrypted_text is equal to CAPITALISED letter ++ pos[2] in alphabet[element]
             elif i == alphabet[letter][0]:
                 alphabet[letter][1] = alphabet[letter][1]+1
-        #If character in encrypted_text is not equal to upper or lower letter (stated within the aplahabet list - indicated by element range)
+        #If character in encrypted_text is not equal to upper or lower letter (stated within the alphabet list - indicated by element range)
         #if character in encrypted_text therefore is a space, then ++ last element in alphabet pos 1(alphabet[26][1]) 
             elif i== " ":
                 alphabet[26][1] = alphabet[26][1]+1
@@ -184,16 +184,16 @@ def characterFrequency(encrpyted_text):
                         
 
     """print(alphabet)"""#TESTING PURPOSES ONLY
-    #Displays number of each LOWERcase letter found in enrcypted_text
+    #Displays number of each LOWERcase letter found in encrypted_text
     for i in alphabet[0:26]:
         print(i[0],", ", i[1])
     print("\n")
-    #Displays number of each UPPERcase letter found in enrcypted_text
+    #Displays number of each UPPERcase letter found in encrypted_text
     for i in alphabet[0:26]:
         print(i[0].upper(),", ", i[2])
-    #Displays number of SPACES found in enrcypted_text
+    #Displays number of SPACES found in encrypted_text
     print("Spaces , ",alphabet[26][1])
-    #Displays number of each UNKNOWN CHARACTERS found in enrcypted_text
+    #Displays number of each UNKNOWN CHARACTERS found in encrypted_text
 
     # due to nature fo this code, numbers will be classified as unknown characters -
     #I'm currently writing code which can work in conjunction with this code to rectify this
@@ -207,7 +207,7 @@ def characterFrequency(encrpyted_text):
 #                                                            CIPHER SOLVING - EDITABLE
 #==============================================================================================================================================================
 
-#ADD TO THE KEY GENERTAION FUNCTION
+#ADD TO THE KEY GENERATION FUNCTION
 #WORD KEYS
 #NO DUPLICATION KEYS
 #KEY STORAGE - high intensity
@@ -323,7 +323,7 @@ while True == True: #Loops the entire program
 {printedUserKey}
 ============== STATISTICS: ===============
 Keys/s              {printedStatistics}
-Number of attemps   {printedAttempts}
+Number of attempts   {printedAttempts}
 English Score       {printedClearScore}%
 '''.format(printedCipherOut = cipherOut, printedUserKey = userKey, printedStatistics = keysPerSecond, printedClearScore = clearScore, printedAttempts = keyIterations)#Formatting
             if  clearScore> 10:
@@ -335,6 +335,8 @@ English Score       {printedClearScore}%
         #                                             TEXT MANIPULATION MAIN PROGRAM
         #---------------------------------------------------------------------------------------------------------------
         plainText = input(textManipulationInputFormat)
+        lowerCase = upperCase = noSymbol = reversal = noSpaces = ""
+        menu = 0
         if plainText == "": # if enter is pressed the previous input will be carried forward
             if menu == 1:
                 plainText = lowerCase
@@ -365,11 +367,10 @@ English Score       {printedClearScore}%
         elif menu == 6:
             print("\n",stats, "\n")
         elif menu == 7:
-            freqq = characterFrequency(plainText)
-            print("\n",freqq, "\n")
+            characterFrequency(plainText)
         elif menu == 8:
-            advfreqq = advancedFrequencyAnalysis(plainText)
-            print("\n",advfreqq, "\n")
+            advFrequencyAnalysis = 0 #advancedFrequencyAnalysis(plainText) <<< add in functionality for this function later
+            print("\n",advFrequencyAnalysis, "\n")
         else:
             print("PLEASE MAKE A SELECTION") #Menu repeats if no selection is made
             menu = int(input(textManipulationMenuFormat))

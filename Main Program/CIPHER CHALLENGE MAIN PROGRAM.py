@@ -207,6 +207,7 @@ def characterFrequency(encrypted_text):
 #                                                            CIPHER SOLVING - EDITABLE
 #==============================================================================================================================================================
 
+# TODO
 #ADD TO THE KEY GENERATION FUNCTION
 #WORD KEYS
 #NO DUPLICATION KEYS

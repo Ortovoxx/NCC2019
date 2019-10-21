@@ -1,5 +1,5 @@
 # NCC2019
-Python code used for the National Cipher Challenge 2019 - Ipswich School
+##### Python code used for the National Cipher Challenge 2019 - Ipswich School
 
 
 ## National Cipher Challenge 2019
@@ -16,7 +16,7 @@ Wey
 - Install Python
 - Install Visual Studio Code
 
-## TO DO:
+## To-Do:
 - [x] Text manipulator
   - [x] Upper, Lower
   - [x] Remove Spaces, punctuation

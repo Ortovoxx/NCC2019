@@ -27,7 +27,7 @@ cipherSolverInputFormat = '''*************** CIPHERTEXT: **************
 '''
 textManipulationInputFormat = '''*********** INPUT YOUR TEXT: ***********
 '''
-freqWords = ["the","of","to","and","a","in","is","it","you","that","he","was","for","on","are","with","as","I","his","they","be","at","one","have","this","from","or","had","by","hot","but","some","what","there","we","can",
+freqWords = ["the","of","to","and","a","in","is","it","you","that","he","was","for","on","are","with","as","i","his","they","be","at","one","have","this","from","or","had","by","hot","but","some","what","there","we","can",
              "out","other","were","all","your","when","up","use","word","how","said","an","each","she","which","do","their","time","if","will","way","about","many","then","them","would","write","like","so","these","her","long",
              "make","thing","see","him","two","has","look","more","day","could","go","come","did","my","sound","no","most","number","who","over","know","water","than","call","first","people","may","down","side","been","now",
              "any","new","work","part","take","get","place","made","live","where","after","back","little","only","round","man","year","came","show","every","good","me","give","our","under","name","very","through","just","form",
@@ -49,7 +49,7 @@ freqWords = ["the","of","to","and","a","in","is","it","you","that","he","was","f
              "state","department","united","states","america","usa","uk","britain","americas","gene","conscience","plot","navigation","neil","file","files","coincidence","once","twice","wisdom",]
 # COPY-PASTE for adding words to freqWords array: "",
 # Add extra words to the array to get better accuracy when detecting english
-alphabetASCII = [97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122]
+alphabetASCII = [97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122]
 alphabetCHARACTER = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
 #==============================================================================================================================================================
@@ -141,28 +141,18 @@ def search(itemToCheckFor,listToSearchFrom): #LINEAR SEARCH GLOBAL FUNCTION - Se
 def characterFrequency(encryptedText):
     frequencies=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     letter=["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"," "]
-    #iterates through each character in encrypted_cipher text
-    for i in encryptedText:
+    for i in encryptedText: #iterates through each character in encrypted_cipher text
         index = 0 #element index set at 0
-
-
         #WHEN data at index (character in encrypted text) does not equal first element
         #AND the alphabet index is less than 25, (i.e all letters encompassed only):
-        
-        while i != letter[index] and index < 25:
-           """print(alphabet[letter])"""#TESTING PURPOSES ONLY
-        #THEN increment pos index ++, avoids indexing greater than alphabet list
+        while i != letter[index] and index < 25: #THEN increment pos index ++, avoids indexing greater than alphabet list
            if index <= 24:
                index = index + 1
-        #ELSE
-        else:
-        #increments relative index dependant upon character contained within i
+        else: #increments relative index dependant upon character contained within i
             if i == letter[index]:
-                frequencies[index] = frequencies[index]+1
-        #if character in encrypted_text is a space,data @ alphabet[26] ++:
+                frequencies[index] = frequencies[index]+1 #if character in encrypted_text is a space,data @ alphabet[26] ++:
             elif i == " ":
-                 frequencies[26]= frequencies[26]+1
-        #if character in encrypted_text therefore is not a recognised characer,data @ alphabet[27] ++
+                 frequencies[26]= frequencies[26]+1 #if character in encrypted_text therefore is not a recognised characer,data @ alphabet[27] ++
             else:
                 frequencies[27]= frequencies[27]+1              
     return frequencies
@@ -172,8 +162,6 @@ def characterFrequency(encryptedText):
 #==============================================================================================================================================================
 
 # TODO
-#ADD TO THE KEY GENERATION FUNCTION
-#WORD KEYS
 #NO DUPLICATION KEYS
 #KEY STORAGE - high intensity
 
@@ -185,8 +173,6 @@ def ceaser(string, shift): # Ceaser shift function
       else:
         cipher = cipher + chr((ord(char) + shift - 97) % 26 + 97) #Shifts all lowercases
     return cipher
-
-
 def randomKey(): #generates a random key
     perms = 0
     key = []
@@ -198,9 +184,18 @@ def randomKey(): #generates a random key
             perms = perms + 1
     finalKey = "".join(convertToCHARACTER(key))
     return finalKey
-
-def keyWord(index): #Keyword key generator - INCOMPLETE
+def keyWordRandom(index): #Keyword key generator - filled in bit being random characters
     key = convertToASCII(list(freqWords[index]))
+    countIndex = 0
+    while countIndex < len(alphabetASCII): #Removes duplicate letters any words may have
+        howMany = key.count(alphabetASCII[countIndex])
+        if howMany >= 2:
+            where = key.index(alphabetASCII[countIndex])
+            while howMany > 1:
+                key.pop(where)
+                where = key.index(alphabetASCII[countIndex])
+                howMany = howMany - 1
+        countIndex = countIndex + 1
     perms = len(key)
     while perms < len(alphabetASCII): #Ensures 26 letters in the alphabet
         randomNo = random.randint(97, 122)
@@ -208,6 +203,28 @@ def keyWord(index): #Keyword key generator - INCOMPLETE
         if repeat == False:
             key.append(randomNo)
             perms = perms + 1
+    finalKey = "".join(convertToCHARACTER(key))
+    return finalKey
+def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alphabet
+    key = convertToASCII(list(freqWords[index]))
+    countIndex = 0
+    while countIndex < len(alphabetASCII): #Removes duplicate letters any words may have
+        howMany = key.count(alphabetASCII[countIndex])
+        if howMany >= 2:
+            where = key.index(alphabetASCII[countIndex])
+            while howMany > 1:
+                key.pop(where)
+                where = key.index(alphabetASCII[countIndex])
+                howMany = howMany - 1
+        countIndex = countIndex + 1
+    perms = 0
+    repeat = False
+    while perms < len(alphabetASCII): #Ensures 26 letters in the alphabet
+        newChar = alphabetASCII[perms]
+        repeat = search(newChar,key) #Ensures each letter is unique
+        if repeat == False:
+            key.append(newChar)
+        perms = perms + 1
     finalKey = "".join(convertToCHARACTER(key))
     return finalKey
 
@@ -249,6 +266,7 @@ def searchFrequencyAnalysis(itemToCheckFor,listToSearchFrom): #searches for the 
             positionIndexed = searchFrequencyAnalysisSorted(positionSortedAlphabet,englishLetterFrequencySorted,englishLetterFrequency)#translates the indexing from the sorted alphabet into the normal alphabet
     return positionIndexed
 
+#test cipher
 #xqhho y qc dej ikhu yv oek muhu sefyut yd je jxu cuce qrekj husudj uludji rkj xuhu yi q ikccqho jme tqoi qwe qd evvtkjo wkytqdsu evvysuh qbuhjut cyiiyed sedjheb je q fejudjyqb fherbuc myjx jxu qfebbe vbywxj jxu fbqddut tuisudj jhqzusjeho qffuqhut je ru hkddydw ed q sebbyiyed sekhiu myjx 
 
 def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accordance to comparisons between the ciphertext frequency analysis and the frequency analysis of english plaintext
@@ -341,8 +359,13 @@ while True == True: #Loops the entire program
                 userKey = ceaser("abcdefghijklmnopqrstuvwxyz", 26 - ceaserShifts)
                 cipherOut = ceaser(userCipher, ceaserShifts)
                 ceaserShifts = ceaserShifts + 1
-            elif keyIterations > 26 and keyIterations < len(freqWords): #Keyword keys done for all key words
-                userKey = keyWord((keyIterations - 26))
+            elif keyIterations > 26 and keyIterations < len(freqWords): # Keyword keys done for all key words with the last letters being random
+                userKey = keyWordRandom((keyIterations - 26))
+                print(userKey)
+                cipherOut = substitionKeyCipher(userCipher,userKey)
+            elif keyIterations > 26 and keyIterations < 2*(len(freqWords)): # Keyword keys done for all key words with the last letters being the alphabet
+                userKey = keyWordAlphabet(keyIterations - (26 + len(freqWords)))
+                print(userKey)
                 cipherOut = substitionKeyCipher(userCipher,userKey)
             elif keyIterations > len(freqWords): #Key generated from advanced frequency analysis
                 userKey = frequencyKey(userCipher)

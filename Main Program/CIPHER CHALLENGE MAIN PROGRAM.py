@@ -4,6 +4,7 @@
 
 import random
 import time
+
 mainMenuFormat = '''----------------------------------------
  1  -  Substition Cipher solver
  2  -  Text Manipulator
@@ -129,7 +130,7 @@ def clearScoreEnglish(cipherText): # clear Score function that returns % english
     clearScore = round((trues / len(cipherEnglishArray)) * 100) # Calculates how many T's there are in array and outputs a % english
     cipherEnglishArray.clear()
     return clearScore
-def search(itemToCheckFor,listToSearchFrom): #Searches to see if there are repeats for random and keyword keys
+def search(itemToCheckFor,listToSearchFrom): #LINEAR SEARCH GLOBAL FUNCTION - Searches to see if there are repeats for random and keyword keys
     position = 0
     found = False
     while position < len(listToSearchFrom) and not found:
@@ -137,71 +138,34 @@ def search(itemToCheckFor,listToSearchFrom): #Searches to see if there are repea
             found = True
         position = position + 1
     return found
-#######################################################################################################################################################
-def characterFrequency(encrypted_text):
-
-    #2D array consisting of alphabet: ["letter",no. of lowercase instances, no. of uppercase instances]
-    #alphabet[26][1]: number of spaces
-    #alphabet[26][2]: number of unknown characters
-    
-    alphabet=[["a",0,0],["b",0,0],["c",0,0],["d",0,0],["e",0,0],["f",0,0],["g",0,0],["h",0,0],["i",0,0],["j",0,0],["k",0,0],["l",0,0],["m",0,0],["n",0,0],["o",0,0],["p",0,0],["q",0,0],["r",0,0],["s",0,0],["t",0,0],["u",0,0],["v",0,0],["w",0,0],["x",0,0],["y",0,0],["z",0,0],["space_or_unknown_char",0,0]]
-
-    """encrypted_text= input("enter cipher text")"""#TESTING PURPOSES ONLY
-
-
+def characterFrequency(encryptedText):
+    frequencies=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    letter=["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"," "]
     #iterates through each character in encrypted_cipher text
-    for i in encrypted_text:
-        letter = 0 #element index set at 0
+    for i in encryptedText:
+        index = 0 #element index set at 0
 
 
-
-
-
-        #WHEN data at index (character in encrypted text) does not equal first element in alphabet (i.e "a" or "A")
-        #AND the alphabet index is less than 25, (i.e all letters encompassed only:
+        #WHEN data at index (character in encrypted text) does not equal first element
+        #AND the alphabet index is less than 25, (i.e all letters encompassed only):
         
-        while i != alphabet[letter][0].upper() and i != alphabet[letter][0] and letter < 25:
-            """print(alphabet[letter][0])"""#TESTING PURPOSES ONLY
+        while i != letter[index] and index < 25:
+           """print(alphabet[letter])"""#TESTING PURPOSES ONLY
         #THEN increment pos index ++, avoids indexing greater than alphabet list
-            if letter <= 24:
-               letter = letter + 1
+           if index <= 24:
+               index = index + 1
         #ELSE
         else:
-        #Already know, at this point, that character in encrypted_text is a letter - now deciding as to wether it is in form upper or lower case
-        #if character in encrypted_text is equal to CAPITALISED letter ++ pos[1] in alphabet[element]
-            if i == alphabet[letter][0].upper():
-                alphabet[letter][2] = alphabet[letter][2]+1
-        #if character in encrypted_text is equal to CAPITALISED letter ++ pos[2] in alphabet[element]
-            elif i == alphabet[letter][0]:
-                alphabet[letter][1] = alphabet[letter][1]+1
-        #If character in encrypted_text is not equal to upper or lower letter (stated within the alphabet list - indicated by element range)
-        #if character in encrypted_text therefore is a space, then ++ last element in alphabet pos 1(alphabet[26][1]) 
-            elif i== " ":
-                alphabet[26][1] = alphabet[26][1]+1
-        #if character in encrypted_text therefore is not a recognised characer, then ++ last element in alphabet pos 2(alphabet[26][2]) 
+        #increments relative index dependant upon character contained within i
+            if i == letter[index]:
+                frequencies[index] = frequencies[index]+1
+        #if character in encrypted_text is a space,data @ alphabet[26] ++:
+            elif i == " ":
+                 frequencies[26]= frequencies[26]+1
+        #if character in encrypted_text therefore is not a recognised characer,data @ alphabet[27] ++
             else:
-                alphabet[26][2] = alphabet[26][2]+1
-                        
-
-    """print(alphabet)"""#TESTING PURPOSES ONLY
-    #Displays number of each LOWERcase letter found in encrypted_text
-    for i in alphabet[0:26]:
-        print(i[0],", ", i[1])
-    print("\n")
-    #Displays number of each UPPERcase letter found in encrypted_text
-    for i in alphabet[0:26]:
-        print(i[0].upper(),", ", i[2])
-    #Displays number of SPACES found in encrypted_text
-    print("Spaces , ",alphabet[26][1])
-    #Displays number of each UNKNOWN CHARACTERS found in encrypted_text
-
-    # due to nature fo this code, numbers will be classified as unknown characters -
-    #I'm currently writing code which can work in conjunction with this code to rectify this
-    #Did not want to add it to this stage in case it causes a tonne of bugs - so I will place revised version on discord in a few days
-
-
-    
-    print("Unknown characters  , ", alphabet[26][2])
+                frequencies[27]= frequencies[27]+1              
+    return frequencies
 
 #==============================================================================================================================================================
 #                                                            CIPHER SOLVING - EDITABLE
@@ -222,30 +186,100 @@ def ceaser(string, shift): # Ceaser shift function
         cipher = cipher + chr((ord(char) + shift - 97) % 26 + 97) #Shifts all lowercases
     return cipher
 
-def keyGeneration(): #generates a random key
+
+def randomKey(): #generates a random key
+    perms = 0
     key = []
-    def randomKey(): #generates a random key
-        perms = 0
-        while perms < len(alphabetASCII): #Ensures 26 letters in the alphabet
-            randomNo = random.randint(97, 122)
-            repeat = search(randomNo,key) #Ensures each letter is unique
-            if repeat == False:
-                key.append(randomNo)
-                perms = perms + 1
-    #all the functions to call in order of importance
-    randomKey()
+    while perms < len(alphabetASCII): #Ensures 26 letters in the alphabet
+        randomNo = random.randint(97, 122)
+        repeat = search(randomNo,key) #Ensures each letter is unique
+        if repeat == False:
+            key.append(randomNo)
+            perms = perms + 1
     finalKey = "".join(convertToCHARACTER(key))
     return finalKey
 
-'''
-def keyWord(): #Keyword key generator - INCOMPLETE
-    perms = 0
-    while perms < len(freqWords):
-        keyWordASCII = convertToASCII(freqWords[perms])
-        perms = perms + 1
-        finalKey = 0
+def keyWord(index): #Keyword key generator - INCOMPLETE
+    key = convertToASCII(list(freqWords[index]))
+    perms = len(key)
+    while perms < len(alphabetASCII): #Ensures 26 letters in the alphabet
+        randomNo = random.randint(97, 122)
+        repeat = search(randomNo,key) #Ensures each letter is unique
+        if repeat == False:
+            key.append(randomNo)
+            perms = perms + 1
+    finalKey = "".join(convertToCHARACTER(key))
     return finalKey
-'''
+
+
+#THEY ARE IN %
+englishLetterFrequency = [8.167,1.492,2.782,4.253,12.702,2.228,2.015,6.094,6.966,0.153,0.772,4.025,2.406,6.749,7.507,1.929,0.095,5.987,6.327,9.056,2.758,0.978,2.360,0.150,1.974,0.074]
+englishLetterFrequencySorted = [12.702,9.056,8.167,7.507,6.966,6.749,6.327,6.094,5.987,4.253,4.025,2.782,2.758,2.406,2.360,2.228,2.015,1.974,1.929,1.492,0.978,0.772,0.153,0.150,0.095,0.074]
+# the above array numbers map to the following letters (in order)           e t a o i n s h r d l c u m w f g y p b v k j x q z
+ 
+#BUG - RETURNS 5 ALL OF FREQUENCYKEY IS WORKING FINE BUT THIS ALWAYS RETURNS 0 OR 5
+def searchFrequencyAnalysis(itemToCheckFor,listToSearchFrom): #searches for the closest value to the ones inputted to the ones in english letter frequency
+    def searchFrequencyAnalysisSorted(positionToMap,frequencySorted,frequency): #Takes both the sorted alphabet and normal alphabet and maps the positions from the ciphertext frequency analysis
+        index = 0
+        indexSorted = 0
+        found = False
+        while indexSorted < len(frequencySorted) and not found:
+            while index < len(frequency) and not found:
+                if frequencySorted[indexSorted] == frequency[index]:
+                    found = True
+                index = index + 1
+            indexSorted = indexSorted + 1
+        return index
+    #######
+    position = 0
+    betweenValues = False
+    positionIndexed = 0
+    while position < len(listToSearchFrom) and not betweenValues:
+        if listToSearchFrom[position] > itemToCheckFor: #compares to the first, and because sorted, highest value and if it is less than it will move onto the second ( next highest)
+            position = position + 1
+        elif listToSearchFrom[position] < itemToCheckFor: #Does the above until it it greater than the next value so it must be between position and the previous position ( position - 1 )
+            betweenValues = True
+        if betweenValues == True: #its greater than the position but less than position - 1
+            differenceAbove = listToSearchFrom[(position - 1)] - itemToCheckFor
+            differentBelow = itemToCheckFor - listToSearchFrom[position]
+            if differenceAbove > differentBelow: # if the upper different is bigger it is closer to position
+                positionSortedAlphabet = position
+            else: #elif differenceAbove < differentBelow # if the lower different is bigger it is closer to position - 1
+                positionSortedAlphabet = position - 1
+            positionIndexed = searchFrequencyAnalysisSorted(positionSortedAlphabet,englishLetterFrequencySorted,englishLetterFrequency)#translates the indexing from the sorted alphabet into the normal alphabet
+    return positionIndexed
+
+#xqhho y qc dej ikhu yv oek muhu sefyut yd je jxu cuce qrekj husudj uludji rkj xuhu yi q ikccqho jme tqoi qwe qd evvtkjo wkytqdsu evvysuh qbuhjut cyiiyed sedjheb je q fejudjyqb fherbuc myjx jxu qfebbe vbywxj jxu fbqddut tuisudj jhqzusjeho qffuqhut je ru hkddydw ed q sebbyiyed sekhiu myjx 
+
+def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accordance to comparisons between the ciphertext frequency analysis and the frequency analysis of english plaintext
+    #cipherTextToBeFREQQED is a string
+    frequencyOfCipherText = characterFrequency(cipherTextToBeFREQQED) #gets the frequency analysis of the string inputted
+    cipherTextNoSpaces = removePunctuation(removeSpaces(cipherTextToBeFREQQED)) #removes spaces and punctuation of ciphertext
+    cipherTextNoSpacesArray = list(cipherTextNoSpaces) #converts ciphertext into an array
+    indexOfFrequencyAnalysis = 0
+    while indexOfFrequencyAnalysis < len(frequencyOfCipherText): #Turns it from how many occurrences into a % frequency analysis
+        frequencyOfCipherText[indexOfFrequencyAnalysis] = round(((frequencyOfCipherText[indexOfFrequencyAnalysis] / len(cipherTextNoSpacesArray))*100),3 )
+        indexOfFrequencyAnalysis = indexOfFrequencyAnalysis + 1
+    indexToCompare = 0
+    englishIndexOrderArray = []
+    while indexToCompare < len(frequencyOfCipherText): 
+        englishIndex = searchFrequencyAnalysis(frequencyOfCipherText[indexToCompare],englishLetterFrequencySorted) #Gets the frequency of ciphertext in % and compares it to the % of english and then returns an array with the positions
+        unCertainty = random.randint(-5,5) #Adds uncertainty to the letters so higher chance of finding a match
+        randomisedEnglishIndex = englishIndex + unCertainty
+        duplicates = search(randomisedEnglishIndex,englishIndexOrderArray)
+        while duplicates == True:
+            unCertainty = random.randint(-5,5) #Adds uncertainty to the letters so higher chance of finding a match
+            randomisedEnglishIndex = englishIndex + unCertainty
+            duplicates = search(randomisedEnglishIndex,englishIndexOrderArray) #Ensures each letter in the array is 100% unique
+        else: #elif duplicates == False
+            englishIndexOrderArray.append(randomisedEnglishIndex) #adds each letter mapped to the new letter position to this array (a=0 b=1 etc etc)
+        indexToCompare = indexToCompare + 1
+    convertASCIIIndex = 0
+    while convertASCIIIndex < len(englishIndexOrderArray): #converts the a=0 b=1 to ASCII 
+        englishIndexOrderArray[convertASCIIIndex] = englishIndexOrderArray[convertASCIIIndex] + 97
+        convertASCIIIndex = convertASCIIIndex + 1
+    finalKey = "".join(convertToCHARACTER(englishIndexOrderArray)) #converts the ASCII index to a plaintext string key with 26 characters
+    return finalKey
 #==============================================================================================================================================================
 #                                                   USER INPUT / OUTPUT                   MAIN PROGRAM
 #==============================================================================================================================================================
@@ -279,13 +313,13 @@ printedNumberCount = numberCount,
 printedSpaceCount = spaceCount,
 printedWordCount = wordCount) #Formatting
 
+#TODO - make a keys per second function unsing unix time
 unixTimeFUNC = lambda: int(round(time.time() * 1000))# Unix time function work in progress
 startUnix = unixTimeFUNC()
 def unixTime():
     nowUnix = int(round(time.time() * 1000))
     endUnix = nowUnix - startUnix
     return endUnix
-
 
 
     
@@ -300,21 +334,21 @@ while True == True: #Loops the entire program
         keyIterations = 0
         keyCountPerSecond = 0
         keysPerSecond = 0
-        randomKeyStart = True #Flag used to start the random key generation
+        randomKeyStart = False #Flag used to start the random key generation
         userCipher = input(cipherSolverInputFormat)
         while keyIterations < keyIterations + 1:
             if keyIterations < 26: #Ceaser shifts done 26 times
                 userKey = ceaser("abcdefghijklmnopqrstuvwxyz", 26 - ceaserShifts)
                 cipherOut = ceaser(userCipher, ceaserShifts)
                 ceaserShifts = ceaserShifts + 1
-#           elif keyIterations > 26 and keyIterations < len(freqWords): #Keyword keys done for all key words
-#               userKey = keyWord()
-#               cipherOut = substitionKeyCipher(userCipher,userKey)
-#           elif n > len(freqWords) and randomKeyStart == False: #Key generated from advanced frequency analysis
-#               userKey = frequencyKey()
-#               cipherOut = substitionKeyCipher(userCipher,userKey)
-            elif randomKeyStart == True: # Last resort random keys
-                userKey = keyGeneration()
+            elif keyIterations > 26 and keyIterations < len(freqWords): #Keyword keys done for all key words
+                userKey = keyWord((keyIterations - 26))
+                cipherOut = substitionKeyCipher(userCipher,userKey)
+            elif keyIterations > len(freqWords): #Key generated from advanced frequency analysis
+                userKey = frequencyKey(userCipher)
+                cipherOut = substitionKeyCipher(userCipher,userKey)
+            elif keyIterations > 10000: # Last resort random keys
+                userKey = randomKey()
                 cipherOut = substitionKeyCipher(userCipher,userKey)
             clearScore = clearScoreEnglish(cipherOut)
             cipherOutKeyOut ='''

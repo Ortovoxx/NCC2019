@@ -1,5 +1,5 @@
 #columnar transposition cipher
-ciphertext = input("Enter ciphertext here")
+ciphertext = input("CipherText: ")
 ciphertextlength = len(ciphertext)
 ciphertextarray = list(ciphertext)
 print(ciphertextarray)
@@ -17,3 +17,6 @@ while j < columnnumber and i < ciphertextlength:
   i = i + columnlength
   columnlength = columnlength + columnlength
 print(columns)
+
+
+#rearrange the ciphertext until it is plaintext?

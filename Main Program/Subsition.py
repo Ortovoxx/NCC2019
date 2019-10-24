@@ -300,7 +300,7 @@ while True == True: #Loops the entire program
     #---------------------------------------------------------------------------------------------------------------
     #                                        CIPHER SOLVER MAIN PROGRAM
     #---------------------------------------------------------------------------------------------------------------
-    keyIterations = keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = REPLACEME123 = 0
+    keyIterations = keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = keysPerSecond = REPLACEME123 = 0
     #Turn each function on or off
     keyWordAlphabetStart = True
     keyWordRandomStart = False

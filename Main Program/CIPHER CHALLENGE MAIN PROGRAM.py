@@ -46,7 +46,7 @@ freqWords = ["the","of","to","and","a","in","is","it","you","that","he","was","f
              "moon","island","foot","yet","busy","test","record","boat","common","gold","possible","plane","age","dry","wonder","laugh","thousand","ago","ran","check","game","shape","yes","hot","miss","brought","heat","snow",
              "bed","bring","sit","perhaps","fill","east","weight","language","among","nasa","harry","cipher","nuclear","war","catastrophe","apollo","one","two","three","four","five","six","seven","eight","nine","ten","eleven",
              "twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eightteen","nineteen","twenty","apollo","lunar","mission","phase","orbit","orbital","prime","objective","spacecraft","meg","file","luna","programme",
-             "state","department","united","states","america","usa","uk","britain","americas","gene","conscience","plot","navigation","neil","file","files","coincidence","once","twice","wisdom",]
+             "state","department","united","states","america","usa","uk","britain","americas","gene","conscience","plot","wisdom","neil","file","files","coincidence","once","twice","navigation","saturn"]
 # COPY-PASTE for adding words to freqWords array: "",
 # Add extra words to the array to get better accuracy when detecting english
 alphabetASCII = [97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122]
@@ -110,7 +110,7 @@ def substitionKeyCipher(userCipherText,userKey): #maps a ciphertext to plaintext
         textPerm = textPerm + 1
     switchedCipherStr = "".join(convertToCHARACTER(switchedCipher))
     return switchedCipherStr
-def clearScoreEnglish(cipherText): # clear Score function that returns % english when string inputted 
+def clearScoreEnglish(cipherText): # clear Score function that returns % english when string inputted #BUG I THINK IT DOESNT WORK IF THERE ARE SPACES -FIXME
     def searchWords(cipherWord,freqWords):
         freqPosition = 0
         english = False
@@ -233,7 +233,7 @@ def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alp
 englishLetterFrequency = [8.167,1.492,2.782,4.253,12.702,2.228,2.015,6.094,6.966,0.153,0.772,4.025,2.406,6.749,7.507,1.929,0.095,5.987,6.327,9.056,2.758,0.978,2.360,0.150,1.974,0.074]
 englishLetterFrequencySorted = [12.702,9.056,8.167,7.507,6.966,6.749,6.327,6.094,5.987,4.253,4.025,2.782,2.758,2.406,2.360,2.228,2.015,1.974,1.929,1.492,0.978,0.772,0.153,0.150,0.095,0.074]
 # the above array numbers map to the following letters (in order)           e t a o i n s h r d l c u m w f g y p b v k j x q z
- 
+
 #BUG - RETURNS 5 ALL OF FREQUENCYKEY IS WORKING FINE BUT THIS ALWAYS RETURNS 0 OR 5
 def searchFrequencyAnalysis(itemToCheckFor,listToSearchFrom): #searches for the closest value to the ones inputted to the ones in english letter frequency
     def searchFrequencyAnalysisSorted(positionToMap,frequencySorted,frequency): #Takes both the sorted alphabet and normal alphabet and maps the positions from the ciphertext frequency analysis
@@ -341,7 +341,7 @@ def unixTime():
 
 
     
-userKey = "abcdefghijklmnopqrstuvwxyz"
+userKey = "abcdefghijklmnopqrstuvwxyz" #Sets a defult user key ~~~~WARNING~~~~ Wont show error if there is not a key generated as this one will take over ~~~~WARNING~~~~
 ceaserShifts = 0
 while True == True: #Loops the entire program
     mainMenu = int(input(mainMenuFormat))
@@ -349,31 +349,36 @@ while True == True: #Loops the entire program
         #---------------------------------------------------------------------------------------------------------------
         #                                        CIPHER SOLVER MAIN PROGRAM
         #---------------------------------------------------------------------------------------------------------------
-        keyIterations = 0
-        keyCountPerSecond = 0
-        keysPerSecond = 0
-        randomKeyStart = False #Flag used to start the random key generation
+        keyIterations = keyCountPerSecond = keysPerSecond = keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = REPLACEME123 = 0
+        #Turn each one on or off
+        keyWordAlphabetStart = True
+        keyWordRandomStart = False
+        frequencyKeyStart = False
+        randomKeyStart = False
+        ceaserStart = False
         userCipher = input(cipherSolverInputFormat)
         while keyIterations < keyIterations + 1:
-            if keyIterations < 26: #Ceaser shifts done 26 times
+            if ceaserStart == True: #Ceaser shifts done 26 times
                 userKey = ceaser("abcdefghijklmnopqrstuvwxyz", 26 - ceaserShifts)
                 cipherOut = ceaser(userCipher, ceaserShifts)
                 ceaserShifts = ceaserShifts + 1
-            elif keyIterations > 26 and keyIterations < len(freqWords): # Keyword keys done for all key words with the last letters being random
-                userKey = keyWordRandom((keyIterations - 26))
-                print(userKey)
+            elif keyWordAlphabetStart == True: # Keyword keys done for all key words with the last letters being random
+                userKey = keyWordAlphabet(keyWordAlphabetIndex)
                 cipherOut = substitionKeyCipher(userCipher,userKey)
-            elif keyIterations > 26 and keyIterations < 2*(len(freqWords)): # Keyword keys done for all key words with the last letters being the alphabet
-                userKey = keyWordAlphabet(keyIterations - (26 + len(freqWords)))
-                print(userKey)
+                keyWordAlphabetIndex = keyWordAlphabetIndex + 1
+            elif keyWordRandomStart == True: # Keyword keys done for all key words with the last letters being the alphabet
+                userKey = keyWordRandom(keyWordRandomIndex)
                 cipherOut = substitionKeyCipher(userCipher,userKey)
-            elif keyIterations > len(freqWords): #Key generated from advanced frequency analysis
+                keyWordRandomIndex = keyWordRandomIndex + 1
+            elif frequencyKeyStart == True: #Key generated from advanced frequency analysis
                 userKey = frequencyKey(userCipher)
                 cipherOut = substitionKeyCipher(userCipher,userKey)
-            elif keyIterations > 10000: # Last resort random keys
+                frequencyKeyIndex = frequencyKeyIndex + 1
+            elif randomKeyStart == True: # Last resort random keys
                 userKey = randomKey()
                 cipherOut = substitionKeyCipher(userCipher,userKey)
-            clearScore = clearScoreEnglish(cipherOut)
+                randomKeyIndex = randomKeyIndex + 1
+            clearScore = clearScoreEnglish(cipherOut) #rbo rpktigo vcrb bwucja wj kloj hcjd km sktpqo cq rbwr loklgo vcgg cjqcqr kj skhcja wgkja wjd rpycja rk ltr rbcjaq cj cr
             cipherOutKeyOut ='''
 =============== PLAINTEXT: ===============
 {printedCipherOut}
@@ -384,7 +389,7 @@ Keys/s              {printedStatistics}
 Number of attempts   {printedAttempts}
 English Score       {printedClearScore}%
 '''.format(printedCipherOut = cipherOut, printedUserKey = userKey, printedStatistics = keysPerSecond, printedClearScore = clearScore, printedAttempts = keyIterations)#Formatting
-            if  clearScore> 10:
+            if clearScore > 1:
                 print(cipherOutKeyOut)
             keyIterations = keyIterations + 1
             keyCountPerSecond = keyCountPerSecond + 1

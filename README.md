@@ -31,7 +31,7 @@
 1. Make a github account
 2. Install Git
 
-##### Useful commands
+#### Useful commands
 git add .
 git commit -m "message make it meaningful"
 git push

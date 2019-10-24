@@ -5,28 +5,16 @@
 import random
 import time
 
-mainMenuFormat = '''----------------------------------------
- 1  -  Substition Cipher solver
- 2  -  Text Manipulator
------------ PROGRAM SELECT: ------------
-'''
-textManipulationMenuFormat = '''----------------------------------------
-
- 1  -  Convert to lowercase
- 2  -  Convert to uppercase
- 3  -  Remove punctuation
- 4  -  Reverse text
- 5  -  Remove spaces
- 6  -  Statistics
- 7  -  Frequency analysis
- 8  -  Advanced frequency analysis
- 
----------------- SELECT: ---------------
-'''
 cipherSolverInputFormat = '''*************** CIPHERTEXT: **************
 '''
 textManipulationInputFormat = '''*********** INPUT YOUR TEXT: ***********
 '''
+alphabetASCII = [97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122]
+alphabetCHARACTER = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+#THEY ARE IN %
+englishLetterFrequency = [8.167,1.492,2.782,4.253,12.702,2.228,2.015,6.094,6.966,0.153,0.772,4.025,2.406,6.749,7.507,1.929,0.095,5.987,6.327,9.056,2.758,0.978,2.360,0.150,1.974,0.074]
+englishLetterFrequencySorted = [12.702,9.056,8.167,7.507,6.966,6.749,6.327,6.094,5.987,4.253,4.025,2.782,2.758,2.406,2.360,2.228,2.015,1.974,1.929,1.492,0.978,0.772,0.153,0.150,0.095,0.074]
+# the above array numbers map to the following letters (in order)           e t a o i n s h r d l c u m w f g y p b v k j x q z
 freqWords = ["the","of","to","and","a","in","is","it","you","that","he","was","for","on","are","with","as","i","his","they","be","at","one","have","this","from","or","had","by","hot","but","some","what","there","we","can",
              "out","other","were","all","your","when","up","use","word","how","said","an","each","she","which","do","their","time","if","will","way","about","many","then","them","would","write","like","so","these","her","long",
              "make","thing","see","him","two","has","look","more","day","could","go","come","did","my","sound","no","most","number","who","over","know","water","than","call","first","people","may","down","side","been","now",
@@ -49,8 +37,6 @@ freqWords = ["the","of","to","and","a","in","is","it","you","that","he","was","f
              "state","department","united","states","america","usa","uk","britain","americas","gene","conscience","plot","wisdom","neil","file","files","coincidence","once","twice","navigation","saturn"]
 # COPY-PASTE for adding words to freqWords array: "",
 # Add extra words to the array to get better accuracy when detecting english
-alphabetASCII = [97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122]
-alphabetCHARACTER = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
 #==============================================================================================================================================================
 #                                                       TEXT MANIPULATION AND REPEATED USE FUNCTIONS - DO NOT EDIT
@@ -92,6 +78,14 @@ def removeSpaces(plain): #Removes spaces
     return charactersNoSpaceJoint
 def reverseString(string): #Reverses the text
     return string[::-1]
+def search(itemToCheckFor,listToSearchFrom): #LINEAR SEARCH GLOBAL FUNCTION - Searches to see if there are repeats for random and keyword keys
+    position = 0
+    found = False
+    while position < len(listToSearchFrom) and not found:
+        if listToSearchFrom[position] == itemToCheckFor:
+            found = True
+        position = position + 1
+    return found
 def substitionKeyCipher(userCipherText,userKey): #maps a ciphertext to plaintext according to the key given to it
     cipherText = convertToASCII(list(userCipherText)) #Converting cipher to numbers
     key = convertToASCII(list(userKey)) #Converting key to numbers
@@ -130,14 +124,6 @@ def clearScoreEnglish(cipherText): # clear Score function that returns % english
     clearScore = round((trues / len(cipherEnglishArray)) * 100) # Calculates how many T's there are in array and outputs a % english
     cipherEnglishArray.clear()
     return clearScore
-def search(itemToCheckFor,listToSearchFrom): #LINEAR SEARCH GLOBAL FUNCTION - Searches to see if there are repeats for random and keyword keys
-    position = 0
-    found = False
-    while position < len(listToSearchFrom) and not found:
-        if listToSearchFrom[position] == itemToCheckFor:
-            found = True
-        position = position + 1
-    return found
 def characterFrequency(encryptedText):
     frequencies=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     letter=["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"," "]
@@ -229,11 +215,6 @@ def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alp
     return finalKey
 
 
-#THEY ARE IN %
-englishLetterFrequency = [8.167,1.492,2.782,4.253,12.702,2.228,2.015,6.094,6.966,0.153,0.772,4.025,2.406,6.749,7.507,1.929,0.095,5.987,6.327,9.056,2.758,0.978,2.360,0.150,1.974,0.074]
-englishLetterFrequencySorted = [12.702,9.056,8.167,7.507,6.966,6.749,6.327,6.094,5.987,4.253,4.025,2.782,2.758,2.406,2.360,2.228,2.015,1.974,1.929,1.492,0.978,0.772,0.153,0.150,0.095,0.074]
-# the above array numbers map to the following letters (in order)           e t a o i n s h r d l c u m w f g y p b v k j x q z
-
 #BUG - RETURNS 5 ALL OF FREQUENCYKEY IS WORKING FINE BUT THIS ALWAYS RETURNS 0 OR 5
 def searchFrequencyAnalysis(itemToCheckFor,listToSearchFrom): #searches for the closest value to the ones inputted to the ones in english letter frequency
     def searchFrequencyAnalysisSorted(positionToMap,frequencySorted,frequency): #Takes both the sorted alphabet and normal alphabet and maps the positions from the ciphertext frequency analysis
@@ -302,34 +283,6 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
 #                                                   USER INPUT / OUTPUT                   MAIN PROGRAM
 #==============================================================================================================================================================
 
-#All the different statistic variables
-characterCount = 1
-symbolCount = 1
-upperCount = 1
-lowerCount = 1
-numberCount = 1
-spaceCount = 1
-wordCount = 1
-stats = '''========================================
- Statistics about inputted text:
- ========================================
- 
-   Characters:     {printedCharacterCount}
-   Symbols:        {printedSymbolCount}
-   Uppercases:     {printedUpperCount}
-   LowerCases:     {printedLowerCount}
-   Numbers:        {printedNumberCount}
-   Spaces:         {printedSpaceCount}
-   Words:          {printedWordCount}
- 
- ========================================'''.format(
-printedCharacterCount = characterCount,
-printedSymbolCount = symbolCount,
-printedUpperCount = upperCount,
-printedLowerCount = lowerCount,
-printedNumberCount = numberCount,
-printedSpaceCount = spaceCount,
-printedWordCount = wordCount) #Formatting
 
 #TODO - make a keys per second function unsing unix time
 unixTimeFUNC = lambda: int(round(time.time() * 1000))# Unix time function work in progress
@@ -344,99 +297,49 @@ def unixTime():
 userKey = "abcdefghijklmnopqrstuvwxyz" #Sets a defult user key ~~~~WARNING~~~~ Wont show error if there is not a key generated as this one will take over ~~~~WARNING~~~~
 ceaserShifts = 0
 while True == True: #Loops the entire program
-    mainMenu = int(input(mainMenuFormat))
-    while mainMenu == 1:
-        #---------------------------------------------------------------------------------------------------------------
-        #                                        CIPHER SOLVER MAIN PROGRAM
-        #---------------------------------------------------------------------------------------------------------------
-        keyIterations = keyCountPerSecond = keysPerSecond = keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = REPLACEME123 = 0
-        #Turn each one on or off
-        keyWordAlphabetStart = True
-        keyWordRandomStart = False
-        frequencyKeyStart = False
-        randomKeyStart = False
-        ceaserStart = False
-        userCipher = input(cipherSolverInputFormat)
-        while keyIterations < keyIterations + 1:
-            if ceaserStart == True: #Ceaser shifts done 26 times
-                userKey = ceaser("abcdefghijklmnopqrstuvwxyz", 26 - ceaserShifts)
-                cipherOut = ceaser(userCipher, ceaserShifts)
-                ceaserShifts = ceaserShifts + 1
-            elif keyWordAlphabetStart == True: # Keyword keys done for all key words with the last letters being random
-                userKey = keyWordAlphabet(keyWordAlphabetIndex)
-                cipherOut = substitionKeyCipher(userCipher,userKey)
-                keyWordAlphabetIndex = keyWordAlphabetIndex + 1
-            elif keyWordRandomStart == True: # Keyword keys done for all key words with the last letters being the alphabet
-                userKey = keyWordRandom(keyWordRandomIndex)
-                cipherOut = substitionKeyCipher(userCipher,userKey)
-                keyWordRandomIndex = keyWordRandomIndex + 1
-            elif frequencyKeyStart == True: #Key generated from advanced frequency analysis
-                userKey = frequencyKey(userCipher)
-                cipherOut = substitionKeyCipher(userCipher,userKey)
-                frequencyKeyIndex = frequencyKeyIndex + 1
-            elif randomKeyStart == True: # Last resort random keys
-                userKey = randomKey()
-                cipherOut = substitionKeyCipher(userCipher,userKey)
-                randomKeyIndex = randomKeyIndex + 1
-            clearScore = clearScoreEnglish(cipherOut) #rbo rpktigo vcrb bwucja wj kloj hcjd km sktpqo cq rbwr loklgo vcgg cjqcqr kj skhcja wgkja wjd rpycja rk ltr rbcjaq cj cr
-            cipherOutKeyOut ='''
+    #---------------------------------------------------------------------------------------------------------------
+    #                                        CIPHER SOLVER MAIN PROGRAM
+    #---------------------------------------------------------------------------------------------------------------
+    keyIterations = keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = REPLACEME123 = 0
+    #Turn each function on or off
+    keyWordAlphabetStart = True
+    keyWordRandomStart = False
+    frequencyKeyStart = False
+    randomKeyStart = False
+    ceaserStart = False
+    userCipher = input(cipherSolverInputFormat)
+    while keyIterations < keyIterations + 1:
+        if ceaserStart == True: #Ceaser shifts done 26 times
+            userKey = ceaser("abcdefghijklmnopqrstuvwxyz", 26 - ceaserShifts)
+            cipherOut = ceaser(userCipher, ceaserShifts)
+            ceaserShifts = ceaserShifts + 1
+        elif keyWordAlphabetStart == True: # Keyword keys done for all key words with the last letters being random
+            userKey = keyWordAlphabet(keyWordAlphabetIndex)
+            cipherOut = substitionKeyCipher(userCipher,userKey)
+            keyWordAlphabetIndex = keyWordAlphabetIndex + 1
+        elif keyWordRandomStart == True: # Keyword keys done for all key words with the last letters being the alphabet
+            userKey = keyWordRandom(keyWordRandomIndex)
+            cipherOut = substitionKeyCipher(userCipher,userKey)
+            keyWordRandomIndex = keyWordRandomIndex + 1
+        elif frequencyKeyStart == True: #Key generated from advanced frequency analysis
+            userKey = frequencyKey(userCipher)
+            cipherOut = substitionKeyCipher(userCipher,userKey)
+            frequencyKeyIndex = frequencyKeyIndex + 1
+        elif randomKeyStart == True: # Last resort random keys
+            userKey = randomKey()
+            cipherOut = substitionKeyCipher(userCipher,userKey)
+            randomKeyIndex = randomKeyIndex + 1
+        clearScore = clearScoreEnglish(cipherOut) #rbo rpktigo vcrb bwucja wj kloj hcjd km sktpqo cq rbwr loklgo vcgg cjqcqr kj skhcja wgkja wjd rpycja rk ltr rbcjaq cj cr
+        cipherOutKeyOut ='''
 =============== PLAINTEXT: ===============
 {printedCipherOut}
 ================== KEY: ==================
 {printedUserKey}
 ============== STATISTICS: ===============
-Keys/s              {printedStatistics}
+Keys/s               {printedStatistics}
 Number of attempts   {printedAttempts}
-English Score       {printedClearScore}%
+English Score        {printedClearScore}%
 '''.format(printedCipherOut = cipherOut, printedUserKey = userKey, printedStatistics = keysPerSecond, printedClearScore = clearScore, printedAttempts = keyIterations)#Formatting
-            if clearScore > 1:
-                print(cipherOutKeyOut)
-            keyIterations = keyIterations + 1
-            keyCountPerSecond = keyCountPerSecond + 1
-    while mainMenu == 2:
-        #---------------------------------------------------------------------------------------------------------------
-        #                                             TEXT MANIPULATION MAIN PROGRAM
-        #---------------------------------------------------------------------------------------------------------------
-        plainText = input(textManipulationInputFormat)
-        lowerCase = upperCase = noSymbol = reversal = noSpaces = ""
-        menu = 0
-        if plainText == "": # if enter is pressed the previous input will be carried forward
-            if menu == 1:
-                plainText = lowerCase
-            elif menu == 2:
-                plainText = upperCase
-            elif menu == 3:
-                plainText = noSymbol
-            elif menu == 4:
-                plainText = reversal
-            elif menu == 5:
-                plainText = noSpaces
-        menu = int(input(textManipulationMenuFormat))
-        if menu == 1: # MENU to select which function to use
-            lowerCase = plainText.lower()
-            print("\n", lowerCase, "\n")
-        elif menu == 2:
-            upperCase = plainText.upper()
-            print("\n",upperCase, "\n")
-        elif menu == 3:
-            noSymbol = removePunctuation(plainText)
-            print("\n",noSymbol, "\n")
-        elif menu == 4:
-            reversal = reverseString(plainText)
-            print("\n",reversal, "\n")
-        elif menu == 5:
-            noSpaces = removeSpaces(plainText)
-            print("\n",noSpaces, "\n")
-        elif menu == 6:
-            print("\n",stats, "\n")
-        elif menu == 7:
-            characterFrequency(plainText)
-        elif menu == 8:
-            advFrequencyAnalysis = 0 #advancedFrequencyAnalysis(plainText) <<< add in functionality for this function later
-            print("\n",advFrequencyAnalysis, "\n")
-        else:
-            print("PLEASE MAKE A SELECTION") #Menu repeats if no selection is made
-            menu = int(input(textManipulationMenuFormat))
-    else: #Main menu repeats if no selection is made between 1 or 2
-        print("PLEASE MAKE A SELECTION")
-        mainMenu = int(input(mainMenuFormat))
+        if clearScore > 1:
+            print(cipherOutKeyOut)
+        keyIterations = keyIterations + 1

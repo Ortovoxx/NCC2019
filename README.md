@@ -27,6 +27,10 @@
 - [ ] Transposition Solver
 - [ ] Polyalphabetic Solver
 
+### Variable naming conventions
+- Please try to keep global variables to a minimum
+- Variables should look like this: variableNameFirst NOT Variable_Name_First
+
 #### Adding changes with Git to github
 1. Make a github account
 2. Install Git

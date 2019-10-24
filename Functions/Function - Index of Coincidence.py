@@ -18,3 +18,5 @@ def ic(self):
 user = input("text: ")
 
 ic(list(user))
+
+#TODO

@@ -1,7 +1,6 @@
 # National Cipher Challenge 2019
-### Ipswich School Team - TheLegend28
-##### Python code used for the National Cipher Challenge 2019 - Ipswich School
-###### Euan, Kuncharan, Penny, Vasco, Wey
+### Ipswich School Team
+##### Software used for the National Cipher Challenge 2019 - Ipswich School
 
 ### BUGS:
 1. Clear score takes a string but sometimes will not work when a var string is inputted? 
@@ -30,17 +29,6 @@
 ### Variable naming conventions
 - Please try to keep global variables to a minimum
 - Variables should look like this: variableNameFirst NOT Variable_Name_First
-
-#### Adding changes with Git to github
-1. Make a github account
-2. Install Git
-
-#### Useful commands
-git add .
-git commit -m "message make it meaningful"
-git push
-
-git pull
 
 #### Useful Links
 Getting started with github [here](https://guides.github.com/activities/hello-world/)

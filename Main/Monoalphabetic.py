@@ -157,11 +157,12 @@ def indexOfCoincidence(text): #String input to calculate the Index of Coincidenc
         alphaIndex = alphaIndex + 1
     IoC = sum(IoCARRAY)
     return IoC
-    
+
 
 #==============================================================================================================================================================
 #                                                            CIPHER SOLVING - EDITABLE
 #==============================================================================================================================================================
+
 
 # TODO
 #NO DUPLICATION KEYS

@@ -142,6 +142,21 @@ def characterFrequency(encryptedText):
             else:
                 frequencies[27]= frequencies[27]+1              
     return frequencies
+def indexOfCoincidence(text): #String input to calculate the Index of Coincidence of a text
+    def letter(letterCount,textLength):
+        letterValue = (letterCount / textLength)*((letterCount - 1)/(textLength - 1))
+        return letterValue
+    IoCARRAY = []
+    alphaIndex = 0
+    textArray = convertToASCII(list(removeSpaces(removePunctuation(text))))
+    textLength = len(textArray)
+    while alphaIndex < len(alphabetASCII):
+        letterCount = textArray.count(alphaIndex+97)
+        IoCARRAYStore = (letter(letterCount,textLength))
+        IoCARRAY.append(IoCARRAYStore)
+        alphaIndex = alphaIndex + 1
+    IoC = sum(IoCARRAY)
+    return IoC
 
 #==============================================================================================================================================================
 #                                                            CIPHER SOLVING - EDITABLE

@@ -322,10 +322,10 @@ while True == True: #Loops the entire program
     userKey = "abcdefghijklmnopqrstuvwxyz" #Sets a defult user key ~~~~WARNING~~~~ Wont show error if there is not a key generated as this one will take over ~~~~WARNING~~~~
     keyIterations = keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = ceaserShifts = REPLACEME123 = 0
     #Turn each function on or off
-    keyWordAlphabetStart = True
+    keyWordAlphabetStart = False
     keyWordRandomStart = False
     frequencyKeyStart = False
-    randomKeyStart = False
+    randomKeyStart = True
     ceaserStart = False
     userCipher = input(cipherSolverInputFormat)
     ############################################
@@ -351,15 +351,24 @@ while True == True: #Loops the entire program
             cipherOut = substitionKeyCipher(userCipher,userKey)
             randomKeyIndex = randomKeyIndex + 1
         clearScore = clearScoreEnglish(cipherOut) #rbo rpktigo vcrb bwucja wj kloj hcjd km sktpqo cq rbwr loklgo vcgg cjqcqr kj skhcja wgkja wjd rpycja rk ltr rbcjaq cj cr
+        indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
+        chiSquaredText = round(chiSquaredStat(cipherOut),10)
         cipherOutKeyOut ='''
-=============== PLAINTEXT: ===============
+================== PLAINTEXT: ==================
 {printedCipherOut}
-================== KEY: ==================
+===================== KEY: =====================
 {printedUserKey}
-============== STATISTICS: ===============
-Number of keys       {printedAttempts}
-English Score        {printedClearScore}%
-'''.format(printedCipherOut = cipherOut, printedUserKey = userKey, printedClearScore = clearScore, printedAttempts = keyIterations)#Formatting
-        if clearScore > 1:
+================= STATISTICS: ==================
+Number of keys          {printedAttempts}
+English Score           {printedClearScore}%
+Index Of Coincidence    {printedIoC}
+Chi Squared             {printedChi}
+'''.format(printedCipherOut = cipherOut, 
+        printedUserKey = userKey,
+        printedClearScore = clearScore, 
+        printedAttempts = keyIterations, 
+        printedIoC = indexOfCoincidenceText, 
+        printedChi = chiSquaredText )#Formatting
+        if clearScore > 1 and chiSquaredText < 300:
             print(cipherOutKeyOut)
         keyIterations = keyIterations + 1

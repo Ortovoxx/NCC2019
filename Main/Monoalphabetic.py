@@ -318,24 +318,9 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
 #                                                   USER INPUT / OUTPUT                   MAIN PROGRAM
 #==============================================================================================================================================================
 
-
-#TODO - make a keys per second function unsing unix time
-unixTimeFUNC = lambda: int(round(time.time() * 1000))# Unix time function work in progress
-startUnix = unixTimeFUNC()
-def unixTime():
-    nowUnix = int(round(time.time() * 1000))
-    endUnix = nowUnix - startUnix
-    return endUnix
-
-
-    
-
 while True == True: #Loops the entire program
-    #---------------------------------------------------------------------------------------------------------------
-    #                                        CIPHER SOLVER MAIN PROGRAM
-    #---------------------------------------------------------------------------------------------------------------
     userKey = "abcdefghijklmnopqrstuvwxyz" #Sets a defult user key ~~~~WARNING~~~~ Wont show error if there is not a key generated as this one will take over ~~~~WARNING~~~~
-    keyIterations = keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = keysPerSecond = ceaserShifts = REPLACEME123 = 0
+    keyIterations = keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = ceaserShifts = REPLACEME123 = 0
     #Turn each function on or off
     keyWordAlphabetStart = True
     keyWordRandomStart = False
@@ -343,6 +328,7 @@ while True == True: #Loops the entire program
     randomKeyStart = False
     ceaserStart = False
     userCipher = input(cipherSolverInputFormat)
+    ############################################
     while keyIterations < keyIterations + 1:
         if ceaserStart == True: #Ceaser shifts done 26 times
             userKey = ceaser("abcdefghijklmnopqrstuvwxyz", 26 - ceaserShifts)
@@ -371,10 +357,9 @@ while True == True: #Loops the entire program
 ================== KEY: ==================
 {printedUserKey}
 ============== STATISTICS: ===============
-Keys/s               {printedStatistics}
-Number of attempts   {printedAttempts}
+Number of keys       {printedAttempts}
 English Score        {printedClearScore}%
-'''.format(printedCipherOut = cipherOut, printedUserKey = userKey, printedStatistics = keysPerSecond, printedClearScore = clearScore, printedAttempts = keyIterations)#Formatting
+'''.format(printedCipherOut = cipherOut, printedUserKey = userKey, printedClearScore = clearScore, printedAttempts = keyIterations)#Formatting
         if clearScore > 1:
             print(cipherOutKeyOut)
         keyIterations = keyIterations + 1

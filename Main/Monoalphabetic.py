@@ -3,7 +3,6 @@
 #==============================================================================================================================================================
 
 import random
-import time
 
 cipherSolverInputFormat = '''*************** CIPHERTEXT: **************
 '''
@@ -363,7 +362,8 @@ Number of keys          {printedAttempts}
 English Score           {printedClearScore}%
 Index Of Coincidence    {printedIoC}
 Chi Squared             {printedChi}
-'''.format(printedCipherOut = cipherOut, 
+'''.format(
+        printedCipherOut = cipherOut, 
         printedUserKey = userKey,
         printedClearScore = clearScore, 
         printedAttempts = keyIterations, 

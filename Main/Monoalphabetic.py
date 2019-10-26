@@ -159,6 +159,22 @@ def indexOfCoincidence(text): #String input to calculate the Index of Coincidenc
         alphaIndex = alphaIndex + 1
     IoC = sum(IoCARRAY)
     return IoC
+def chiSquaredStat(text):
+    def letter(realLetterCount,expectedLetterCount):
+        letterValue = ((realLetterCount - expectedLetterCount)**2) / expectedLetterCount
+        return letterValue
+    chiSquaredARRAY = []
+    alphaIndex = 0
+    textArray = convertToASCII(list(removeSpaces(removePunctuation(text))))
+    textLength = len(textArray)
+    while alphaIndex < len(alphabetASCII): 
+        realLetterCount = textArray.count(alphaIndex + 97)
+        expectedLetterCount = textLength * englishLetterFrequencyProbability[alphaIndex] #Compares it against an english distribution
+        chiSquaredARRAYStore = letter(realLetterCount,expectedLetterCount)
+        chiSquaredARRAY.append(chiSquaredARRAYStore)
+        alphaIndex = alphaIndex + 1
+    chiSquared = sum(chiSquaredARRAY)
+    return chiSquared
 
 
 #==============================================================================================================================================================

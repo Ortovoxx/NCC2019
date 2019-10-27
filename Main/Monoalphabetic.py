@@ -4,10 +4,13 @@
 
 import random
 
+#Menu and input formats
 cipherSolverInputFormat = '''*************** CIPHERTEXT: **************
 '''
 textManipulationInputFormat = '''*********** INPUT YOUR TEXT: ***********
 '''
+
+#Alphabet arrays
 alphabetASCII = [97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122]
 alphabetCHARACTER = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 #IN %
@@ -16,6 +19,7 @@ englishLetterFrequencySorted = [12.702,9.056,8.167,7.507,6.966,6.749,6.327,6.094
 #Probabilty /1
 englishLetterFrequencyProbability = [0.08167,0.01492,0.02782,0.04253,0.12702,0.02228,0.02015,0.06094,0.06966,0.00153,0.00772,0.04025,0.02406,0.06749,0.07507,0.01929,0.00095,0.05987,0.06327,0.09056,0.02758,0.00978,0.02360,0.00150,0.01974,0.00074]
 # the above array numbers map to the following letters (in order)           e t a o i n s h r d l c u m w f g y p b v k j x q z
+
 freqWords = ["the","of","to","and","a","in","is","it","you","that","he","was","for","on","are","with","as","i","his","they","be","at","one","have","this","from","or","had","by","hot","but","some","what","there","we","can",
              "out","other","were","all","your","when","up","use","word","how","said","an","each","she","which","do","their","time","if","will","way","about","many","then","them","would","write","like","so","these","her","long",
              "make","thing","see","him","two","has","look","more","day","could","go","come","did","my","sound","no","most","number","who","over","know","water","than","call","first","people","may","down","side","been","now",
@@ -43,38 +47,38 @@ freqWords = ["the","of","to","and","a","in","is","it","you","that","he","was","f
 #                                                       TEXT MANIPULATION AND REPEATED USE FUNCTIONS - DO NOT EDIT
 #==============================================================================================================================================================
 
-def convertToASCII(text): #Converts an array of characters into an array of their ASCII equivalent numbers
-    perm = 0
-    while perm < len(text): #goes through each array index and turns it from Character to ASCII
-        text[perm] = ord(text[perm])
-        perm = perm + 1
-    return text
-def convertToCHARACTER(text): #Converts an array of ASCII equivalent numbers into an array of their ASCII equivalent characters
-    perm = 0
-    while perm < len(text): #goes through each array index and turns it from ASCII number to Character
-        text[perm] = chr(text[perm])
-        perm = perm + 1
-    return text
-def removePunctuation(plain): #Removes punctuation
-    plainText = plain.lower() 
+def convertToASCII(textArray): #Converts an array of characters into an array of their ASCII equivalent numbers
+    index = 0
+    while index < len(textArray): #goes through each array index and turns it from Character to ASCII
+        textArray[index] = ord(textArray[index])
+        index = index + 1
+    return textArray
+def convertToCHARACTER(textArray): #Converts an array of ASCII equivalent numbers into an array of their ASCII equivalent characters
+    index = 0
+    while index < len(textArray): #goes through each array index and turns it from ASCII number to Character
+        textArray[index] = chr(textArray[index])
+        index = index + 1
+    return textArray
+def removePunctuation(string): #Removes punctuation from a string input
+    plainText = string.lower() 
     characters = list(plainText)
     charactersNoSymbol = []
-    n = 0
-    while n < len(characters):
-        if ord(characters[n]) > 96 and ord(characters[n]) < 123 or ord(characters[n]) == 32: # 97 = A 122 = Z 32 = [SPACE]
-            charactersNoSymbol.append(characters[n])
-        n = n + 1
+    index = 0
+    while index < len(characters):
+        if ord(characters[index]) > 96 and ord(characters[index]) < 123 or ord(characters[index]) == 32: # 97 = A 122 = Z 32 = [SPACE]
+            charactersNoSymbol.append(characters[index])
+        index = index + 1
     charactersNoSymbolJoint = "".join(charactersNoSymbol)
     return charactersNoSymbolJoint
-def removeSpaces(plain): #Removes spaces
-    plainText = plain.lower()
+def removeSpaces(string): #Removes spaces from a string input
+    plainText = string.lower()
     characters = list(plainText)
     charactersNoSpace = []
-    n = 0
-    while n < len(characters):
-        if ord(characters[n]) != 32: # 32 ASCII for space
+    index = 0
+    while index < len(characters):
+        if ord(characters[index]) != 32: # 32 ASCII for space
             charactersNoSpace.append(characters[n])
-        n = n + 1
+        index = index + 1
     charactersNoSpaceJoint = "".join(charactersNoSpace)
     return charactersNoSpaceJoint
 def reverseString(string): #Reverses the text
@@ -105,7 +109,7 @@ def substitionKeyCipher(userCipherText,userKey): #maps a ciphertext to plaintext
         textPerm = textPerm + 1
     switchedCipherStr = "".join(convertToCHARACTER(switchedCipher))
     return switchedCipherStr
-def clearScoreEnglish(cipherText): # clear Score function that returns % english when string inputted #BUG I THINK IT DOESNT WORK IF THERE ARE SPACES -FIXME
+def clearScoreEnglish(cipherText): # clear Score function that returns % english when string inputted #BUG I THINK IT DOESNT WORK IF THERE ARE SPACES
     def searchWords(cipherWord,freqWords):
         freqPosition = 0
         english = False
@@ -158,7 +162,7 @@ def indexOfCoincidence(text): #String input to calculate the Index of Coincidenc
         alphaIndex = alphaIndex + 1
     IoC = sum(IoCARRAY)
     return IoC
-def chiSquaredStat(text):
+def chiSquaredStat(text): #String input which calculates the chi-squared statistic of a text
     def letter(realLetterCount,expectedLetterCount):
         letterValue = ((realLetterCount - expectedLetterCount)**2) / expectedLetterCount
         return letterValue
@@ -179,11 +183,6 @@ def chiSquaredStat(text):
 #==============================================================================================================================================================
 #                                                            CIPHER SOLVING - EDITABLE
 #==============================================================================================================================================================
-
-
-# TODO
-#NO DUPLICATION KEYS
-#KEY STORAGE - high intensity
 
 def ceaser(string, shift): # Ceaser shift function
     cipher = ""

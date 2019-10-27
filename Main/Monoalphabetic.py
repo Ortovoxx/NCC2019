@@ -41,7 +41,7 @@ freqWords = ["the","of","to","and","a","in","is","it","you","that","he","was","f
              "twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eightteen","nineteen","twenty","apollo","lunar","mission","phase","orbit","orbital","prime","objective","spacecraft","meg","file","luna","programme",
              "state","department","united","states","america","usa","uk","britain","americas","gene","conscience","plot","wisdom","neil","file","files","coincidence","once","twice","navigation","saturn"]
 # COPY-PASTE for adding words to freqWords array: "",
-# Add extra words to the array to get better accuracy when detecting english
+# Add extra words to the array to get better accuracy when detecting english and generating keys
 
 #==============================================================================================================================================================
 #                                                       TEXT MANIPULATION AND REPEATED USE FUNCTIONS - DO NOT EDIT
@@ -282,33 +282,34 @@ def searchFrequencyAnalysis(itemToCheckFor,listToSearchFrom): #searches for the 
 
 #test cipher
 #xqhho y qc dej ikhu yv oek muhu sefyut yd je jxu cuce qrekj husudj uludji rkj xuhu yi q ikccqho jme tqoi qwe qd evvtkjo wkytqdsu evvysuh qbuhjut cyiiyed sedjheb je q fejudjyqb fherbuc myjx jxu qfebbe vbywxj jxu fbqddut tuisudj jhqzusjeho qffuqhut je ru hkddydw ed q sebbyiyed sekhiu myjx 
+def testsearchFrequencyAnalysis(x,y):
+    englishIndex = random.randint(0,26)
+    return englishIndex
 
 def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accordance to comparisons between the ciphertext frequency analysis and the frequency analysis of english plaintext
-    #cipherTextToBeFREQQED is a string
-    frequencyOfCipherText = characterFrequency(cipherTextToBeFREQQED) #gets the frequency analysis of the string inputted
+    #cipherTextToBeFREQQED is a user inputted string
+    frequencyOfCipherText = characterFrequency(cipherTextToBeFREQQED) #gets the frequency analysis data of the string inputted
     cipherTextNoSpaces = removePunctuation(removeSpaces(cipherTextToBeFREQQED)) #removes spaces and punctuation of ciphertext
-    cipherTextNoSpacesArray = list(cipherTextNoSpaces) #converts ciphertext into an array
+    cipherTextNoSpacesArray = list(cipherTextNoSpaces) #converts the formatted ciphertext into an array
     indexOfFrequencyAnalysis = 0
-    while indexOfFrequencyAnalysis < len(frequencyOfCipherText): #Turns it from how many occurrences into a % frequency analysis
+    while indexOfFrequencyAnalysis < len(frequencyOfCipherText): #Converts frequency analysis data from number of occurrences into a % of text frequency analysis
         frequencyOfCipherText[indexOfFrequencyAnalysis] = round(((frequencyOfCipherText[indexOfFrequencyAnalysis] / len(cipherTextNoSpacesArray))*100),3 )
         indexOfFrequencyAnalysis = indexOfFrequencyAnalysis + 1
     indexToCompare = 0
     englishIndexOrderArray = []
-    while indexToCompare < len(frequencyOfCipherText): 
-        englishIndex = searchFrequencyAnalysis(frequencyOfCipherText[indexToCompare],englishLetterFrequencySorted) #Gets the frequency of ciphertext in % and compares it to the % of english and then returns an array with the positions
-        unCertainty = random.randint(-5,5) #Adds uncertainty to the letters so higher chance of finding a match
+    while indexToCompare < 26: 
+        #Matches the frequencies of individual letters in the ciphertext to that of english producing a key
+        #Gets the frequency of ciphertext in % and compares it to the % of english and then returns an array with the positions of the closest values
+        englishIndex = testsearchFrequencyAnalysis(frequencyOfCipherText[indexToCompare],englishLetterFrequencySorted) 
+        unCertainty = random.randint(-2,2) #Adds uncertainty to the letters so higher chance of finding a correct key (bigger numbers longer key generation time)
         randomisedEnglishIndex = englishIndex + unCertainty
-        duplicates = search(randomisedEnglishIndex,englishIndexOrderArray)
-        while duplicates == True:
-            unCertainty = random.randint(-5,5) #Adds uncertainty to the letters so higher chance of finding a match
-            randomisedEnglishIndex = englishIndex + unCertainty
-            duplicates = search(randomisedEnglishIndex,englishIndexOrderArray) #Ensures each letter in the array is 100% unique
-        else: #elif duplicates == False
+        duplicates = search(randomisedEnglishIndex,englishIndexOrderArray) #Ensures no duplicates of positions
+        if duplicates == False and randomisedEnglishIndex < 27 and randomisedEnglishIndex > 0:
             englishIndexOrderArray.append(randomisedEnglishIndex) #adds each letter mapped to the new letter position to this array (a=0 b=1 etc etc)
-        indexToCompare = indexToCompare + 1
-    convertASCIIIndex = 0
-    while convertASCIIIndex < len(englishIndexOrderArray): #converts the a=0 b=1 to ASCII 
-        englishIndexOrderArray[convertASCIIIndex] = englishIndexOrderArray[convertASCIIIndex] + 97
+            indexToCompare = indexToCompare + 1 #Only increases if there is no duplicates and therefore something new got added else it will repeat until this does happen
+    convertASCIIIndex = 0 # Text formatting
+    while convertASCIIIndex < len(englishIndexOrderArray): #converts the a=0 b=1 (positional data) to ASCII numbers
+        englishIndexOrderArray[convertASCIIIndex] = englishIndexOrderArray[convertASCIIIndex] + 96
         convertASCIIIndex = convertASCIIIndex + 1
     finalKey = "".join(convertToCHARACTER(englishIndexOrderArray)) #converts the ASCII index to a plaintext string key with 26 characters
     return finalKey
@@ -322,8 +323,8 @@ while True == True: #Loops the entire program
     #Turn each function on or off
     keyWordAlphabetStart = False
     keyWordRandomStart = False
-    frequencyKeyStart = False
-    randomKeyStart = True
+    frequencyKeyStart = True
+    randomKeyStart = False
     ceaserStart = False
     userCipher = input(cipherSolverInputFormat)
     ############################################
@@ -343,12 +344,13 @@ while True == True: #Loops the entire program
         elif frequencyKeyStart == True: #Key generated from advanced frequency analysis
             userKey = frequencyKey(userCipher)
             cipherOut = substitionKeyCipher(userCipher,userKey)
+            #print(cipherOut)
             frequencyKeyIndex = frequencyKeyIndex + 1
         elif randomKeyStart == True: # Last resort random keys
             userKey = randomKey()
             cipherOut = substitionKeyCipher(userCipher,userKey)
             randomKeyIndex = randomKeyIndex + 1
-        clearScore = clearScoreEnglish(cipherOut) #rbo rpktigo vcrb bwucja wj kloj hcjd km sktpqo cq rbwr loklgo vcgg cjqcqr kj skhcja wgkja wjd rpycja rk ltr rbcjaq cj cr
+        clearScore = clearScoreEnglish(cipherOut) 
         indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
         chiSquaredText = round(chiSquaredStat(cipherOut),10)
         cipherOutKeyOut ='''
@@ -368,6 +370,10 @@ Chi Squared             {printedChi}
         printedAttempts = keyIterations, 
         printedIoC = indexOfCoincidenceText, 
         printedChi = chiSquaredText )#Formatting
-        if clearScore > 1 and chiSquaredText < 300:
+        if clearScore > 1:
             print(cipherOutKeyOut)
         keyIterations = keyIterations + 1
+
+#Example ciphers to try solve
+#rbo rpktigo vcrb bwucja wj kloj hcjd km sktpqo cq rbwr loklgo vcgg cjqcqr kj skhcja wgkja wjd rpycja rk ltr rbcjaq cj cr
+#Tjf, B sppx r ippx rs sqj ubij vpd hjes pojw rey bs zrh mdhs r wpsrsbpe nbaqjw raaibjy sp sqj sjks. Rs ubwhs bs zrh qrwy sp hrv bu sqrs zrh r cdf pw r ujrsdwj rey epwtriiv B zpdiy rhhdtj cdf, cds bs hjjtjy pyy sqrs bs zrh sqj peiv ubij sqrs zrh ruujnsjy hp B rhxjy rwpdey sp hjj bu revpej qry hjje revsqbef hbtbirw. Bs sdweh pds sqrs sqbh zrh eps sqj ubwhs erobfrsbpe awpcijt sp qbs sqj awpfwrttj. Fjej wjapwsjy r trmpw bhhdj zbsq sqj fdbyrenj awpfwrttj upw Heppav pe sqj Rapiip Sje tbhhbpe zqbnq npdiy rfrbe qroj nrdhjy r trmpw awpcijt. Upw hptj wjrhpe sqj awpfwrttj npeswpiibef sqj ireybef wryrw zrhe’s dayrsjy zbsq sqj uibfqs aire rey bu Fjej qrye’s wrbhjy sqrs zbsq Bojwhpe sqje sqj cpvh tbfqs qroj qry wjri swpdcij fjssbef crnx. B ippxjy sqwpdfq sqj nptarev ubijh rey updey repsqjw pu pdw tvhsjwbpdhiv upwtrssjy wjapwsh: sqj tjtp beupwtbef sqjt rcpds sqj nqrefj, zqbnq jkairbeh zqv sqj awpfwrttj ejojw fps dayrsjy. Sqbh sbtj sqj nbaqjw zrh re ruubej hqbus, hp hibfqsiv qrwyjw sp nwrnx, cds epsqbef hjwbpdh. Hsbii, bs bh tdnq ijhh ibxjiv sqrs bs zrh r cdf sqrs sbtj, rey be rev nrhj szbnj bh spp tdnq pu r npbenbyjenj. Bs yby hsrws tj zpeyjwbef zqv sqj hjnpey nbaqjw zrh jrhbjw sp nwrnx sqre sqj ubwhs, cds sqje B wjribhjy sqrs sqj ruubej hqbus zrh spp tdnq pu r fbojrzrv. R wpsrsbpe nbaqjw wjriiv npdiy mdhs cj re jenpybef jwwpw, cds sqj ruubej hqbus bh spp hpaqbhsbnrsjy upw r tbhsrxj, hp zqpjojw trefijy sqj wjapwsh tdhs qroj wjribhjy sqjv qry tryj r cbs pu re jwwpw zbsq sqj ubwhs pej rey swbjy sp npojw sqjbw hsjah zbsq sqj hjnpey. Bs bh qrwy sp hjj sqbh rh revsqbef psqjw sqre rssjtasjy hrcpsrfj, cds B rt eps hdwj zqrs sqj tpsboj npdiy cj. B ypdcs bs bh ajwhperi. Sqj Rapiip Sje rey Jijoje nwjzh ype’s pojwira, hp jbsqjw hptjpej qrh r fwdyfj rfrbehs sqj zqpij Rhswperds npwah pw sqjv rwj swvbef sp yjwrbi sqj Rapiip awpfwrttj. Bs npdiy cj sqj Hpobjsh B hdaaphj. Rs ubwhs, B sqpdfqs sqrs sqjbw zbiibefejhh sp hqbus sqj IDER-UBUSJJE pwcbs hqpzjy sqrs sqjv zjwje’s arws pu bs, cds hptjpej be sqj Hsrsj Yjarwstjes apbesjy pds sqrs sqjv tbfqs mdhs qroj qry r fdbisv npehnbjenj, pw cjje xjje sp ybhsrenj sqjthjiojh penj sqj aips zrh ybhnpojwjy. B rt hsbii eps hdwj. Be sqj tjresbtj, npdiy vpd srxj r ippx rs sqj nptadsjw ubijh sp hjj zqp tbfqs qroj qry rnnjhh sp cpsq tjtph, rey zqp tbfqs qroj qry sqj paapwsdebsv rey tjreh sp ypnspw sqjt? B rt uivbef crnx sp Irefijv spebfqs, sp hjj bu sqj Hsrsj Yjarwstjes qroj rev byjrh zqrs tbfqs cj fpbef pe. Ejbi hrby qj npdiy uiv tj da be pej pu sqj ERHR nqrhj airejh, zqbnq bh hptjsqbef B qroj cjje xjje sp swv. B zbii nrii vpd bu B fjs revsqbef.

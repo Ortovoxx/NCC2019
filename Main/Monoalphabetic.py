@@ -77,7 +77,7 @@ def removeSpaces(string): #Removes spaces from a string input
     index = 0
     while index < len(characters):
         if ord(characters[index]) != 32: # 32 ASCII for space
-            charactersNoSpace.append(characters[n])
+            charactersNoSpace.append(characters[index])
         index = index + 1
     charactersNoSpaceJoint = "".join(charactersNoSpace)
     return charactersNoSpaceJoint

@@ -104,8 +104,8 @@ def iterativeSolving(userCipherText):
     parentKey = randomKey() #parent Key is generated using frequency analysis
     decipher = substitionKeyCipher(userCipherText,parentKey) #solves parent cipher using the parent key
     parentScore = chiSquaredStat(decipher) #Gets the text fitness of this ciphertext
-    count = 0
-    while count < 1000:
+    iteration = 0
+    while iteration < 1000:
         a = random.randint(0,25) #2 random letters (numbers) generated
         b = random.randint(0,25)
         childKeyArray = list(parentKey) #converts parent key string into a child array
@@ -116,8 +116,8 @@ def iterativeSolving(userCipherText):
         if childScore < parentScore: # if the child was better, replace the parent with it. Else dont...
             parentScore = childScore
             parentKey = childKey
-            count = 0 #reset the iteration count to 0 as it is getting better and is not at a local minimum
-        count = count + 1
+            iteration = 0 #reset the iteration count to 0 as it is getting better and is not at a local minimum
+        iteration = iteration + 1
     if childScore < 50:
         return decipher
 

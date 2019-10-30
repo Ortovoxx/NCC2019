@@ -16,9 +16,9 @@ alphabetCHARACTER = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
 #IN %
 englishLetterFrequency = [8.167,1.492,2.782,4.253,12.702,2.228,2.015,6.094,6.966,0.153,0.772,4.025,2.406,6.749,7.507,1.929,0.095,5.987,6.327,9.056,2.758,0.978,2.360,0.150,1.974,0.074]
 englishLetterFrequencySorted = [12.702,9.056,8.167,7.507,6.966,6.749,6.327,6.094,5.987,4.253,4.025,2.782,2.758,2.406,2.360,2.228,2.015,1.974,1.929,1.492,0.978,0.772,0.153,0.150,0.095,0.074]
+# the above array numbers map to the following letters (in order)           e t a o i n s h r d l c u m w f g y p b v k j x q z
 #Probabilty /1
 englishLetterFrequencyProbability = [0.08167,0.01492,0.02782,0.04253,0.12702,0.02228,0.02015,0.06094,0.06966,0.00153,0.00772,0.04025,0.02406,0.06749,0.07507,0.01929,0.00095,0.05987,0.06327,0.09056,0.02758,0.00978,0.02360,0.00150,0.01974,0.00074]
-# the above array numbers map to the following letters (in order)           e t a o i n s h r d l c u m w f g y p b v k j x q z
 
 freqWords = ["the","of","to","and","a","in","is","it","you","that","he","was","for","on","are","with","as","i","his","they","be","at","one","have","this","from","or","had","by","hot","but","some","what","there","we","can",
              "out","other","were","all","your","when","up","use","word","how","said","an","each","she","which","do","their","time","if","will","way","about","many","then","them","would","write","like","so","these","her","long",
@@ -109,7 +109,7 @@ def substitionKeyCipher(userCipherText,userKey): #maps a ciphertext to plaintext
         textPerm = textPerm + 1
     switchedCipherStr = "".join(convertToCHARACTER(switchedCipher))
     return switchedCipherStr
-def clearScoreEnglish(cipherText): # clear Score function that returns % english when string inputted #BUG I THINK IT DOESNT WORK IF THERE ARE SPACES
+def clearScoreEnglish(cipherText): # clear Score function that returns % english when string inputted 
     def searchWords(cipherWord,freqWords):
         freqPosition = 0
         english = False
@@ -247,45 +247,45 @@ def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alp
     finalKey = "".join(convertToCHARACTER(key))
     return finalKey
 
-
-#BUG - RETURNS 5 ALL OF FREQUENCYKEY IS WORKING FINE BUT THIS ALWAYS RETURNS 0 OR 5
-def searchFrequencyAnalysis(itemToCheckFor,listToSearchFrom): #searches for the closest value to the ones inputted to the ones in english letter frequency
+def searchFrequencyAnalysis(itemToCheckFor): #Compares the inputted value to standard english language letter freuqnecy and finds the closest value and returns its letter position (a=0 b=1 etc) [all in %]
     def searchFrequencyAnalysisSorted(positionToMap,frequencySorted,frequency): #Takes both the sorted alphabet and normal alphabet and maps the positions from the ciphertext frequency analysis
-        index = 0
-        indexSorted = 0
-        found = False
-        while indexSorted < len(frequencySorted) and not found:
-            while index < len(frequency) and not found:
-                if frequencySorted[indexSorted] == frequency[index]:
-                    found = True
-                index = index + 1
-            indexSorted = indexSorted + 1
-        return index
-    #######
+        value = frequencySorted[positionToMap]
+        mappedPosition = frequency.index(value)
+        return mappedPosition
     position = 0
-    betweenValues = False
     positionIndexed = 0
-    while position < len(listToSearchFrom) and not betweenValues:
-        if listToSearchFrom[position] > itemToCheckFor: #compares to the first, and because sorted, highest value and if it is less than it will move onto the second ( next highest)
+    betweenValues = False
+    positionSortedAlphabetZero = False
+    while position < len(englishLetterFrequencySorted) and not betweenValues:
+        if englishLetterFrequencySorted[position] > itemToCheckFor: #compares to the first, and because sorted, highest value and if it is less than it will move onto the second ( next highest)
+            if position == 25: #If a value lower than the lowest value is inputted it will bypass everything else (ie input of 0 or less than 0.074)
+                positionSortedAlphabetZero = True
             position = position + 1
-        elif listToSearchFrom[position] < itemToCheckFor: #Does the above until it it greater than the next value so it must be between position and the previous position ( position - 1 )
+        elif englishLetterFrequencySorted[position] < itemToCheckFor: #Does the above until it it greater than the next value so it must be between position and the previous position ( position - 1 )
             betweenValues = True
         if betweenValues == True: #its greater than the position but less than position - 1
-            differenceAbove = listToSearchFrom[(position - 1)] - itemToCheckFor
-            differentBelow = itemToCheckFor - listToSearchFrom[position]
-            if differenceAbove > differentBelow: # if the upper different is bigger it is closer to position
+            differenceAbove = round(englishLetterFrequencySorted[(position - 1)] - itemToCheckFor,10)
+            differentBelow = round(itemToCheckFor - englishLetterFrequencySorted[position],10)
+            if differenceAbove > differentBelow and positionSortedAlphabetZero == False: # if the upper different is bigger it is closer to position
                 positionSortedAlphabet = position
-            else: #elif differenceAbove < differentBelow # if the lower different is bigger it is closer to position - 1
-                positionSortedAlphabet = position - 1
+            elif differenceAbove < differentBelow and positionSortedAlphabetZero == False: # if the lower different is bigger it is closer to position - 1
+                if position != 0: 
+                    positionSortedAlphabet = position - 1
+                else: # if bigger than 12.702 and therefore first or 0th
+                    positionSortedAlphabet = position
+            positionIndexed = searchFrequencyAnalysisSorted(positionSortedAlphabet,englishLetterFrequencySorted,englishLetterFrequency)#translates the indexing from the sorted alphabet into the normal alphabet
+        elif positionSortedAlphabetZero == True: #Bypass for inputs less than 0.074
+            positionSortedAlphabet = 25
             positionIndexed = searchFrequencyAnalysisSorted(positionSortedAlphabet,englishLetterFrequencySorted,englishLetterFrequency)#translates the indexing from the sorted alphabet into the normal alphabet
     return positionIndexed
 
 #test cipher
 #xqhho y qc dej ikhu yv oek muhu sefyut yd je jxu cuce qrekj husudj uludji rkj xuhu yi q ikccqho jme tqoi qwe qd evvtkjo wkytqdsu evvysuh qbuhjut cyiiyed sedjheb je q fejudjyqb fherbuc myjx jxu qfebbe vbywxj jxu fbqddut tuisudj jhqzusjeho qffuqhut je ru hkddydw ed q sebbyiyed sekhiu myjx 
-def testsearchFrequencyAnalysis(x,y):
+def testsearchFrequencyAnalysis(x):
     englishIndex = random.randint(0,26)
     return englishIndex
 
+#WORKING
 def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accordance to comparisons between the ciphertext frequency analysis and the frequency analysis of english plaintext
     #cipherTextToBeFREQQED is a user inputted string
     frequencyOfCipherText = characterFrequency(cipherTextToBeFREQQED) #gets the frequency analysis data of the string inputted
@@ -300,7 +300,7 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
     while indexToCompare < 26: 
         #Matches the frequencies of individual letters in the ciphertext to that of english producing a key
         #Gets the frequency of ciphertext in % and compares it to the % of english and then returns an array with the positions of the closest values
-        englishIndex = testsearchFrequencyAnalysis(frequencyOfCipherText[indexToCompare],englishLetterFrequencySorted) 
+        englishIndex = testsearchFrequencyAnalysis(frequencyOfCipherText[indexToCompare]) 
         unCertainty = random.randint(-2,2) #Adds uncertainty to the letters so higher chance of finding a correct key (bigger numbers longer key generation time)
         randomisedEnglishIndex = englishIndex + unCertainty
         duplicates = search(randomisedEnglishIndex,englishIndexOrderArray) #Ensures no duplicates of positions
@@ -316,7 +316,6 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
 #==============================================================================================================================================================
 #                                                   USER INPUT / OUTPUT                   MAIN PROGRAM
 #==============================================================================================================================================================
-
 while True == True: #Loops the entire program
     userKey = "abcdefghijklmnopqrstuvwxyz" #Sets a defult user key ~~~~WARNING~~~~ Wont show error if there is not a key generated as this one will take over ~~~~WARNING~~~~
     keyIterations = keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = ceaserShifts = REPLACEME123 = 0
@@ -344,7 +343,6 @@ while True == True: #Loops the entire program
         elif frequencyKeyStart == True: #Key generated from advanced frequency analysis
             userKey = frequencyKey(userCipher)
             cipherOut = substitionKeyCipher(userCipher,userKey)
-            #print(cipherOut)
             frequencyKeyIndex = frequencyKeyIndex + 1
         elif randomKeyStart == True: # Last resort random keys
             userKey = randomKey()
@@ -373,6 +371,45 @@ Chi Squared             {printedChi}
         if clearScore > 1:
             print(cipherOutKeyOut)
         keyIterations = keyIterations + 1
+
+#Plain -abcdefghijklmnopqrstuvwxyz
+
+#TEAOIHSNRDLMUGCFPWYBVKJX
+
+
+#Cipher - rcnyjufqbmxitepagwhsdozkvl
+
+#SJRPBQHEWYITDFNUAZVCOXMK
+
+
+
+
+
+#abcdefghijklmnopqrstuvwxyz - 01;02;03;04;05;06;07;08;09;10;11;12;13;14;15;16;17;18;19;20;21;22;23;24;25;26
+#rcnyjufqbmxitepagwhsdozkvl - 18;03;14;25;10;21;06;17;02;13;24;09;20;05;16;01;07;23;08;19;04;15;26;11;22;12
+
+
+
+
+
+
+
+
+
+#TEAOIHSNRDLMUGCFPWYBVKJX - 20;05;01;15;09;08;19;14;18;04;12;13;21;07;03;06;16;23;25;02;22;11;10;24
+#SJRPBQHEWYITDFNUAZVCOXMK - 19;10;18;16;02;17;08;05;23;25;09;20;04;06;14;21;01;26;22;03;15;24;13;11;
+
+
+
+
+
+#SJRPBQHEWYITDFNUAZVCOXMK -   19;10;18;16;02;17;08;05;23;25;09;20;04;06;14;21;01;26;22;03;15;24;13;11;
+#rcnyjufqbmxitepagwhsdozkvl - 18;03;14;25;10;21;06;17;02;13;24;09;20;05;16;01;07;23;08;19;04;15;26;11;22;12
+
+
+
+
+
 
 #Example ciphers to try solve
 #rbo rpktigo vcrb bwucja wj kloj hcjd km sktpqo cq rbwr loklgo vcgg cjqcqr kj skhcja wgkja wjd rpycja rk ltr rbcjaq cj cr

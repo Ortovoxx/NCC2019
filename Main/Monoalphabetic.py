@@ -312,6 +312,32 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
         convertASCIIIndex = convertASCIIIndex + 1
     finalKey = "".join(convertToCHARACTER(englishIndexOrderArray)) #converts the ASCII index to a plaintext string key with 26 characters
     return finalKey
+
+
+
+def iterativeSolving(userCipherText): #TODO NEEDS NEW FITNESS SCORE MEASURE
+    parentKey = randomKey() #TODO change from randomkey to frequency key once that branch is sorted           #parent Key is generated using frequency analysis
+    decipher = substitionKeyCipher(userCipherText,parentKey) #solves parent cipher using the parent key
+    parentScore = chiSquaredStat(decipher) #Gets the text fitness of this ciphertext
+    iteration = 0
+    while iteration < 1000:
+        a = random.randint(0,25) #2 random letters (numbers) generated
+        b = random.randint(0,25)
+        childKeyArray = list(parentKey) #converts parent key string into a child array
+        childKeyArray[a],childKeyArray[b] = childKeyArray[b],childKeyArray[a] # swap two characters in the child
+        childKey = "".join(childKeyArray) #converts child key array into a string
+        decipher = substitionKeyCipher(userCipherText,childKey) #deciphers the ciphertext with the new jumbled key
+        childScore = chiSquaredStat(decipher) #gets the text fitness score of the new ciphertext
+        if childScore < parentScore: # if the child was better, replace the parent with it. Else dont...
+            parentScore = childScore
+            parentKey = childKey
+            iteration = 0 #reset the iteration count to 0 as it is getting better and is not at a local minimum
+        iteration = iteration + 1
+    if childScore < 50:
+        return decipher
+
+
+
 #==============================================================================================================================================================
 #                                                   USER INPUT / OUTPUT                   MAIN PROGRAM
 #==============================================================================================================================================================

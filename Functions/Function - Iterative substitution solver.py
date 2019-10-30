@@ -100,29 +100,27 @@ def randomKey(): #generates a random key
 
 #xqhho y qc dej ikhu yv oek muhu sefyut yd je jxu cuce qrekj husudj uludji rkj xuhu yi q ikccqho jme tqoi qwe qd evvtkjo wkytqdsu evvysuh qbuhjut cyiiyed sedjheb je q fejudjyqb fherbuc myjx jxu qfebbe vbywxj jxu fbqddut tuisudj jhqzusjeho qffuqhut je ru hkddydw ed q sebbyiyed sekhiu myjx
 
-
-
-while True == True:
-    userCipherText = input("text: ")
-    parentkey = randomKey()
-    deciphered = substitionKeyCipher(userCipherText,parentkey)
-    parentscore = chiSquaredStat(deciphered)
+def iterativeSolving(userCipherText):
+    parentKey = randomKey() #parent Key is generated using frequency analysis
+    decipher = substitionKeyCipher(userCipherText,parentKey) #solves parent cipher using the parent key
+    parentScore = chiSquaredStat(decipher) #Gets the text fitness of this ciphertext
     count = 0
-    while count < 100000:
-        a = random.randint(0,25)
+    while count < 1000:
+        a = random.randint(0,25) #2 random letters (numbers) generated
         b = random.randint(0,25)
-        child = list(parentkey)
-        # swap two characters in the child
-        child[a],child[b] = child[b],child[a]
-        deciphered = substitionKeyCipher(userCipherText,child)
-        score = chiSquaredStat(deciphered)
-        # if the child was better, replace the parent with it
-        print (score)
-        if score > parentscore:
-            parentscore = score
-            parentkey = child
-            count = 0
-        count = count+1
-    # keep track of best score seen so far
-    if parentscore or score < 50:
-        print(deciphered)
+        childKeyArray = list(parentKey) #converts parent key string into a child array
+        childKeyArray[a],childKeyArray[b] = childKeyArray[b],childKeyArray[a] # swap two characters in the child
+        childKey = "".join(childKeyArray) #converts child key array into a string
+        decipher = substitionKeyCipher(userCipherText,childKey) #deciphers the ciphertext with the new jumbled key
+        childScore = chiSquaredStat(decipher) #gets the text fitness score of the new ciphertext
+        if childScore < parentScore: # if the child was better, replace the parent with it. Else dont...
+            parentScore = childScore
+            parentKey = childKey
+            count = 0 #reset the iteration count to 0 as it is getting better and is not at a local minimum
+        count = count + 1
+    if childScore < 50:
+        return decipher
+
+userCipherText = input("text: ")
+x = iterativeSolving(userCipherText)
+print(x)

@@ -9,12 +9,11 @@ englishLetterFrequencyProbability = [0.08167,0.01492,0.02782,0.04253,0.12702,0.0
 
 
 def searchFrequencyAnalysis(itemToCheckFor): #Compares the inputted value to standard english language letter freuqnecy and finds the closest value and returns its letter position (a=0 b=1 etc) [all in %]
-    def searchFrequencyAnalysisSorted(positionToMap,frequencySorted,frequency): #Takes both the sorted alphabet and normal alphabet and maps the positions from the ciphertext frequency analysis
-        value = frequencySorted[positionToMap]
-        mappedPosition = frequency.index(value)
+    def searchFrequencyAnalysisSorted(positionToMap): #Takes both the sorted alphabet and normal alphabet and maps the positions from the ciphertext frequency analysis
+        value = englishLetterFrequencySorted[positionToMap]
+        mappedPosition = englishLetterFrequency.index(value)
         return mappedPosition
     position = 0
-    positionIndexed = 0
     betweenValues = False
     positionSortedAlphabetZero = False
     while position < len(englishLetterFrequencySorted) and not betweenValues:
@@ -24,12 +23,12 @@ def searchFrequencyAnalysis(itemToCheckFor): #Compares the inputted value to sta
             position = position + 1
         elif englishLetterFrequencySorted[position] < itemToCheckFor: #Does the above until it it greater than the next value so it must be between position and the previous position ( position - 1 )
             betweenValues = True
-            print(position)
+            #print(position)
         if betweenValues == True: #its greater than the position but less than position - 1
             differenceAbove = round(englishLetterFrequencySorted[(position - 1)] - itemToCheckFor,10)
             differentBelow = round(itemToCheckFor - englishLetterFrequencySorted[position],10)
-            print(differenceAbove)
-            print(differentBelow)
+            #print(differenceAbove)
+            #print(differentBelow)
             if differenceAbove > differentBelow and positionSortedAlphabetZero == False: # if the upper different is bigger it is closer to position
                 positionSortedAlphabet = position
             elif differenceAbove < differentBelow and positionSortedAlphabetZero == False: # if the lower different is bigger it is closer to position - 1
@@ -37,12 +36,12 @@ def searchFrequencyAnalysis(itemToCheckFor): #Compares the inputted value to sta
                     positionSortedAlphabet = position - 1
                 else: # if bigger than 12.702 and therefore first or 0th
                     positionSortedAlphabet = position
-            print(positionSortedAlphabet)
-            positionIndexed = searchFrequencyAnalysisSorted(positionSortedAlphabet,englishLetterFrequencySorted,englishLetterFrequency)#translates the indexing from the sorted alphabet into the normal alphabet
+            #print(positionSortedAlphabet , "no 0")
+            positionIndexed = searchFrequencyAnalysisSorted(positionSortedAlphabet)#translates the indexing from the sorted alphabet into the normal alphabet
         elif positionSortedAlphabetZero == True: #Bypass for inputs less than 0.074
             positionSortedAlphabet = 25
-            print(positionSortedAlphabet)
-            positionIndexed = searchFrequencyAnalysisSorted(positionSortedAlphabet,englishLetterFrequencySorted,englishLetterFrequency)#translates the indexing from the sorted alphabet into the normal alphabet
+            #print(positionSortedAlphabet , "yes 0")
+            positionIndexed = searchFrequencyAnalysisSorted(positionSortedAlphabet)#translates the indexing from the sorted alphabet into the normal alphabet
     return positionIndexed
 
 

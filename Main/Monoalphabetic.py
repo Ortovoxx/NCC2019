@@ -129,7 +129,22 @@ def clearScoreEnglish(cipherText): # clear Score function that returns % english
     clearScore = round((trues / len(cipherEnglishArray)) * 100) # Calculates how many T's there are in array and outputs a % english
     cipherEnglishArray.clear()
     return clearScore
-def characterFrequency(encryptedText):
+def characterFrequency(encryptedTextUnformatted):
+    encryptedText = removeSpaces(removePunctuation(encryptedTextUnformatted))
+    frequencies = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    letter = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
+    for i in encryptedText: #iterates through each character in encrypted_cipher text
+        index = 0 #element index set at 0
+        #WHEN data at index (character in encrypted text) does not equal first element
+        #AND the alphabet index is less than 25, (i.e all letters encompassed only):
+        while i != letter[index] and index < 25: #THEN increment pos index ++, avoids indexing greater than alphabet list
+           if index <= 24:
+               index = index + 1
+        else: #increments relative index dependant upon character contained within i
+            if i == letter[index]:
+                frequencies[index] = frequencies[index]+1 #if character in encrypted_text is a space,data @ alphabet[26] ++:           
+    return frequencies
+def characterFrequencySpaces(encryptedText):
     frequencies=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     letter=["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"," "]
     for i in encryptedText: #iterates through each character in encrypted_cipher text
@@ -248,12 +263,11 @@ def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alp
     return finalKey
 
 def searchFrequencyAnalysis(itemToCheckFor): #Compares the inputted value to standard english language letter freuqnecy and finds the closest value and returns its letter position (a=0 b=1 etc) [all in %]
-    def searchFrequencyAnalysisSorted(positionToMap,frequencySorted,frequency): #Takes both the sorted alphabet and normal alphabet and maps the positions from the ciphertext frequency analysis
-        value = frequencySorted[positionToMap]
-        mappedPosition = frequency.index(value)
+    def searchFrequencyAnalysisSorted(positionToMap): #Takes both the sorted alphabet and normal alphabet and maps the positions from the ciphertext frequency analysis
+        value = englishLetterFrequencySorted[positionToMap]
+        mappedPosition = englishLetterFrequency.index(value)
         return mappedPosition
     position = 0
-    positionIndexed = 0
     betweenValues = False
     positionSortedAlphabetZero = False
     while position < len(englishLetterFrequencySorted) and not betweenValues:
@@ -273,10 +287,10 @@ def searchFrequencyAnalysis(itemToCheckFor): #Compares the inputted value to sta
                     positionSortedAlphabet = position - 1
                 else: # if bigger than 12.702 and therefore first or 0th
                     positionSortedAlphabet = position
-            positionIndexed = searchFrequencyAnalysisSorted(positionSortedAlphabet,englishLetterFrequencySorted,englishLetterFrequency)#translates the indexing from the sorted alphabet into the normal alphabet
+            positionIndexed = searchFrequencyAnalysisSorted(positionSortedAlphabet)#translates the indexing from the sorted alphabet into the normal alphabet
         elif positionSortedAlphabetZero == True: #Bypass for inputs less than 0.074
             positionSortedAlphabet = 25
-            positionIndexed = searchFrequencyAnalysisSorted(positionSortedAlphabet,englishLetterFrequencySorted,englishLetterFrequency)#translates the indexing from the sorted alphabet into the normal alphabet
+            positionIndexed = searchFrequencyAnalysisSorted(positionSortedAlphabet)#translates the indexing from the sorted alphabet into the normal alphabet
     return positionIndexed
 
 #test cipher
@@ -285,7 +299,7 @@ def testsearchFrequencyAnalysis(x):
     englishIndex = random.randint(0,26)
     return englishIndex
 
-#WORKING
+#BUG something to do with duplicates I think
 def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accordance to comparisons between the ciphertext frequency analysis and the frequency analysis of english plaintext
     #cipherTextToBeFREQQED is a user inputted string
     frequencyOfCipherText = characterFrequency(cipherTextToBeFREQQED) #gets the frequency analysis data of the string inputted
@@ -300,9 +314,15 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
     while indexToCompare < 26: 
         #Matches the frequencies of individual letters in the ciphertext to that of english producing a key
         #Gets the frequency of ciphertext in % and compares it to the % of english and then returns an array with the positions of the closest values
-        englishIndex = testsearchFrequencyAnalysis(frequencyOfCipherText[indexToCompare]) 
+        englishIndex = searchFrequencyAnalysis(frequencyOfCipherText[indexToCompare])
+        duplicates = False
+        #print("array",frequencyOfCipherText)
+        #print("index",indexToCompare)
+        #print("first",frequencyOfCipherText[indexToCompare])
+        #print("english Index:",englishIndex)
         unCertainty = random.randint(-2,2) #Adds uncertainty to the letters so higher chance of finding a correct key (bigger numbers longer key generation time)
         randomisedEnglishIndex = englishIndex + unCertainty
+        #print(randomisedEnglishIndex)
         duplicates = search(randomisedEnglishIndex,englishIndexOrderArray) #Ensures no duplicates of positions
         if duplicates == False and randomisedEnglishIndex < 27 and randomisedEnglishIndex > 0:
             englishIndexOrderArray.append(randomisedEnglishIndex) #adds each letter mapped to the new letter position to this array (a=0 b=1 etc etc)
@@ -312,6 +332,7 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
         englishIndexOrderArray[convertASCIIIndex] = englishIndexOrderArray[convertASCIIIndex] + 96
         convertASCIIIndex = convertASCIIIndex + 1
     finalKey = "".join(convertToCHARACTER(englishIndexOrderArray)) #converts the ASCII index to a plaintext string key with 26 characters
+    print(finalKey, "YESSSSSSSSSSSSSSSSSSSSSSSSSSS")
     return finalKey
 #==============================================================================================================================================================
 #                                                   USER INPUT / OUTPUT                   MAIN PROGRAM

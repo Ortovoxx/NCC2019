@@ -56,16 +56,11 @@ def search(itemToCheckFor,listToSearchFrom): #LINEAR SEARCH GLOBAL FUNCTION - Se
 
 
 
-#test - attack: atta, ttac, tack
-
-#attack attack attack attack attack - atta, ttac, tack, acka, ckat, katt, atta, ttac, tack, acka, ckat, katt, atta, ttac, tack, acka, ckat, katt,
-
-
 def quadgramExtraction(userCiperText):
     cipherText = list(removeSpaces(removePunctuation(userCiperText)))
     quadramDitionaryCiphertext = {}
     index = 0
-    n = 4 # the n in ngram
+    n = 4 # the n in ngram -  change to 2 for bigrams and 3 for trigrams etc
     while index < len(cipherText) - (n - 1):
         quadIndex = 0
         singleQuadgram = []

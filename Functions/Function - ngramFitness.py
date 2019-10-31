@@ -47,15 +47,18 @@ y = os.listdir() #lists all items in a directory
 #print(y)
 #print(x)
 
-quadramDitionary = {}
+quadramDitionaryCiphertext = {}
+
+
+quadramDitionaryEnglish = {}
 index = 0
 with open("english_quadgrams.txt", "r") as f:
     quadramData = f.read()
     quadramArray = quadramData.split()
     while index < len(quadramArray):
-        quadramDitionary[quadramArray[index]] = int(quadramArray[index + 1])
+        quadramDitionaryEnglish[quadramArray[index]] = int(quadramArray[index + 1])
         index = index + 2
-    #print(quadramDitionary)
+    #print(quadramDitionaryEnglish)
 
 
 print("done")

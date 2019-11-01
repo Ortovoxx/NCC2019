@@ -58,7 +58,7 @@ Allows scoring of text using n-gram probabilities
 
 from math import log10
 
-# 389,373 unique quadrams in the file
+
 
 
 
@@ -87,11 +87,15 @@ class ngram_score(object):
 
 '''
 import os
-os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/ngrams")
+
 #x = os.getcwd() #current working directory
 #y = os.listdir() #lists all items in a directory
 #print(y)
 #print(x)
+
+
+# 389,373 unique quadrams in the file
+# 2,512,972 total quadgram
 
 
 
@@ -116,16 +120,40 @@ def quadgramExtraction(userCiperText): #Finds quadgrams from a ciphertext
         index = index + 1
     return quadramDitionaryCiphertext
 
+def loadEnglishQuadgram():
+    os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/ngrams")
+    quadramDitionaryEnglish = {}
+    index = 0
+    with open("english_quadgrams.txt", "r") as f:
+        quadramData = f.read()
+        quadramArray = quadramData.split()
+        while index < len(quadramArray):
+            quadramDitionaryEnglish[quadramArray[index]] = int(quadramArray[index + 1])
+            index = index + 2
+    print("done")
+    return quadramDitionaryEnglish
+    
 
-quadramDitionaryEnglish = {}
-index = 0
-with open("english_quadgrams.txt", "r") as f:
-    quadramData = f.read()
-    quadramArray = quadramData.split()
-    while index < len(quadramArray):
-        quadramDitionaryEnglish[quadramArray[index]] = int(quadramArray[index + 1])
-        index = index + 2
-    #print(quadramDitionaryEnglish)
+def fitness(quadramDitionaryCiphertext,quadramDitionaryEnglish):
+    index = 0
+    if quadramDitionaryCiphertext[index] in quadramDitionaryEnglish:
+        quadramDitionaryCiphertext[index] = quadramDitionaryEnglish[quadramDitionaryCiphertext[index]]
+    
 
 
-print("done")
+    fitnessScore = 0
+    return fitnessScore
+
+
+
+# convert all the counts for ngrams into probabilities 
+
+#load the probabilites then compare it to the ngrams for the ciphertext to extract the ones you want
+
+#log them all and then use the log(ab) = log a + log b
+
+
+user = input("text: ")
+x =  quadgramExtraction(user)
+loadEnglishQuadgram()
+print(x)

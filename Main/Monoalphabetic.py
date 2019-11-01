@@ -443,5 +443,5 @@ Chi Squared             {printedChi}
         keyIterations = keyIterations + 1
 
 
-# convert all the counts for ngrams into probabilities 
+
 # Find some typical log probabilities for english texts and for texts with different ciphers put through them to get a rough guage of how fit it is

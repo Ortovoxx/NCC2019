@@ -117,7 +117,7 @@ def ngramFitness(quadramDitionaryCiphertext,quadramDitionaryEnglish):
 
 
 # convert all the counts for ngrams into probabilities 
-#Find some typical log probabilities for english texts and for texts with different ciphers put through them to get a rough guage of how fit it is
+# Find some typical log probabilities for english texts and for texts with different ciphers put through them to get a rough guage of how fit it is
 
 quadramDitionaryEnglish = loadEnglishNgram()
 user = input("text: ")

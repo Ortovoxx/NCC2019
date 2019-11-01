@@ -184,7 +184,7 @@ def loadEnglishNgram(): #loads a ngram file to a python ditionary
     os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/ngrams") #path of ngram file to load make sure .txt file is in this folder MAKE SURE NGRAMS ARE LOWER CASE
     quadramDitionaryEnglish = {}
     index = 0
-    with open("english_quadgrams.txt", "r") as f:
+    with open("english_quadgrams.txt", "r") as f: #MAKE SURE YOUR NGRAM TRAINING FILE IS HERE!!!!!!
         quadramData = f.read()
         quadramArray = quadramData.split()
         while index < len(quadramArray):

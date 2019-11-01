@@ -22,10 +22,7 @@ def removePunctuation(string): #Removes punctuation from a string input
     charactersNoSymbolJoint = "".join(charactersNoSymbol)
     return charactersNoSymbolJoint
 
-
-
 os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/textCorpus")
-f = open("englishQuadgrams.txt", "w")
 quadramDitionaryEnglish = {}
 index = 0
 with open("corpus.txt", "r") as f:
@@ -48,6 +45,7 @@ with open("corpus.txt", "r") as f:
         else:
             quadramDitionaryCiphertext[quad] = 1
         index = index + 1
-    for x in quadramDitionaryCiphertext:
-        f.write(x)
-        f.write(str(quadramDitionaryCiphertext[x]))
+    with open("englishQuadgrams.txt", "w") as f:
+        for n in quadramDitionaryCiphertext:
+            f.writelines(n + " ")
+            f.writelines(str(quadramDitionaryCiphertext[n]) + "\n")

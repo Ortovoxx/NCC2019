@@ -70,7 +70,7 @@ import math
 
 
 
-def quadgramExtraction(userCiperText): #Finds quadgrams from a ciphertext
+def ngramExtraction(userCiperText): #Finds quadgrams from a ciphertext
     cipherText = list(removeSpaces(removePunctuation(userCiperText)))
     quadramDitionaryCiphertext = {}
     index = 0
@@ -91,8 +91,8 @@ def quadgramExtraction(userCiperText): #Finds quadgrams from a ciphertext
         index = index + 1
     return quadramDitionaryCiphertext
 
-def loadEnglishQuadgram(): #loads a ngram file to a python ditionary
-    os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/ngrams")
+def loadEnglishNgram(): #loads a ngram file to a python ditionary
+    os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/ngrams") #path of ngram file to load make sure .txt file is in this folder MAKE SURE NGRAMS ARE LOWER CASE
     quadramDitionaryEnglish = {}
     index = 0
     with open("english_quadgrams.txt", "r") as f:
@@ -104,7 +104,7 @@ def loadEnglishQuadgram(): #loads a ngram file to a python ditionary
     return quadramDitionaryEnglish
     
 
-def fitness(quadramDitionaryCiphertext,quadramDitionaryEnglish):
+def ngramFitness(quadramDitionaryCiphertext,quadramDitionaryEnglish):
     logAB = []
     probQuadgram = 0
     for index in quadramDitionaryCiphertext:
@@ -119,9 +119,9 @@ def fitness(quadramDitionaryCiphertext,quadramDitionaryEnglish):
 # convert all the counts for ngrams into probabilities 
 #Find some typical log probabilities for english texts and for texts with different ciphers put through them to get a rough guage of how fit it is
 
-quadramDitionaryEnglish = loadEnglishQuadgram()
+quadramDitionaryEnglish = loadEnglishNgram()
 user = input("text: ")
-quadramDitionaryCiphertext =  quadgramExtraction(user)
-x = fitness(quadramDitionaryCiphertext,quadramDitionaryEnglish)
+quadramDitionaryCiphertext =  ngramExtraction(user)
+x = ngramFitness(quadramDitionaryCiphertext,quadramDitionaryEnglish)
 print(x)
 

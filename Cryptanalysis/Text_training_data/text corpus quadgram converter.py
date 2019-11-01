@@ -22,10 +22,10 @@ def removePunctuation(string): #Removes punctuation from a string input
     charactersNoSymbolJoint = "".join(charactersNoSymbol)
     return charactersNoSymbolJoint
 
-os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/textCorpus")
+os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/Text_training_data") #Change to your local directory which contains this file, the training data .txt file and the output .txt file
 quadramDitionaryEnglish = {}
 index = 0
-with open("corpus.txt", "r") as f:
+with open("training_text.txt", "r") as f:
     dataUnformatted = f.read()
     quadramData = list(removeSpaces(removePunctuation(dataUnformatted)))
     quadramDitionaryCiphertext = {}
@@ -45,7 +45,7 @@ with open("corpus.txt", "r") as f:
         else:
             quadramDitionaryCiphertext[quad] = 1
         index = index + 1
-    with open("englishQuadgrams.txt", "w") as f:
+    with open("quadgram_output.txt", "w") as f:
         for n in quadramDitionaryCiphertext:
             f.writelines(n + " ")
             f.writelines(str(quadramDitionaryCiphertext[n]) + "\n")

@@ -25,7 +25,7 @@ def removePunctuation(string): #Removes punctuation from a string input
 os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/Text_training_data") #Change to your local directory which contains this file, the training data .txt file and the output .txt file
 quadramDitionaryEnglish = {}
 index = 0
-with open("training_text.txt", "r") as f:
+with open("training_text.txt", "r") as f: #ENSURE THIS FILE NAME IS CORRECT OTHERWISE IT WILL ERROR!!!!!!!!
     dataUnformatted = f.read()
     quadramData = list(removeSpaces(removePunctuation(dataUnformatted)))
     quadramDitionaryCiphertext = {}
@@ -45,7 +45,7 @@ with open("training_text.txt", "r") as f:
         else:
             quadramDitionaryCiphertext[quad] = 1
         index = index + 1
-    with open("quadgram_output.txt", "w") as f:
+    with open("ngram_output.txt", "w") as f:
         for n in quadramDitionaryCiphertext:
             f.writelines(n + " ")
             f.writelines(str(quadramDitionaryCiphertext[n]) + "\n")

@@ -52,50 +52,21 @@ def search(itemToCheckFor,listToSearchFrom): #LINEAR SEARCH GLOBAL FUNCTION - Se
             found = True
         position = position + 1
     return found
-'''
-Allows scoring of text using n-gram probabilities
-17/07/12
-
-from math import log10
 
 
-
-
-
-class ngram_score(object):
-    def __init__(self,ngramfile,sep=' '):
-        # load a file containing ngrams and counts, calculate log probabilities 
-        self.ngrams = {}
-        for line in file(ngramfile):
-            key,count = line.split(sep) 
-            self.ngrams[key] = int(count)
-        self.L = len(key)
-        self.N = sum(self.ngrams.itervalues())
-        #calculate log probabilities
-        for key in self.ngrams.keys():
-            self.ngrams[key] = log10(float(self.ngrams[key])/self.N)
-        self.floor = log10(0.01/self.N)
-
-    def score(self,text):
-        # compute the score of text 
-        score = 0
-        ngrams = self.ngrams.__getitem__
-        for i in xrange(len(text)-self.L+1):
-            if text[i:i+self.L] in self.ngrams: score += ngrams(text[i:i+self.L])
-            else: score += self.floor          
-        return score
-
-'''
-import os
 
 #x = os.getcwd() #current working directory
 #y = os.listdir() #lists all items in a directory
 #print(y)
 #print(x)
-
-
 # 389,373 unique quadrams in the file
 # 2,512,972 total quadgram
+
+
+
+import os
+import math
+
 
 
 
@@ -120,7 +91,7 @@ def quadgramExtraction(userCiperText): #Finds quadgrams from a ciphertext
         index = index + 1
     return quadramDitionaryCiphertext
 
-def loadEnglishQuadgram():
+def loadEnglishQuadgram(): #loads a ngram file to a python ditionary
     os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/ngrams")
     quadramDitionaryEnglish = {}
     index = 0
@@ -128,32 +99,29 @@ def loadEnglishQuadgram():
         quadramData = f.read()
         quadramArray = quadramData.split()
         while index < len(quadramArray):
-            quadramDitionaryEnglish[quadramArray[index]] = int(quadramArray[index + 1])
+            quadramDitionaryEnglish[quadramArray[index]] = float(quadramArray[index + 1])
             index = index + 2
-    print("done")
     return quadramDitionaryEnglish
     
 
 def fitness(quadramDitionaryCiphertext,quadramDitionaryEnglish):
-    index = 0
-    if quadramDitionaryCiphertext[index] in quadramDitionaryEnglish:
-        quadramDitionaryCiphertext[index] = quadramDitionaryEnglish[quadramDitionaryCiphertext[index]]
-    
-
-
-    fitnessScore = 0
-    return fitnessScore
-
+    logAB = []
+    probQuadgram = 0
+    for index in quadramDitionaryCiphertext:
+        if index in quadramDitionaryEnglish:
+            probQuadgram = quadramDitionaryEnglish[index]
+    loggedProbQuadgram = math.log10(probQuadgram)
+    logAB.append(loggedProbQuadgram)
+    final = sum(logAB)
+    return final
 
 
 # convert all the counts for ngrams into probabilities 
+#Find some typical log probabilities for english texts and for texts with different ciphers put through them to get a rough guage of how fit it is
 
-#load the probabilites then compare it to the ngrams for the ciphertext to extract the ones you want
-
-#log them all and then use the log(ab) = log a + log b
-
-
+quadramDitionaryEnglish = loadEnglishQuadgram()
 user = input("text: ")
-x =  quadgramExtraction(user)
-loadEnglishQuadgram()
+quadramDitionaryCiphertext =  quadgramExtraction(user)
+x = fitness(quadramDitionaryCiphertext,quadramDitionaryEnglish)
 print(x)
+

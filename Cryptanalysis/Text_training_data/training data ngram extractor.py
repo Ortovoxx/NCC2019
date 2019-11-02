@@ -29,7 +29,6 @@ os.chdir("/Users/Euan/Desktop") #Change to your local directory which contains t
 with open("training_text.txt", "r") as f: #ENSURE THIS FILE NAME IS CORRECT OTHERWISE IT WILL ERROR!!!!!!!!
     lines = f.readlines()
     for line in lines:
-    #dataUnformatted = f.read()
         datanew = line.strip("\n")
         quadramData = list(removeSpaces(removePunctuation(datanew)))
         index = 0
@@ -48,7 +47,6 @@ with open("training_text.txt", "r") as f: #ENSURE THIS FILE NAME IS CORRECT OTHE
             else:
                 quadramDitionaryEnglish[quad] = 1
             index = index + 1
-            #print(quadramDitionaryEnglish)
     with open("ngram_output.txt", "w") as f:
         for n in quadramDitionaryEnglish:
             probability = quadramDitionaryEnglish[n] / len(quadramDitionaryEnglish) #calculates the probability of an ngram occuring
@@ -59,13 +57,4 @@ with open("training_text.txt", "r") as f: #ENSURE THIS FILE NAME IS CORRECT OTHE
         for n in quadramDitionaryEnglish:
             f.writelines(n + " ") #the ngram
             f.writelines(str(quadramDitionaryEnglish[n]) + "\n") #the number of occurances
-
-
-with open("training_text33.txt", "r") as f:
-    lines = f.readlines()
-with open("training_text33.txt", "w") as f:
-    for line in lines:
-        linearray = list(lines)
-        if line.strip("\n") != "Title":
-            f.write(line)
-            '''
+'''

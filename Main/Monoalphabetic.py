@@ -5,6 +5,8 @@
 import random
 import os
 import math
+import time
+import requests
 
 #Menu and input formats
 cipherSolverInputFormat = '''*************** CIPHERTEXT: **************

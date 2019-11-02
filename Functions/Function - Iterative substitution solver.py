@@ -1,4 +1,6 @@
 import random
+import math
+import os
 alphabetASCII = [97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122]
 alphabetCHARACTER = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 #IN %
@@ -95,6 +97,51 @@ def randomKey(): #generates a random key
             perms = perms + 1
     finalKey = "".join(convertToCHARACTER(key))
     return finalKey
+def loadEnglishNgram(): #loads a ngram file to a python ditionary
+    os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/Text_training_data") #path of ngram file to load make sure .txt file is in this folder MAKE SURE NGRAMS ARE LOWER CASE
+    quadramDitionaryEnglish = {}
+    index = 0
+    with open("ngram_output.txt", "r") as f:
+        quadramData = f.read()
+        quadramArray = quadramData.split()
+        while index < len(quadramArray):
+            quadramDitionaryEnglish[quadramArray[index]] = float(quadramArray[index + 1])
+            index = index + 2
+    return quadramDitionaryEnglish
+def ngramExtraction(userCiperText): #Finds quadgrams from a ciphertext
+    cipherText = list(removeSpaces(removePunctuation(userCiperText)))
+    quadramDitionaryCiphertext = {}
+    index = 0
+    n = 4 # the n in ngram -  change to 2 for bigrams and 3 for trigrams etc
+    while index < len(cipherText) - (n - 1):
+        quadIndex = 0
+        singleQuadgram = []
+        while quadIndex < n and index < len(cipherText):
+            if index + quadIndex < len(cipherText):
+                quaterQuadgramChar = cipherText[index + quadIndex]
+                singleQuadgram.append(quaterQuadgramChar)
+                quadIndex = quadIndex + 1
+        quad = "".join(singleQuadgram)
+        if quad in quadramDitionaryCiphertext:
+            quadramDitionaryCiphertext[quad] = quadramDitionaryCiphertext[quad] + 1
+        else:
+            quadramDitionaryCiphertext[quad] = 1
+        index = index + 1
+    return quadramDitionaryCiphertext
+def ngramFitness(quadramDitionaryCiphertext,quadramDitionaryEnglish):
+    logAB = []
+    probQuadgram = 0
+    for index in quadramDitionaryCiphertext:
+        if index in quadramDitionaryEnglish:
+            probQuadgram = quadramDitionaryEnglish[index]
+            loggedProbQuadgram = math.log10(probQuadgram)
+            logAB.append(loggedProbQuadgram)
+        else:
+            probQuadgram = 0.00000000001 #floors it as / 0 should be -infinity but that cannot be logged -- smaller this number bigger gap between english and non english
+            loggedProbQuadgram = math.log10(probQuadgram)
+            logAB.append(loggedProbQuadgram)
+    final = sum(logAB)
+    return final
 
 
 
@@ -103,7 +150,9 @@ def randomKey(): #generates a random key
 def iterativeSolving(userCipherText):
     parentKey = randomKey() #parent Key is generated using frequency analysis
     decipher = substitionKeyCipher(userCipherText,parentKey) #solves parent cipher using the parent key
-    parentScore = chiSquaredStat(decipher) #Gets the text fitness of this ciphertext
+    parentScoreNgram = ngramExtraction(decipher) #Gets the text fitness of this ciphertext
+    englishDIC = loadEnglishNgram()
+    parentScore = ngramFitness(parentScoreNgram,englishDIC)
     iteration = 0
     while iteration < 1000:
         a = random.randint(0,25) #2 random letters (numbers) generated
@@ -112,7 +161,9 @@ def iterativeSolving(userCipherText):
         childKeyArray[a],childKeyArray[b] = childKeyArray[b],childKeyArray[a] # swap two characters in the child
         childKey = "".join(childKeyArray) #converts child key array into a string
         decipher = substitionKeyCipher(userCipherText,childKey) #deciphers the ciphertext with the new jumbled key
-        childScore = chiSquaredStat(decipher) #gets the text fitness score of the new ciphertext
+        childScoreNgram = ngramExtraction(decipher) #Gets the text fitness of the new ciphertext
+        englishDIC2 = loadEnglishNgram()
+        childScore = ngramFitness(childScoreNgram,englishDIC2)
         if childScore < parentScore: # if the child was better, replace the parent with it. Else dont...
             parentScore = childScore
             parentKey = childKey
@@ -124,3 +175,6 @@ def iterativeSolving(userCipherText):
 userCipherText = input("text: ")
 x = iterativeSolving(userCipherText)
 print(x)
+
+
+# make scores better

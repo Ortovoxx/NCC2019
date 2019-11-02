@@ -2,13 +2,15 @@ import time
 import requests
 import os
 
-#"http://www.gutenberg.org/files/" + str(index) + "/" + str(index) + ".txt" <<<<<< ASCII ENCODING
-#"http://www.gutenberg.org/files/" + str(index) + "/" + str(index) + "-0.txt" <<<<< GIVES UTF-8 ENCODING
+#"http://www.gutenberg.org/files/" + str(index) + "/" + str(index) + ".txt" <<<<<< ASCII ENCODING 
+# [ http://www.gutenberg.org/files/123/123.txt ]
+#"http://www.gutenberg.org/files/" + str(index) + "/" + str(index) + "-0.txt" <<<<< GIVES UTF-8 ENCODING 
+# [ http://www.gutenberg.org/files/123/123-0.txt ]
 
 os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/Text_training_data/training_text") #Directory you want files to be saved in
 index = 1
-while index < 5000:
-    url = "http://www.gutenberg.org/files/" + str(index) + "/" + str(index) + ".txt" #constructs the .txt files url
+while index < 44000:
+    url = "http://www.gutenberg.org/files/" + str(index) + "/" + str(index) + ".txt" #constructs the .txt files url <<<<<< ASCII ENCODING
     myfile = requests.get(url) #downloads the file
     filename = "training_text" + str(index) + ".txt" #constructs file name
     remove = False

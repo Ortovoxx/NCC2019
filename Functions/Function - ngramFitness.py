@@ -92,10 +92,10 @@ def ngramExtraction(userCiperText): #Finds quadgrams from a ciphertext
     return quadramDitionaryCiphertext
 
 def loadEnglishNgram(): #loads a ngram file to a python ditionary
-    os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/ngrams") #path of ngram file to load make sure .txt file is in this folder MAKE SURE NGRAMS ARE LOWER CASE
+    os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/Text_training_data") #path of ngram file to load make sure .txt file is in this folder MAKE SURE NGRAMS ARE LOWER CASE
     quadramDitionaryEnglish = {}
     index = 0
-    with open("english_quadgrams.txt", "r") as f:
+    with open("ngram_output.txt", "r") as f:
         quadramData = f.read()
         quadramArray = quadramData.split()
         while index < len(quadramArray):
@@ -110,8 +110,12 @@ def ngramFitness(quadramDitionaryCiphertext,quadramDitionaryEnglish):
     for index in quadramDitionaryCiphertext:
         if index in quadramDitionaryEnglish:
             probQuadgram = quadramDitionaryEnglish[index]
-    loggedProbQuadgram = math.log10(probQuadgram)
-    logAB.append(loggedProbQuadgram)
+            loggedProbQuadgram = math.log10(probQuadgram)
+            logAB.append(loggedProbQuadgram)
+        else:
+            probQuadgram = 0.00000000001 #floors it as / 0 should be -infinity but that cannot be logged -- smaller this number bigger gap between english and non english
+            loggedProbQuadgram = math.log10(probQuadgram)
+            logAB.append(loggedProbQuadgram)
     final = sum(logAB)
     return final
 

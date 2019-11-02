@@ -22,9 +22,10 @@ def removePunctuation(string): #Removes punctuation from a string input
     charactersNoSymbolJoint = "".join(charactersNoSymbol)
     return charactersNoSymbolJoint
 
-os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/Text_training_data") #Change to your local directory which contains this file, the training data .txt file and the output .txt file
+
 quadramDitionaryEnglish = {}
 index = 0
+os.chdir("/Users/Euan/Desktop") #Change to your local directory which contains this file, the training data .txt file and the output .txt file
 with open("training_text.txt", "r") as f: #ENSURE THIS FILE NAME IS CORRECT OTHERWISE IT WILL ERROR!!!!!!!!
     dataUnformatted = f.read()
     quadramData = list(removeSpaces(removePunctuation(dataUnformatted)))

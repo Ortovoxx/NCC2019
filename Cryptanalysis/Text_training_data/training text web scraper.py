@@ -8,7 +8,7 @@ import os
 # [ http://www.gutenberg.org/files/123/123-0.txt ]
 
 os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/Text_training_data/training_text") #Directory you want files to be saved in
-index = 1
+index = 1039
 while index < 44000:
     url = "http://www.gutenberg.org/files/" + str(index) + "/" + str(index) + ".txt" #constructs the .txt files url <<<<<< ASCII ENCODING
     myfile = requests.get(url) #downloads the file
@@ -23,5 +23,6 @@ while index < 44000:
             remove = True
     if remove == True: #removes the file if there was a 404 error and therefore the file is just html
         os.remove(filename)
-    time.sleep(1) #waits a second so gutenberg servers do not kick us off for downloading too quickly
+        print("removed " + filename)
+    #time.sleep(0.1) #waits 0.1 seconds so gutenberg servers do not kick us off for downloading too quickly
     index = index + 1

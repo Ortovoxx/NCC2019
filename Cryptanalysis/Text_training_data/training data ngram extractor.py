@@ -27,25 +27,28 @@ quadramDitionaryEnglish = {}
 index = 0
 os.chdir("/Users/Euan/Desktop") #Change to your local directory which contains this file, the training data .txt file and the output .txt file
 with open("training_text.txt", "r") as f: #ENSURE THIS FILE NAME IS CORRECT OTHERWISE IT WILL ERROR!!!!!!!!
-    dataUnformatted = f.read()
-    quadramData = list(removeSpaces(removePunctuation(dataUnformatted)))
-    quadramDitionaryEnglish = {}
-    index = 0
-    n = 4 # the n in ngram -  change to 2 for bigrams and 3 for trigrams etc
-    while index < len(quadramData) - (n - 1):
-        quadIndex = 0
-        singleQuadgram = []
-        while quadIndex < n and index < len(quadramData):
-            if index + quadIndex < len(quadramData):
-                quaterQuadgramChar = quadramData[index + quadIndex]
-                singleQuadgram.append(quaterQuadgramChar)
-                quadIndex = quadIndex + 1
-        quad = "".join(singleQuadgram)
-        if quad in quadramDitionaryEnglish:
-            quadramDitionaryEnglish[quad] = quadramDitionaryEnglish[quad] + 1
-        else:
-            quadramDitionaryEnglish[quad] = 1
-        index = index + 1
+    lines = f.readlines()
+    for line in lines:
+    #dataUnformatted = f.read()
+        datanew = line.strip("\n")
+        quadramData = list(removeSpaces(removePunctuation(datanew)))
+        index = 0
+        n = 4 # the n in ngram -  change to 2 for bigrams and 3 for trigrams etc
+        while index < len(quadramData) - (n - 1):
+            quadIndex = 0
+            singleQuadgram = []
+            while quadIndex < n and index < len(quadramData):
+                if index + quadIndex < len(quadramData):
+                    quaterQuadgramChar = quadramData[index + quadIndex]
+                    singleQuadgram.append(quaterQuadgramChar)
+                    quadIndex = quadIndex + 1
+            quad = "".join(singleQuadgram)
+            if quad in quadramDitionaryEnglish:
+                quadramDitionaryEnglish[quad] = quadramDitionaryEnglish[quad] + 1
+            else:
+                quadramDitionaryEnglish[quad] = 1
+            index = index + 1
+            #print(quadramDitionaryEnglish)
     with open("ngram_output.txt", "w") as f:
         for n in quadramDitionaryEnglish:
             probability = quadramDitionaryEnglish[n] / len(quadramDitionaryEnglish) #calculates the probability of an ngram occuring
@@ -56,4 +59,13 @@ with open("training_text.txt", "r") as f: #ENSURE THIS FILE NAME IS CORRECT OTHE
         for n in quadramDitionaryEnglish:
             f.writelines(n + " ") #the ngram
             f.writelines(str(quadramDitionaryEnglish[n]) + "\n") #the number of occurances
-'''
+
+
+with open("training_text33.txt", "r") as f:
+    lines = f.readlines()
+with open("training_text33.txt", "w") as f:
+    for line in lines:
+        linearray = list(lines)
+        if line.strip("\n") != "Title":
+            f.write(line)
+            '''

@@ -182,38 +182,40 @@ def chiSquaredStat(text): #String input which calculates the chi-squared statist
         alphaIndex = alphaIndex + 1
     chiSquared = sum(chiSquaredARRAY)
     return chiSquared
-def loadEnglishNgram(): #loads a ngram file to a python ditionary
-    os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/Text_training_data") #path of ngram file to load make sure .txt file is in this folder MAKE SURE NGRAMS ARE LOWER CASE
-    quadramDitionaryEnglish = {}
-    index = 0
-    with open("ngram_output.txt", "r") as f:
-        quadramData = f.read()
-        quadramArray = quadramData.split()
-        while index < len(quadramArray):
-            quadramDitionaryEnglish[quadramArray[index]] = float(quadramArray[index + 1])
-            index = index + 2
-    return quadramDitionaryEnglish
-def ngramExtraction(userCiperText): #Finds quadgrams from a ciphertext
-    cipherText = list(removeSpaces(removePunctuation(userCiperText)))
-    quadramDitionaryCiphertext = {}
-    index = 0
-    n = 4 # the n in ngram -  change to 2 for bigrams and 3 for trigrams etc
-    while index < len(cipherText) - (n - 1):
-        quadIndex = 0
-        singleQuadgram = []
-        while quadIndex < n and index < len(cipherText):
-            if index + quadIndex < len(cipherText):
-                quaterQuadgramChar = cipherText[index + quadIndex]
-                singleQuadgram.append(quaterQuadgramChar)
-                quadIndex = quadIndex + 1
-        quad = "".join(singleQuadgram)
-        if quad in quadramDitionaryCiphertext:
-            quadramDitionaryCiphertext[quad] = quadramDitionaryCiphertext[quad] + 1
-        else:
-            quadramDitionaryCiphertext[quad] = 1
-        index = index + 1
-    return quadramDitionaryCiphertext
-def ngramFitness(quadramDitionaryCiphertext,quadramDitionaryEnglish):
+def ngramFitness(userCiperText):
+    def ngramExtraction(userCiperText): #Finds quadgrams from a ciphertext
+        cipherText = list(removeSpaces(removePunctuation(userCiperText)))
+        quadramDitionaryCiphertext = {}
+        index = 0
+        n = 4 # the n in ngram -  change to 2 for bigrams and 3 for trigrams etc
+        while index < len(cipherText) - (n - 1):
+            quadIndex = 0
+            singleQuadgram = []
+            while quadIndex < n and index < len(cipherText):
+                if index + quadIndex < len(cipherText):
+                    quaterQuadgramChar = cipherText[index + quadIndex]
+                    singleQuadgram.append(quaterQuadgramChar)
+                    quadIndex = quadIndex + 1
+            quad = "".join(singleQuadgram)
+            if quad in quadramDitionaryCiphertext:
+                quadramDitionaryCiphertext[quad] = quadramDitionaryCiphertext[quad] + 1
+            else:
+                quadramDitionaryCiphertext[quad] = 1
+            index = index + 1
+        return quadramDitionaryCiphertext
+    def loadEnglishNgram(): #loads a ngram file to a python ditionary
+        os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/Text_training_data") #path of ngram file to load make sure .txt file is in this folder MAKE SURE NGRAMS ARE LOWER CASE
+        quadramDitionaryEnglish = {}
+        index = 0
+        with open("ngram_output.txt", "r") as f:
+            quadramData = f.read()
+            quadramArray = quadramData.split()
+            while index < len(quadramArray):
+                quadramDitionaryEnglish[quadramArray[index]] = float(quadramArray[index + 1])
+                index = index + 2
+        return quadramDitionaryEnglish
+    quadramDitionaryEnglish = loadEnglishNgram()
+    quadramDitionaryCiphertext = ngramExtraction(userCiperText)
     logAB = []
     probQuadgram = 0
     for index in quadramDitionaryCiphertext:
@@ -222,7 +224,7 @@ def ngramFitness(quadramDitionaryCiphertext,quadramDitionaryEnglish):
             loggedProbQuadgram = math.log10(probQuadgram)
             logAB.append(loggedProbQuadgram)
         else:
-            probQuadgram = 0.00000000001 #floors it as / 0 should be -infinity but that cannot be logged -- smaller this number bigger gap between english and non english
+            probQuadgram = 1e-50 #floors it as / 0 should be -infinity but that cannot be logged -- smaller this number bigger gap between english and non english
             loggedProbQuadgram = math.log10(probQuadgram)
             logAB.append(loggedProbQuadgram)
     final = sum(logAB)

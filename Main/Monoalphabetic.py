@@ -356,8 +356,8 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
     indexToCompare = loopIteration = 0
     englishIndexOrderArray = []
     randomIncrease = 100
-    lowerRandom = -1
-    upperRandom = 1
+    lowerRandom = -2
+    upperRandom = 2
     while indexToCompare < 26: 
         #Matches the frequencies of individual letters in the ciphertext to that of english producing a key
         #Gets the frequency of ciphertext in % and compares it to the % of english and then returns an array with the positions of the closest values

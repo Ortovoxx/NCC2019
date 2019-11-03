@@ -57,7 +57,7 @@ def loadEnglishNgram(): #loads a ngram file to a python ditionary
             quadramArray = quadramData.split()
             while index < len(quadramArray):
                 quadramDitionaryEnglish[quadramArray[index]] = float(quadramArray[index + 1])
-                index = index + 2
+                index += 2
         return quadramDitionaryEnglish
 ngramDitionaryEnglish = loadEnglishNgram()
 
@@ -69,13 +69,13 @@ def convertToASCII(textArray): #Converts an array of characters into an array of
     index = 0
     while index < len(textArray): #goes through each array index and turns it from Character to ASCII
         textArray[index] = ord(textArray[index])
-        index = index + 1
+        index += 1
     return textArray
 def convertToCHARACTER(textArray): #Converts an array of ASCII equivalent numbers into an array of their ASCII equivalent characters
     index = 0
     while index < len(textArray): #goes through each array index and turns it from ASCII number to Character
         textArray[index] = chr(textArray[index])
-        index = index + 1
+        index += 1
     return textArray
 def removePunctuation(string): #Removes punctuation from a string input
     plainText = string.lower() 
@@ -85,7 +85,7 @@ def removePunctuation(string): #Removes punctuation from a string input
     while index < len(characters):
         if ord(characters[index]) > 96 and ord(characters[index]) < 123 or ord(characters[index]) == 32: # 97 = A 122 = Z 32 = [SPACE]
             charactersNoSymbol.append(characters[index])
-        index = index + 1
+        index += 1
     charactersNoSymbolJoint = "".join(charactersNoSymbol)
     return charactersNoSymbolJoint
 def removeSpaces(string): #Removes spaces from a string input
@@ -96,7 +96,7 @@ def removeSpaces(string): #Removes spaces from a string input
     while index < len(characters):
         if ord(characters[index]) != 32: # 32 ASCII for space
             charactersNoSpace.append(characters[index])
-        index = index + 1
+        index += 1
     charactersNoSpaceJoint = "".join(charactersNoSpace)
     return charactersNoSpaceJoint
 def reverseString(string): #Reverses the text
@@ -107,7 +107,7 @@ def search(itemToCheckFor,listToSearchFrom): #LINEAR SEARCH GLOBAL FUNCTION - Se
     while position < len(listToSearchFrom) and not found:
         if listToSearchFrom[position] == itemToCheckFor:
             found = True
-        position = position + 1
+        position += 1
     return found
 def substitionKeyCipher(userCipherText,userKey): #maps a ciphertext to plaintext according to the key given to it
     cipherText = convertToASCII(list(userCipherText)) #Converting cipher to numbers
@@ -118,13 +118,13 @@ def substitionKeyCipher(userCipherText,userKey): #maps a ciphertext to plaintext
         while alphaPerm < len(alphabetASCII): #as it goes through a letter it changes it 
             if cipherChar == key[alphaPerm]:
                 newChar = alphabetASCII[alphaPerm]
-            alphaPerm = alphaPerm + 1
+            alphaPerm += 1
         return newChar
     textPerm = 0
     switchedCipher = []
     while textPerm < len(cipherText): #Goes through each character one by one and sends to the function which converts cipher to plain
         switchedCipher.append(switchChar(cipherText[textPerm]))
-        textPerm = textPerm + 1
+        textPerm += 1
     switchedCipherStr = "".join(convertToCHARACTER(switchedCipher))
     return switchedCipherStr
 def clearScoreEnglish(cipherText): # clear Score function that returns % english when string inputted 
@@ -134,7 +134,7 @@ def clearScoreEnglish(cipherText): # clear Score function that returns % english
         while freqPosition < len(freqWords) and not english: # Linear searches a specific word with the english language
             if freqWords[freqPosition] == cipherWord:
                 english = True
-            freqPosition = freqPosition + 1
+            freqPosition += 1
         return english
     cipherEnglishArray = []
     cipherTextSplit = cipherText.split()
@@ -142,7 +142,7 @@ def clearScoreEnglish(cipherText): # clear Score function that returns % english
     while cipherPosition < len(cipherTextSplit):
         cipherEnglish = searchWords(cipherTextSplit[cipherPosition],freqWords) 
         cipherEnglishArray.append(cipherEnglish) # puts all the T's and F's into an array
-        cipherPosition = cipherPosition + 1
+        cipherPosition += 1
     trues = cipherEnglishArray.count(True)
     clearScore = round((trues / len(cipherEnglishArray)) * 100) # Calculates how many T's there are in array and outputs a % english
     cipherEnglishArray.clear()
@@ -157,10 +157,10 @@ def characterFrequency(encryptedTextUnformatted):
         #AND the alphabet index is less than 25, (i.e all letters encompassed only):
         while i != letter[index] and index < 25: #THEN increment pos index ++, avoids indexing greater than alphabet list
            if index <= 24:
-               index = index + 1
+               index += 1
         else: #increments relative index dependant upon character contained within i
             if i == letter[index]:
-                frequencies[index] = frequencies[index]+1 #if character in encrypted_text is a space,data @ alphabet[26] ++:           
+                frequencies[index] = frequencies[index] + 1 #if character in encrypted_text is a space,data @ alphabet[26] ++:           
     return frequencies
 def characterFrequencySpaces(encryptedText):
     frequencies=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -171,14 +171,14 @@ def characterFrequencySpaces(encryptedText):
         #AND the alphabet index is less than 25, (i.e all letters encompassed only):
         while i != letter[index] and index < 25: #THEN increment pos index ++, avoids indexing greater than alphabet list
            if index <= 24:
-               index = index + 1
+               index += 1
         else: #increments relative index dependant upon character contained within i
             if i == letter[index]:
-                frequencies[index] = frequencies[index]+1 #if character in encrypted_text is a space,data @ alphabet[26] ++:
+                frequencies[index] = frequencies[index] + 1 #if character in encrypted_text is a space,data @ alphabet[26] ++:
             elif i == " ":
-                 frequencies[26]= frequencies[26]+1 #if character in encrypted_text therefore is not a recognised characer,data @ alphabet[27] ++
+                 frequencies[26]= frequencies[26] + 1 #if character in encrypted_text therefore is not a recognised characer,data @ alphabet[27] ++
             else:
-                frequencies[27]= frequencies[27]+1              
+                frequencies[27]= frequencies[27] + 1              
     return frequencies
 def indexOfCoincidence(text): #String input to calculate the Index of Coincidence of a text
     def letter(letterCount,textLength):
@@ -189,10 +189,10 @@ def indexOfCoincidence(text): #String input to calculate the Index of Coincidenc
     textArray = convertToASCII(list(removeSpaces(removePunctuation(text))))
     textLength = len(textArray)
     while alphaIndex < len(alphabetASCII):
-        letterCount = textArray.count(alphaIndex+97)
+        letterCount = textArray.count(alphaIndex + 97)
         IoCARRAYStore = (letter(letterCount,textLength))
         IoCARRAY.append(IoCARRAYStore)
-        alphaIndex = alphaIndex + 1
+        alphaIndex += 1
     IoC = sum(IoCARRAY)
     return IoC
 def chiSquaredStat(text): #String input which calculates the chi-squared statistic of a text
@@ -208,7 +208,7 @@ def chiSquaredStat(text): #String input which calculates the chi-squared statist
         expectedLetterCount = textLength * englishLetterFrequencyProbability[alphaIndex] #Compares it against an english distribution
         chiSquaredARRAYStore = letter(realLetterCount,expectedLetterCount)
         chiSquaredARRAY.append(chiSquaredARRAYStore)
-        alphaIndex = alphaIndex + 1
+        alphaIndex += 1
     chiSquared = sum(chiSquaredARRAY)
     return chiSquared
 def ngramFitness(userCiperText,ngramDitionaryEnglish):
@@ -224,13 +224,13 @@ def ngramFitness(userCiperText,ngramDitionaryEnglish):
                 if index + quadIndex < len(cipherText):
                     quaterQuadgramChar = cipherText[index + quadIndex]
                     singleQuadgram.append(quaterQuadgramChar)
-                    quadIndex = quadIndex + 1
+                    quadIndex += 1
             quad = "".join(singleQuadgram)
             if quad in quadramDitionaryCiphertext:
                 quadramDitionaryCiphertext[quad] = quadramDitionaryCiphertext[quad] + 1
             else:
                 quadramDitionaryCiphertext[quad] = 1
-            index = index + 1
+            index += 1
         return quadramDitionaryCiphertext
     quadramDitionaryCiphertext = ngramExtraction(userCiperText)
     logAB = []
@@ -267,7 +267,7 @@ def randomKey(): #generates a random key
         repeat = search(randomNo,key) #Ensures each letter is unique
         if repeat == False:
             key.append(randomNo)
-            perms = perms + 1
+            perms += 1
     finalKey = "".join(convertToCHARACTER(key))
     return finalKey
 def keyWordRandom(index): #Keyword key generator - filled in bit being random characters
@@ -280,15 +280,15 @@ def keyWordRandom(index): #Keyword key generator - filled in bit being random ch
             while howMany > 1:
                 key.pop(where)
                 where = key.index(alphabetASCII[countIndex])
-                howMany = howMany - 1
-        countIndex = countIndex + 1
+                howMany -= 1
+        countIndex += 1
     perms = len(key)
     while perms < len(alphabetASCII): #Ensures 26 letters in the alphabet
         randomNo = random.randint(97, 122)
         repeat = search(randomNo,key) #Ensures each letter is unique
         if repeat == False:
             key.append(randomNo)
-            perms = perms + 1
+            perms += 1
     finalKey = "".join(convertToCHARACTER(key))
     return finalKey
 def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alphabet
@@ -301,8 +301,8 @@ def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alp
             while howMany > 1:
                 key.pop(where)
                 where = key.index(alphabetASCII[countIndex])
-                howMany = howMany - 1
-        countIndex = countIndex + 1
+                howMany -= 1
+        countIndex += 1
     perms = 0
     repeat = False
     while perms < len(alphabetASCII): #Ensures 26 letters in the alphabet
@@ -310,7 +310,7 @@ def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alp
         repeat = search(newChar,key) #Ensures each letter is unique
         if repeat == False:
             key.append(newChar)
-        perms = perms + 1
+        perms += 1
     finalKey = "".join(convertToCHARACTER(key))
     return finalKey
 
@@ -320,13 +320,12 @@ def searchFrequencyAnalysis(itemToCheckFor): #Compares the inputted value to sta
         mappedPosition = englishLetterFrequency.index(value)
         return mappedPosition
     position = 0
-    betweenValues = False
-    positionSortedAlphabetZero = False
+    betweenValues = positionSortedAlphabetZero = False
     while position < len(englishLetterFrequencySorted) and not betweenValues:
         if englishLetterFrequencySorted[position] > itemToCheckFor: #compares to the first, and because sorted, highest value and if it is less than it will move onto the second ( next highest)
             if position == 25: #If a value lower than the lowest value is inputted it will bypass everything else (ie input of 0 or less than 0.074)
                 positionSortedAlphabetZero = True
-            position = position + 1
+            position += 1
         elif englishLetterFrequencySorted[position] < itemToCheckFor: #Does the above until it it greater than the next value so it must be between position and the previous position ( position - 1 )
             betweenValues = True
         if betweenValues == True: #its greater than the position but less than position - 1
@@ -355,9 +354,8 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
     while indexOfFrequencyAnalysis < len(frequencyOfCipherText): #Converts frequency analysis data from number of occurrences into a % of text frequency analysis
         frequencyOfCipherText[indexOfFrequencyAnalysis] = round(((frequencyOfCipherText[indexOfFrequencyAnalysis] / len(cipherTextNoSpacesArray))*100),3 )
         indexOfFrequencyAnalysis += 1
-    indexToCompare = 0
+    indexToCompare = loopIteration = 0
     englishIndexOrderArray = []
-    loopIteration = 0
     randomIncrease = 100
     lowerRandom = -1
     upperRandom = 1
@@ -403,7 +401,7 @@ def iterativeSolving(userCipherText): #TODO NEEDS NEW FITNESS SCORE MEASURE
             parentScore = childScore
             parentKey = childKey
             iteration = 0 #reset the iteration count to 0 as it is getting better and is not at a local minimum
-        iteration = iteration + 1
+        iteration += 1
     if childScore < 50:
         return decipher
 
@@ -432,23 +430,23 @@ while True == True: #Loops the entire program
         if ceaserStart == True: #Ceaser shifts done 26 times
             userKey = ceaser("abcdefghijklmnopqrstuvwxyz", 26 - ceaserShifts)
             cipherOut = ceaser(userCipher, ceaserShifts)
-            ceaserShifts = ceaserShifts + 1
+            ceaserShifts += 1
         elif keyWordAlphabetStart == True: # Keyword keys done for all key words with the last letters being random
             userKey = keyWordAlphabet(keyWordAlphabetIndex)
             cipherOut = substitionKeyCipher(userCipher,userKey)
-            keyWordAlphabetIndex = keyWordAlphabetIndex + 1
+            keyWordAlphabetIndex += 1
         elif keyWordRandomStart == True: # Keyword keys done for all key words with the last letters being the alphabet
             userKey = keyWordRandom(keyWordRandomIndex)
             cipherOut = substitionKeyCipher(userCipher,userKey)
-            keyWordRandomIndex = keyWordRandomIndex + 1
+            keyWordRandomIndex += 1
         elif frequencyKeyStart == True: #Key generated from advanced frequency analysis
             userKey = frequencyKey(userCipher)
             cipherOut = substitionKeyCipher(userCipher,userKey)
-            frequencyKeyIndex = frequencyKeyIndex + 1
+            frequencyKeyIndex += 1
         elif randomKeyStart == True: # Last resort random keys
             userKey = randomKey()
             cipherOut = substitionKeyCipher(userCipher,userKey)
-            randomKeyIndex = randomKeyIndex + 1
+            randomKeyIndex += 1
         #########################################################
         #                   Text statistics
         #########################################################
@@ -477,52 +475,14 @@ Chi Squared             {printedChi}
         printedChi = chiSquaredText )#Formatting
         if clearScore > 1:
             print(cipherOutKeyOut)
-        keyIterations = keyIterations + 1
-
-#Plain -abcdefghijklmnopqrstuvwxyz
-
-#TEAOIHSNRDLMUGCFPWYBVKJX
+        keyIterations += 1
 
 
-#Cipher - rcnyjufqbmxitepagwhsdozkvl
-
-#SJRPBQHEWYITDFNUAZVCOXMK
-
-
-
-
-
-#abcdefghijklmnopqrstuvwxyz - 01;02;03;04;05;06;07;08;09;10;11;12;13;14;15;16;17;18;19;20;21;22;23;24;25;26
-#rcnyjufqbmxitepagwhsdozkvl - 18;03;14;25;10;21;06;17;02;13;24;09;20;05;16;01;07;23;08;19;04;15;26;11;22;12
-
-
-
-
-
-
-
-
-
-#TEAOIHSNRDLMUGCFPWYBVKJX - 20;05;01;15;09;08;19;14;18;04;12;13;21;07;03;06;16;23;25;02;22;11;10;24
-#SJRPBQHEWYITDFNUAZVCOXMK - 19;10;18;16;02;17;08;05;23;25;09;20;04;06;14;21;01;26;22;03;15;24;13;11;
-
-
-
-
-
-#SJRPBQHEWYITDFNUAZVCOXMK -   19;10;18;16;02;17;08;05;23;25;09;20;04;06;14;21;01;26;22;03;15;24;13;11;
-#rcnyjufqbmxitepagwhsdozkvl - 18;03;14;25;10;21;06;17;02;13;24;09;20;05;16;01;07;23;08;19;04;15;26;11;22;12
-
-
-
-
-
-
-#Example ciphers to try solve
+######  TEST CIPHERS TO TRY AND SOLVE  ######
 #rbo rpktigo vcrb bwucja wj kloj hcjd km sktpqo cq rbwr loklgo vcgg cjqcqr kj skhcja wgkja wjd rpycja rk ltr rbcjaq cj cr
 #Tjf, B sppx r ippx rs sqj ubij vpd hjes pojw rey bs zrh mdhs r wpsrsbpe nbaqjw raaibjy sp sqj sjks. Rs ubwhs bs zrh qrwy sp hrv bu sqrs zrh r cdf pw r ujrsdwj rey epwtriiv B zpdiy rhhdtj cdf, cds bs hjjtjy pyy sqrs bs zrh sqj peiv ubij sqrs zrh ruujnsjy hp B rhxjy rwpdey sp hjj bu revpej qry hjje revsqbef hbtbirw. Bs sdweh pds sqrs sqbh zrh eps sqj ubwhs erobfrsbpe awpcijt sp qbs sqj awpfwrttj. Fjej wjapwsjy r trmpw bhhdj zbsq sqj fdbyrenj awpfwrttj upw Heppav pe sqj Rapiip Sje tbhhbpe zqbnq npdiy rfrbe qroj nrdhjy r trmpw awpcijt. Upw hptj wjrhpe sqj awpfwrttj npeswpiibef sqj ireybef wryrw zrhe’s dayrsjy zbsq sqj uibfqs aire rey bu Fjej qrye’s wrbhjy sqrs zbsq Bojwhpe sqje sqj cpvh tbfqs qroj qry wjri swpdcij fjssbef crnx. B ippxjy sqwpdfq sqj nptarev ubijh rey updey repsqjw pu pdw tvhsjwbpdhiv upwtrssjy wjapwsh: sqj tjtp beupwtbef sqjt rcpds sqj nqrefj, zqbnq jkairbeh zqv sqj awpfwrttj ejojw fps dayrsjy. Sqbh sbtj sqj nbaqjw zrh re ruubej hqbus, hp hibfqsiv qrwyjw sp nwrnx, cds epsqbef hjwbpdh. Hsbii, bs bh tdnq ijhh ibxjiv sqrs bs zrh r cdf sqrs sbtj, rey be rev nrhj szbnj bh spp tdnq pu r npbenbyjenj. Bs yby hsrws tj zpeyjwbef zqv sqj hjnpey nbaqjw zrh jrhbjw sp nwrnx sqre sqj ubwhs, cds sqje B wjribhjy sqrs sqj ruubej hqbus zrh spp tdnq pu r fbojrzrv. R wpsrsbpe nbaqjw wjriiv npdiy mdhs cj re jenpybef jwwpw, cds sqj ruubej hqbus bh spp hpaqbhsbnrsjy upw r tbhsrxj, hp zqpjojw trefijy sqj wjapwsh tdhs qroj wjribhjy sqjv qry tryj r cbs pu re jwwpw zbsq sqj ubwhs pej rey swbjy sp npojw sqjbw hsjah zbsq sqj hjnpey. Bs bh qrwy sp hjj sqbh rh revsqbef psqjw sqre rssjtasjy hrcpsrfj, cds B rt eps hdwj zqrs sqj tpsboj npdiy cj. B ypdcs bs bh ajwhperi. Sqj Rapiip Sje rey Jijoje nwjzh ype’s pojwira, hp jbsqjw hptjpej qrh r fwdyfj rfrbehs sqj zqpij Rhswperds npwah pw sqjv rwj swvbef sp yjwrbi sqj Rapiip awpfwrttj. Bs npdiy cj sqj Hpobjsh B hdaaphj. Rs ubwhs, B sqpdfqs sqrs sqjbw zbiibefejhh sp hqbus sqj IDER-UBUSJJE pwcbs hqpzjy sqrs sqjv zjwje’s arws pu bs, cds hptjpej be sqj Hsrsj Yjarwstjes apbesjy pds sqrs sqjv tbfqs mdhs qroj qry r fdbisv npehnbjenj, pw cjje xjje sp ybhsrenj sqjthjiojh penj sqj aips zrh ybhnpojwjy. B rt hsbii eps hdwj. Be sqj tjresbtj, npdiy vpd srxj r ippx rs sqj nptadsjw ubijh sp hjj zqp tbfqs qroj qry rnnjhh sp cpsq tjtph, rey zqp tbfqs qroj qry sqj paapwsdebsv rey tjreh sp ypnspw sqjt? B rt uivbef crnx sp Irefijv spebfqs, sp hjj bu sqj Hsrsj Yjarwstjes qroj rev byjrh zqrs tbfqs cj fpbef pe. Ejbi hrby qj npdiy uiv tj da be pej pu sqj ERHR nqrhj airejh, zqbnq bh hptjsqbef B qroj cjje xjje sp swv. B zbii nrii vpd bu B fjs revsqbef.
-#rbo rpktigo vcrb bwucja wj kloj hcjd km sktpqo cq rbwr loklgo vcgg cjqcqr kj skhcja wgkja wjd rpycja rk ltr rbcjaq cj cr
+#xqhho y qc dej ikhu yv oek muhu sefyut yd je jxu cuce qrekj husudj uludji rkj xuhu yi q ikccqho jme tqoi qwe qd evvtkjo wkytqdsu evvysuh qbuhjut cyiiyed sedjheb je q fejudjyqb fherbuc myjx jxu qfebbe vbywxj jxu fbqddut tuisudj jhqzusjeho qffuqhut je ru hkddydw ed q sebbyiyed sekhiu myjx
+
+
 
 # Find some typical log probabilities for english texts and for texts with different ciphers put through them to get a rough guage of how fit it is
-
-#xqhho y qc dej ikhu yv oek muhu sefyut yd je jxu cuce qrekj husudj uludji rkj xuhu yi q ikccqho jme tqoi qwe qd evvtkjo wkytqdsu evvysuh qbuhjut cyiiyed sedjheb je q fejudjyqb fherbuc myjx jxu qfebbe vbywxj jxu fbqddut tuisudj jhqzusjeho qffuqhut je ru hkddydw ed q sebbyiyed sekhiu myjx

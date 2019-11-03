@@ -345,12 +345,6 @@ def searchFrequencyAnalysis(itemToCheckFor): #Compares the inputted value to sta
             positionIndexed = searchFrequencyAnalysisSorted(positionSortedAlphabet)#translates the indexing from the sorted alphabet into the normal alphabet
     return positionIndexed
 
-#test cipher
-#xqhho y qc dej ikhu yv oek muhu sefyut yd je jxu cuce qrekj husudj uludji rkj xuhu yi q ikccqho jme tqoi qwe qd evvtkjo wkytqdsu evvysuh qbuhjut cyiiyed sedjheb je q fejudjyqb fherbuc myjx jxu qfebbe vbywxj jxu fbqddut tuisudj jhqzusjeho qffuqhut je ru hkddydw ed q sebbyiyed sekhiu myjx 
-def testsearchFrequencyAnalysis(x):
-    englishIndex = random.randint(0,26)
-    return englishIndex
-
 
 def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accordance to comparisons between the ciphertext frequency analysis and the frequency analysis of english plaintext
     #cipherTextToBeFREQQED is a user inputted string
@@ -378,11 +372,11 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
         if duplicates == False and randomisedEnglishIndex < 27 and randomisedEnglishIndex > 0:
             englishIndexOrderArray.append(randomisedEnglishIndex) #adds each letter mapped to the new letter position to this array (a=0 b=1 etc etc)
             indexToCompare = indexToCompare + 1 #Only increases if there is no duplicates and therefore something new got added else it will repeat until this does happen
-        if loopIteration == randomIncrease:
+        if loopIteration == randomIncrease: # to stop an endless cycle if it has looped 100 times without successfully finding a letter it increases the randomness until it eventually works
             lowerRandom += -1
             upperRandom += 1
             randomIncrease += 200
-        loopIteration = loopIteration + 1
+        loopIteration += 1
     convertASCIIIndex = 0 # Text formatting
     while convertASCIIIndex < len(englishIndexOrderArray): #converts the a=0 b=1 (positional data) to ASCII numbers
         englishIndexOrderArray[convertASCIIIndex] = englishIndexOrderArray[convertASCIIIndex] + 96
@@ -530,3 +524,5 @@ Chi Squared             {printedChi}
 #rbo rpktigo vcrb bwucja wj kloj hcjd km sktpqo cq rbwr loklgo vcgg cjqcqr kj skhcja wgkja wjd rpycja rk ltr rbcjaq cj cr
 
 # Find some typical log probabilities for english texts and for texts with different ciphers put through them to get a rough guage of how fit it is
+
+#xqhho y qc dej ikhu yv oek muhu sefyut yd je jxu cuce qrekj husudj uludji rkj xuhu yi q ikccqho jme tqoi qwe qd evvtkjo wkytqdsu evvysuh qbuhjut cyiiyed sedjheb je q fejudjyqb fherbuc myjx jxu qfebbe vbywxj jxu fbqddut tuisudj jhqzusjeho qffuqhut je ru hkddydw ed q sebbyiyed sekhiu myjx

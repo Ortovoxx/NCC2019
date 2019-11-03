@@ -2,6 +2,7 @@
 #                                                                  VARIABLES, CONSTANTS AND FORMATTING - DO NOT EDIT
 #==============================================================================================================================================================
 
+#Modules to imports
 import random
 import os
 import math
@@ -14,7 +15,7 @@ cipherSolverInputFormat = '''*************** CIPHERTEXT: **************
 textManipulationInputFormat = '''*********** INPUT YOUR TEXT: ***********
 '''
 
-#Alphabet arrays
+######## ALPHABET LISTS ########
 alphabetASCII = [97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122]
 alphabetCHARACTER = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 #IN %
@@ -22,7 +23,7 @@ englishLetterFrequency = [8.167,1.492,2.782,4.253,12.702,2.228,2.015,6.094,6.966
 englishLetterFrequencySorted = [12.702,9.056,8.167,7.507,6.966,6.749,6.327,6.094,5.987,4.253,4.025,2.782,2.758,2.406,2.360,2.228,2.015,1.974,1.929,1.492,0.978,0.772,0.153,0.150,0.095,0.074]
 #Probabilty /1
 englishLetterFrequencyProbability = [0.08167,0.01492,0.02782,0.04253,0.12702,0.02228,0.02015,0.06094,0.06966,0.00153,0.00772,0.04025,0.02406,0.06749,0.07507,0.01929,0.00095,0.05987,0.06327,0.09056,0.02758,0.00978,0.02360,0.00150,0.01974,0.00074]
-# the above array numbers map to the following letters (in order)           e t a o i n s h r d l c u m w f g y p b v k j x q z
+#The above array numbers map to the following letters (in order) -- e t a o i n s h r d l c u m w f g y p b v k j x q z
 
 freqWords = ["the","of","to","and","a","in","is","it","you","that","he","was","for","on","are","with","as","i","his","they","be","at","one","have","this","from","or","had","by","hot","but","some","what","there","we","can",
              "out","other","were","all","your","when","up","use","word","how","said","an","each","she","which","do","their","time","if","will","way","about","many","then","them","would","write","like","so","these","her","long",
@@ -45,7 +46,7 @@ freqWords = ["the","of","to","and","a","in","is","it","you","that","he","was","f
              "twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eightteen","nineteen","twenty","apollo","lunar","mission","phase","orbit","orbital","prime","objective","spacecraft","meg","file","luna","programme",
              "state","department","united","states","america","usa","uk","britain","americas","gene","conscience","plot","wisdom","neil","file","files","coincidence","once","twice","navigation","saturn"]
 # COPY-PASTE for adding words to freqWords array: "",
-# Add extra words to the array to get better accuracy when detecting english
+# Add extra words to the array to get better accuracy when detecting english and generating key
 
 #==============================================================================================================================================================
 #                                                       TEXT MANIPULATION AND REPEATED USE FUNCTIONS - DO NOT EDIT
@@ -229,7 +230,6 @@ def ngramFitness(userCiperText):
             logAB.append(loggedProbQuadgram)
     final = sum(logAB)
     return final
-
 
 #==============================================================================================================================================================
 #                                                            CIPHER SOLVING - EDITABLE
@@ -429,6 +429,7 @@ while True == True: #Loops the entire program
         clearScore = clearScoreEnglish(cipherOut) #rbo rpktigo vcrb bwucja wj kloj hcjd km sktpqo cq rbwr loklgo vcgg cjqcqr kj skhcja wgkja wjd rpycja rk ltr rbcjaq cj cr
         indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
         chiSquaredText = round(chiSquaredStat(cipherOut),10)
+        ngramScore = ngramFitness(cipherOut)
         cipherOutKeyOut ='''
 ================== PLAINTEXT: ==================
 {printedCipherOut}
@@ -437,12 +438,14 @@ while True == True: #Loops the entire program
 ================= STATISTICS: ==================
 Number of keys          {printedAttempts}
 English Score           {printedClearScore}%
+log Ngram Score         {printedNgramScore}
 Index Of Coincidence    {printedIoC}
 Chi Squared             {printedChi}
 '''.format(
         printedCipherOut = cipherOut, 
         printedUserKey = userKey,
-        printedClearScore = clearScore, 
+        printedClearScore = clearScore,
+        printedNgramScore = ngramScore,
         printedAttempts = keyIterations, 
         printedIoC = indexOfCoincidenceText, 
         printedChi = chiSquaredText )#Formatting

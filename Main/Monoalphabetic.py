@@ -394,6 +394,7 @@ def iterativeSolving(userCipherText): #TODO NEEDS NEW FITNESS SCORE MEASURE
 #==============================================================================================================================================================
 
 
+
 while True == True: #Loops the entire program
     userKey = "abcdefghijklmnopqrstuvwxyz" #Sets a defult user key ~~~~WARNING~~~~ Wont show error if there is not a key generated as this one will take over ~~~~WARNING~~~~
     keyIterations = keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = ceaserShifts = REPLACEME123 = 0
@@ -404,7 +405,9 @@ while True == True: #Loops the entire program
     randomKeyStart = True
     ceaserStart = False
     userCipher = input(cipherSolverInputFormat)
-    ############################################
+    #########################################################
+    #           Calling different deciphering functions
+    #########################################################
     while keyIterations < keyIterations + 1:
         if ceaserStart == True: #Ceaser shifts done 26 times
             userKey = ceaser("abcdefghijklmnopqrstuvwxyz", 26 - ceaserShifts)
@@ -426,7 +429,10 @@ while True == True: #Loops the entire program
             userKey = randomKey()
             cipherOut = substitionKeyCipher(userCipher,userKey)
             randomKeyIndex = randomKeyIndex + 1
-        clearScore = clearScoreEnglish(cipherOut) #rbo rpktigo vcrb bwucja wj kloj hcjd km sktpqo cq rbwr loklgo vcgg cjqcqr kj skhcja wgkja wjd rpycja rk ltr rbcjaq cj cr
+        #########################################################
+        #                   Text statistics
+        #########################################################
+        clearScore = clearScoreEnglish(cipherOut) 
         indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
         chiSquaredText = round(chiSquaredStat(cipherOut),10)
         ngramScore = ngramFitness(cipherOut,ngramDitionaryEnglish)
@@ -453,6 +459,6 @@ Chi Squared             {printedChi}
             print(cipherOutKeyOut)
         keyIterations = keyIterations + 1
 
-
+#rbo rpktigo vcrb bwucja wj kloj hcjd km sktpqo cq rbwr loklgo vcgg cjqcqr kj skhcja wgkja wjd rpycja rk ltr rbcjaq cj cr
 
 # Find some typical log probabilities for english texts and for texts with different ciphers put through them to get a rough guage of how fit it is

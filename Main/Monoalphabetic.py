@@ -2,7 +2,12 @@
 #                                                                  VARIABLES, CONSTANTS AND FORMATTING - DO NOT EDIT
 #==============================================================================================================================================================
 
+#Modules to imports
 import random
+import os
+import math
+import time
+import requests
 
 #Menu and input formats
 cipherSolverInputFormat = '''*************** CIPHERTEXT: **************
@@ -10,7 +15,7 @@ cipherSolverInputFormat = '''*************** CIPHERTEXT: **************
 textManipulationInputFormat = '''*********** INPUT YOUR TEXT: ***********
 '''
 
-#Alphabet arrays
+######## ALPHABET LISTS ########
 alphabetASCII = [97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122]
 alphabetCHARACTER = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 #IN %
@@ -19,6 +24,7 @@ englishLetterFrequencySorted = [12.702,9.056,8.167,7.507,6.966,6.749,6.327,6.094
 # the above array numbers map to the following letters (in order)           e t a o i n s h r d l c u m w f g y p b v k j x q z
 #Probabilty /1
 englishLetterFrequencyProbability = [0.08167,0.01492,0.02782,0.04253,0.12702,0.02228,0.02015,0.06094,0.06966,0.00153,0.00772,0.04025,0.02406,0.06749,0.07507,0.01929,0.00095,0.05987,0.06327,0.09056,0.02758,0.00978,0.02360,0.00150,0.01974,0.00074]
+#The above array numbers map to the following letters (in order) -- e t a o i n s h r d l c u m w f g y p b v k j x q z
 
 freqWords = ["the","of","to","and","a","in","is","it","you","that","he","was","for","on","are","with","as","i","his","they","be","at","one","have","this","from","or","had","by","hot","but","some","what","there","we","can",
              "out","other","were","all","your","when","up","use","word","how","said","an","each","she","which","do","their","time","if","will","way","about","many","then","them","would","write","like","so","these","her","long",
@@ -41,7 +47,19 @@ freqWords = ["the","of","to","and","a","in","is","it","you","that","he","was","f
              "twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eightteen","nineteen","twenty","apollo","lunar","mission","phase","orbit","orbital","prime","objective","spacecraft","meg","file","luna","programme",
              "state","department","united","states","america","usa","uk","britain","americas","gene","conscience","plot","wisdom","neil","file","files","coincidence","once","twice","navigation","saturn"]
 # COPY-PASTE for adding words to freqWords array: "",
-# Add extra words to the array to get better accuracy when detecting english and generating keys
+# Add extra words to the array to get better accuracy when detecting english and generating key
+def loadEnglishNgram(): #loads a ngram file to a python ditionary
+        os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/Text_training_data") #path of ngram file to load make sure .txt file is in this folder MAKE SURE NGRAMS ARE LOWER CASE
+        quadramDitionaryEnglish = {}
+        index = 0
+        with open("ngram_output.txt", "r") as f:
+            quadramData = f.read()
+            quadramArray = quadramData.split()
+            while index < len(quadramArray):
+                quadramDitionaryEnglish[quadramArray[index]] = float(quadramArray[index + 1])
+                index = index + 2
+        return quadramDitionaryEnglish
+ngramDitionaryEnglish = loadEnglishNgram()
 
 #==============================================================================================================================================================
 #                                                       TEXT MANIPULATION AND REPEATED USE FUNCTIONS - DO NOT EDIT
@@ -193,7 +211,41 @@ def chiSquaredStat(text): #String input which calculates the chi-squared statist
         alphaIndex = alphaIndex + 1
     chiSquared = sum(chiSquaredARRAY)
     return chiSquared
-
+def ngramFitness(userCiperText,ngramDitionaryEnglish):
+    def ngramExtraction(userCiperText): #Finds quadgrams from a ciphertext
+        cipherText = list(removeSpaces(removePunctuation(userCiperText)))
+        quadramDitionaryCiphertext = {}
+        index = 0
+        n = 4 # the n in ngram -  change to 2 for bigrams and 3 for trigrams etc
+        while index < len(cipherText) - (n - 1):
+            quadIndex = 0
+            singleQuadgram = []
+            while quadIndex < n and index < len(cipherText):
+                if index + quadIndex < len(cipherText):
+                    quaterQuadgramChar = cipherText[index + quadIndex]
+                    singleQuadgram.append(quaterQuadgramChar)
+                    quadIndex = quadIndex + 1
+            quad = "".join(singleQuadgram)
+            if quad in quadramDitionaryCiphertext:
+                quadramDitionaryCiphertext[quad] = quadramDitionaryCiphertext[quad] + 1
+            else:
+                quadramDitionaryCiphertext[quad] = 1
+            index = index + 1
+        return quadramDitionaryCiphertext
+    quadramDitionaryCiphertext = ngramExtraction(userCiperText)
+    logAB = []
+    probQuadgram = 0
+    for index in quadramDitionaryCiphertext:
+        if index in ngramDitionaryEnglish:
+            probQuadgram = ngramDitionaryEnglish[index]
+            loggedProbQuadgram = math.log10(probQuadgram)
+            logAB.append(loggedProbQuadgram)
+        else:
+            probQuadgram = 1e-50 #floors it as / 0 should be -infinity but that cannot be logged -- smaller this number bigger gap between english and non english
+            loggedProbQuadgram = math.log10(probQuadgram)
+            logAB.append(loggedProbQuadgram)
+    final = sum(logAB)
+    return final
 
 #==============================================================================================================================================================
 #                                                            CIPHER SOLVING - EDITABLE
@@ -338,9 +390,38 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
     finalKey = "".join(convertToCHARACTER(englishIndexOrderArray)) #converts the ASCII index to a plaintext string key with 26 characters
     print(finalKey)
     return finalKey
+
+
+
+def iterativeSolving(userCipherText): #TODO NEEDS NEW FITNESS SCORE MEASURE
+    parentKey = randomKey() #TODO change from randomkey to frequency key once that branch is sorted           #parent Key is generated using frequency analysis
+    decipher = substitionKeyCipher(userCipherText,parentKey) #solves parent cipher using the parent key
+    parentScore = chiSquaredStat(decipher) #Gets the text fitness of this ciphertext
+    iteration = 0
+    while iteration < 1000:
+        a = random.randint(0,25) #2 random letters (numbers) generated
+        b = random.randint(0,25)
+        childKeyArray = list(parentKey) #converts parent key string into a child array
+        childKeyArray[a],childKeyArray[b] = childKeyArray[b],childKeyArray[a] # swap two characters in the child
+        childKey = "".join(childKeyArray) #converts child key array into a string
+        decipher = substitionKeyCipher(userCipherText,childKey) #deciphers the ciphertext with the new jumbled key
+        childScore = chiSquaredStat(decipher) #gets the text fitness score of the new ciphertext
+        if childScore < parentScore: # if the child was better, replace the parent with it. Else dont...
+            parentScore = childScore
+            parentKey = childKey
+            iteration = 0 #reset the iteration count to 0 as it is getting better and is not at a local minimum
+        iteration = iteration + 1
+    if childScore < 50:
+        return decipher
+
+
+
 #==============================================================================================================================================================
 #                                                   USER INPUT / OUTPUT                   MAIN PROGRAM
 #==============================================================================================================================================================
+
+
+
 while True == True: #Loops the entire program
     userKey = "abcdefghijklmnopqrstuvwxyz" #Sets a defult user key ~~~~WARNING~~~~ Wont show error if there is not a key generated as this one will take over ~~~~WARNING~~~~
     keyIterations = keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = ceaserShifts = REPLACEME123 = 0
@@ -351,7 +432,9 @@ while True == True: #Loops the entire program
     randomKeyStart = False
     ceaserStart = False
     userCipher = input(cipherSolverInputFormat)
-    ############################################
+    #########################################################
+    #           Calling different deciphering functions
+    #########################################################
     while keyIterations < keyIterations + 1:
         if ceaserStart == True: #Ceaser shifts done 26 times
             userKey = ceaser("abcdefghijklmnopqrstuvwxyz", 26 - ceaserShifts)
@@ -373,9 +456,13 @@ while True == True: #Loops the entire program
             userKey = randomKey()
             cipherOut = substitionKeyCipher(userCipher,userKey)
             randomKeyIndex = randomKeyIndex + 1
+        #########################################################
+        #                   Text statistics
+        #########################################################
         clearScore = clearScoreEnglish(cipherOut) 
         indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
         chiSquaredText = round(chiSquaredStat(cipherOut),10)
+        ngramScore = ngramFitness(cipherOut,ngramDitionaryEnglish)
         cipherOutKeyOut ='''
 ================== PLAINTEXT: ==================
 {printedCipherOut}
@@ -384,12 +471,14 @@ while True == True: #Loops the entire program
 ================= STATISTICS: ==================
 Number of keys          {printedAttempts}
 English Score           {printedClearScore}%
+log Ngram Score         {printedNgramScore}
 Index Of Coincidence    {printedIoC}
 Chi Squared             {printedChi}
 '''.format(
         printedCipherOut = cipherOut, 
         printedUserKey = userKey,
-        printedClearScore = clearScore, 
+        printedClearScore = clearScore,
+        printedNgramScore = ngramScore,
         printedAttempts = keyIterations, 
         printedIoC = indexOfCoincidenceText, 
         printedChi = chiSquaredText )#Formatting
@@ -439,3 +528,6 @@ Chi Squared             {printedChi}
 #Example ciphers to try solve
 #rbo rpktigo vcrb bwucja wj kloj hcjd km sktpqo cq rbwr loklgo vcgg cjqcqr kj skhcja wgkja wjd rpycja rk ltr rbcjaq cj cr
 #Tjf, B sppx r ippx rs sqj ubij vpd hjes pojw rey bs zrh mdhs r wpsrsbpe nbaqjw raaibjy sp sqj sjks. Rs ubwhs bs zrh qrwy sp hrv bu sqrs zrh r cdf pw r ujrsdwj rey epwtriiv B zpdiy rhhdtj cdf, cds bs hjjtjy pyy sqrs bs zrh sqj peiv ubij sqrs zrh ruujnsjy hp B rhxjy rwpdey sp hjj bu revpej qry hjje revsqbef hbtbirw. Bs sdweh pds sqrs sqbh zrh eps sqj ubwhs erobfrsbpe awpcijt sp qbs sqj awpfwrttj. Fjej wjapwsjy r trmpw bhhdj zbsq sqj fdbyrenj awpfwrttj upw Heppav pe sqj Rapiip Sje tbhhbpe zqbnq npdiy rfrbe qroj nrdhjy r trmpw awpcijt. Upw hptj wjrhpe sqj awpfwrttj npeswpiibef sqj ireybef wryrw zrhe’s dayrsjy zbsq sqj uibfqs aire rey bu Fjej qrye’s wrbhjy sqrs zbsq Bojwhpe sqje sqj cpvh tbfqs qroj qry wjri swpdcij fjssbef crnx. B ippxjy sqwpdfq sqj nptarev ubijh rey updey repsqjw pu pdw tvhsjwbpdhiv upwtrssjy wjapwsh: sqj tjtp beupwtbef sqjt rcpds sqj nqrefj, zqbnq jkairbeh zqv sqj awpfwrttj ejojw fps dayrsjy. Sqbh sbtj sqj nbaqjw zrh re ruubej hqbus, hp hibfqsiv qrwyjw sp nwrnx, cds epsqbef hjwbpdh. Hsbii, bs bh tdnq ijhh ibxjiv sqrs bs zrh r cdf sqrs sbtj, rey be rev nrhj szbnj bh spp tdnq pu r npbenbyjenj. Bs yby hsrws tj zpeyjwbef zqv sqj hjnpey nbaqjw zrh jrhbjw sp nwrnx sqre sqj ubwhs, cds sqje B wjribhjy sqrs sqj ruubej hqbus zrh spp tdnq pu r fbojrzrv. R wpsrsbpe nbaqjw wjriiv npdiy mdhs cj re jenpybef jwwpw, cds sqj ruubej hqbus bh spp hpaqbhsbnrsjy upw r tbhsrxj, hp zqpjojw trefijy sqj wjapwsh tdhs qroj wjribhjy sqjv qry tryj r cbs pu re jwwpw zbsq sqj ubwhs pej rey swbjy sp npojw sqjbw hsjah zbsq sqj hjnpey. Bs bh qrwy sp hjj sqbh rh revsqbef psqjw sqre rssjtasjy hrcpsrfj, cds B rt eps hdwj zqrs sqj tpsboj npdiy cj. B ypdcs bs bh ajwhperi. Sqj Rapiip Sje rey Jijoje nwjzh ype’s pojwira, hp jbsqjw hptjpej qrh r fwdyfj rfrbehs sqj zqpij Rhswperds npwah pw sqjv rwj swvbef sp yjwrbi sqj Rapiip awpfwrttj. Bs npdiy cj sqj Hpobjsh B hdaaphj. Rs ubwhs, B sqpdfqs sqrs sqjbw zbiibefejhh sp hqbus sqj IDER-UBUSJJE pwcbs hqpzjy sqrs sqjv zjwje’s arws pu bs, cds hptjpej be sqj Hsrsj Yjarwstjes apbesjy pds sqrs sqjv tbfqs mdhs qroj qry r fdbisv npehnbjenj, pw cjje xjje sp ybhsrenj sqjthjiojh penj sqj aips zrh ybhnpojwjy. B rt hsbii eps hdwj. Be sqj tjresbtj, npdiy vpd srxj r ippx rs sqj nptadsjw ubijh sp hjj zqp tbfqs qroj qry rnnjhh sp cpsq tjtph, rey zqp tbfqs qroj qry sqj paapwsdebsv rey tjreh sp ypnspw sqjt? B rt uivbef crnx sp Irefijv spebfqs, sp hjj bu sqj Hsrsj Yjarwstjes qroj rev byjrh zqrs tbfqs cj fpbef pe. Ejbi hrby qj npdiy uiv tj da be pej pu sqj ERHR nqrhj airejh, zqbnq bh hptjsqbef B qroj cjje xjje sp swv. B zbii nrii vpd bu B fjs revsqbef.
+#rbo rpktigo vcrb bwucja wj kloj hcjd km sktpqo cq rbwr loklgo vcgg cjqcqr kj skhcja wgkja wjd rpycja rk ltr rbcjaq cj cr
+
+# Find some typical log probabilities for english texts and for texts with different ciphers put through them to get a rough guage of how fit it is

@@ -299,7 +299,7 @@ def testsearchFrequencyAnalysis(x):
     englishIndex = random.randint(0,26)
     return englishIndex
 
-#BUG something to do with duplicates I think
+
 def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accordance to comparisons between the ciphertext frequency analysis and the frequency analysis of english plaintext
     #cipherTextToBeFREQQED is a user inputted string
     frequencyOfCipherText = characterFrequency(cipherTextToBeFREQQED) #gets the frequency analysis data of the string inputted
@@ -308,31 +308,35 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
     indexOfFrequencyAnalysis = 0
     while indexOfFrequencyAnalysis < len(frequencyOfCipherText): #Converts frequency analysis data from number of occurrences into a % of text frequency analysis
         frequencyOfCipherText[indexOfFrequencyAnalysis] = round(((frequencyOfCipherText[indexOfFrequencyAnalysis] / len(cipherTextNoSpacesArray))*100),3 )
-        indexOfFrequencyAnalysis = indexOfFrequencyAnalysis + 1
+        indexOfFrequencyAnalysis += 1
     indexToCompare = 0
     englishIndexOrderArray = []
+    loopIteration = 0
+    randomIncrease = 100
+    lowerRandom = -1
+    upperRandom = 1
     while indexToCompare < 26: 
         #Matches the frequencies of individual letters in the ciphertext to that of english producing a key
         #Gets the frequency of ciphertext in % and compares it to the % of english and then returns an array with the positions of the closest values
         englishIndex = searchFrequencyAnalysis(frequencyOfCipherText[indexToCompare])
         duplicates = False
-        #print("array",frequencyOfCipherText)
-        #print("index",indexToCompare)
-        #print("first",frequencyOfCipherText[indexToCompare])
-        #print("english Index:",englishIndex)
-        unCertainty = random.randint(-2,2) #Adds uncertainty to the letters so higher chance of finding a correct key (bigger numbers longer key generation time)
+        unCertainty = random.randint(lowerRandom,upperRandom) #Adds uncertainty to the letters so higher chance of finding a correct key (bigger numbers longer key generation time)
         randomisedEnglishIndex = englishIndex + unCertainty
-        #print(randomisedEnglishIndex)
         duplicates = search(randomisedEnglishIndex,englishIndexOrderArray) #Ensures no duplicates of positions
         if duplicates == False and randomisedEnglishIndex < 27 and randomisedEnglishIndex > 0:
             englishIndexOrderArray.append(randomisedEnglishIndex) #adds each letter mapped to the new letter position to this array (a=0 b=1 etc etc)
             indexToCompare = indexToCompare + 1 #Only increases if there is no duplicates and therefore something new got added else it will repeat until this does happen
+        if loopIteration == randomIncrease:
+            lowerRandom += -1
+            upperRandom += 1
+            randomIncrease += 200
+        loopIteration = loopIteration + 1
     convertASCIIIndex = 0 # Text formatting
     while convertASCIIIndex < len(englishIndexOrderArray): #converts the a=0 b=1 (positional data) to ASCII numbers
         englishIndexOrderArray[convertASCIIIndex] = englishIndexOrderArray[convertASCIIIndex] + 96
-        convertASCIIIndex = convertASCIIIndex + 1
+        convertASCIIIndex += 1
     finalKey = "".join(convertToCHARACTER(englishIndexOrderArray)) #converts the ASCII index to a plaintext string key with 26 characters
-    print(finalKey, "YESSSSSSSSSSSSSSSSSSSSSSSSSSS")
+    print(finalKey)
     return finalKey
 #==============================================================================================================================================================
 #                                                   USER INPUT / OUTPUT                   MAIN PROGRAM

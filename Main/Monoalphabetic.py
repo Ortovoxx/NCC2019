@@ -47,6 +47,18 @@ freqWords = ["the","of","to","and","a","in","is","it","you","that","he","was","f
              "state","department","united","states","america","usa","uk","britain","americas","gene","conscience","plot","wisdom","neil","file","files","coincidence","once","twice","navigation","saturn"]
 # COPY-PASTE for adding words to freqWords array: "",
 # Add extra words to the array to get better accuracy when detecting english and generating key
+def loadEnglishNgram(): #loads a ngram file to a python ditionary
+        os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/Text_training_data") #path of ngram file to load make sure .txt file is in this folder MAKE SURE NGRAMS ARE LOWER CASE
+        quadramDitionaryEnglish = {}
+        index = 0
+        with open("ngram_output.txt", "r") as f:
+            quadramData = f.read()
+            quadramArray = quadramData.split()
+            while index < len(quadramArray):
+                quadramDitionaryEnglish[quadramArray[index]] = float(quadramArray[index + 1])
+                index = index + 2
+        return quadramDitionaryEnglish
+ngramDitionaryEnglish = loadEnglishNgram()
 
 #==============================================================================================================================================================
 #                                                       TEXT MANIPULATION AND REPEATED USE FUNCTIONS - DO NOT EDIT
@@ -183,7 +195,7 @@ def chiSquaredStat(text): #String input which calculates the chi-squared statist
         alphaIndex = alphaIndex + 1
     chiSquared = sum(chiSquaredARRAY)
     return chiSquared
-def ngramFitness(userCiperText):
+def ngramFitness(userCiperText,ngramDitionaryEnglish):
     def ngramExtraction(userCiperText): #Finds quadgrams from a ciphertext
         cipherText = list(removeSpaces(removePunctuation(userCiperText)))
         quadramDitionaryCiphertext = {}
@@ -204,24 +216,12 @@ def ngramFitness(userCiperText):
                 quadramDitionaryCiphertext[quad] = 1
             index = index + 1
         return quadramDitionaryCiphertext
-    def loadEnglishNgram(): #loads a ngram file to a python ditionary
-        os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/Text_training_data") #path of ngram file to load make sure .txt file is in this folder MAKE SURE NGRAMS ARE LOWER CASE
-        quadramDitionaryEnglish = {}
-        index = 0
-        with open("ngram_output.txt", "r") as f:
-            quadramData = f.read()
-            quadramArray = quadramData.split()
-            while index < len(quadramArray):
-                quadramDitionaryEnglish[quadramArray[index]] = float(quadramArray[index + 1])
-                index = index + 2
-        return quadramDitionaryEnglish
-    quadramDitionaryEnglish = loadEnglishNgram()
     quadramDitionaryCiphertext = ngramExtraction(userCiperText)
     logAB = []
     probQuadgram = 0
     for index in quadramDitionaryCiphertext:
-        if index in quadramDitionaryEnglish:
-            probQuadgram = quadramDitionaryEnglish[index]
+        if index in ngramDitionaryEnglish:
+            probQuadgram = ngramDitionaryEnglish[index]
             loggedProbQuadgram = math.log10(probQuadgram)
             logAB.append(loggedProbQuadgram)
         else:
@@ -429,7 +429,7 @@ while True == True: #Loops the entire program
         clearScore = clearScoreEnglish(cipherOut) #rbo rpktigo vcrb bwucja wj kloj hcjd km sktpqo cq rbwr loklgo vcgg cjqcqr kj skhcja wgkja wjd rpycja rk ltr rbcjaq cj cr
         indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
         chiSquaredText = round(chiSquaredStat(cipherOut),10)
-        ngramScore = ngramFitness(cipherOut)
+        ngramScore = ngramFitness(cipherOut,ngramDitionaryEnglish)
         cipherOutKeyOut ='''
 ================== PLAINTEXT: ==================
 {printedCipherOut}
@@ -449,7 +449,7 @@ Chi Squared             {printedChi}
         printedAttempts = keyIterations, 
         printedIoC = indexOfCoincidenceText, 
         printedChi = chiSquaredText )#Formatting
-        if clearScore > 1 and chiSquaredText < 300:
+        if clearScore > 1:
             print(cipherOutKeyOut)
         keyIterations = keyIterations + 1
 

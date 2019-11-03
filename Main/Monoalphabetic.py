@@ -383,10 +383,10 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
 
 
 
-def iterativeSolving(userCipherText): #TODO NEEDS NEW FITNESS SCORE MEASURE
-    parentKey = randomKey() #TODO change from randomkey to frequency key once that branch is sorted           #parent Key is generated using frequency analysis
+def iterativeSolving(userCipherText):
+    parentKey = frequencyKey(userCipherText) #parent Key is generated using frequency analysis
     decipher = substitionKeyCipher(userCipherText,parentKey) #solves parent cipher using the parent key
-    parentScore = chiSquaredStat(decipher) #Gets the text fitness of this ciphertext
+    parentScore = ngramFitness(userCipherText,ngramDitionaryEnglish) #Gets the text fitness of this ciphertext
     iteration = 0
     while iteration < 1000:
         a = random.randint(0,25) #2 random letters (numbers) generated
@@ -395,14 +395,17 @@ def iterativeSolving(userCipherText): #TODO NEEDS NEW FITNESS SCORE MEASURE
         childKeyArray[a],childKeyArray[b] = childKeyArray[b],childKeyArray[a] # swap two characters in the child
         childKey = "".join(childKeyArray) #converts child key array into a string
         decipher = substitionKeyCipher(userCipherText,childKey) #deciphers the ciphertext with the new jumbled key
-        childScore = chiSquaredStat(decipher) #gets the text fitness score of the new ciphertext
-        if childScore < parentScore: # if the child was better, replace the parent with it. Else dont...
+        childScore = ngramFitness(decipher,ngramDitionaryEnglish) #gets the text fitness score of the new ciphertext
+        if childScore > parentScore: # if the child was better, replace the parent with it. Else dont...
             parentScore = childScore
             parentKey = childKey
             iteration = 0 #reset the iteration count to 0 as it is getting better and is not at a local minimum
         iteration += 1
-    if childScore < 50:
-        return decipher
+        if childScore > -150:
+            return childKey       
+    return childKey
+   
+
 
 
 
@@ -414,13 +417,14 @@ def iterativeSolving(userCipherText): #TODO NEEDS NEW FITNESS SCORE MEASURE
 
 while True == True: #Loops the entire program
     userKey = "abcdefghijklmnopqrstuvwxyz" #Sets a defult user key ~~~~WARNING~~~~ Wont show error if there is not a key generated as this one will take over ~~~~WARNING~~~~
-    keyIterations = keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = ceaserShifts = REPLACEME123 = 0
+    keyIterations = keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = ceaserShifts = iterativeSolvingIndex = REPLACEME123 = 0
     #Turn each function on or off
     keyWordAlphabetStart = False
     keyWordRandomStart = False
-    frequencyKeyStart = True
+    frequencyKeyStart = False
     randomKeyStart = False
     ceaserStart = False
+    iterativeSolvingStart = True
     userCipher = input(cipherSolverInputFormat)
     #########################################################
     #           Calling different deciphering functions
@@ -446,6 +450,10 @@ while True == True: #Loops the entire program
             userKey = randomKey()
             cipherOut = substitionKeyCipher(userCipher,userKey)
             randomKeyIndex += 1
+        elif iterativeSolvingStart == True: # Last resort random keys
+            userKey = iterativeSolving(userCipher)
+            cipherOut = substitionKeyCipher(userCipher,userKey)
+            iterativeSolvingIndex += 1
         #########################################################
         #                   Text statistics
         #########################################################

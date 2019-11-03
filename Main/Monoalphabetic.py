@@ -388,7 +388,6 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
         englishIndexOrderArray[convertASCIIIndex] = englishIndexOrderArray[convertASCIIIndex] + 96
         convertASCIIIndex += 1
     finalKey = "".join(convertToCHARACTER(englishIndexOrderArray)) #converts the ASCII index to a plaintext string key with 26 characters
-    print(finalKey)
     return finalKey
 
 

@@ -384,7 +384,7 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
 
 
 def iterativeSolving(userCipherText):
-    parentKey = frequencyKey(userCipherText) #parent Key is generated using frequency analysis
+    parentKey = randomKey()#frequencyKey(userCipherText) #parent Key is generated using frequency analysis
     decipher = substitionKeyCipher(userCipherText,parentKey) #solves parent cipher using the parent key
     parentScore = ngramFitness(userCipherText,ngramDitionaryEnglish) #Gets the text fitness of this ciphertext
     iteration = 0
@@ -404,7 +404,36 @@ def iterativeSolving(userCipherText):
         if childScore > -150:
             return childKey
     return childKey
+#import re
+def testIter(cipherTextYY,maxScore):
+    #cipherText  = re.sub("[^A-Z]","",cipherTextYY.upper())
+    cipherText = removePunctuation(removeSpaces(cipherTextYY)).upper()
+    parentKey = list(randomKey().upper())
+    deciphered = substitionKeyCipher(cipherText,"".join(parentKey))
+    parentScore = ngramFitness(deciphered,ngramDitionaryEnglish)
+    count = 0
+    while count < 1000:
+        a = random.randint(0,25)
+        b = random.randint(0,25)
+        childKey = parentKey[:]
+        # swap two characters in the child
+        childKey[a],childKey[b] = childKey[b],childKey[a]
+        deciphered = substitionKeyCipher(cipherText,"".join(childKey))
+        childScore = ngramFitness(deciphered,ngramDitionaryEnglish)
+        # if the child was better, replace the parent with it
+        if childScore > parentScore:
+            parentScore = childScore
+            parentKey = childKey[:]
+            count = 0
+        count += 1
+    # keep track of best score seen so far
+    if parentScore > maxScore:
+        maxScore = parentScore
+        r = "".join(parentKey)
+        t = r.lower()
+        return t
 
+#rbo rpktigo vcrb bwucja wj kloj hcjd km sktpqo cq rbwr loklgo vcgg cjqcqr kj skhcja wgkja wjd rpycja rk ltr rbcjaq cj cr
 
 #==============================================================================================================================================================
 #                                                   USER INPUT / OUTPUT                   MAIN PROGRAM
@@ -447,7 +476,9 @@ while True == True: #Loops the entire program
             cipherOut = substitionKeyCipher(userCipher,userKey)
             randomKeyIndex += 1
         elif iterativeSolvingStart == True: # Last resort random keys
-            userKey = iterativeSolving(userCipher)
+            #userKey = iterativeSolving(userCipher)
+            maxScoree = -99e9
+            userKey = testIter(userCipher,maxScoree)
             cipherOut = substitionKeyCipher(userCipher,userKey)
             iterativeSolvingIndex += 1
         #########################################################
@@ -476,7 +507,7 @@ Chi Squared             {printedChi}
         printedAttempts = keyIterations, 
         printedIoC = indexOfCoincidenceText, 
         printedChi = chiSquaredText )#Formatting
-        if clearScore > 1:
+        if ngramScore > -300:
             print(cipherOutKeyOut)
         keyIterations += 1
 

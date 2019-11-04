@@ -8,6 +8,7 @@ import os
 import math
 import time
 import requests
+import re
 
 #Menu and input formats
 cipherSolverInputFormat = '''*************** CIPHERTEXT: **************
@@ -126,6 +127,7 @@ def substitionKeyCipher(userCipherText,userKey): #maps a ciphertext to plaintext
         textPerm += 1
     switchedCipherStr = "".join(convertToCHARACTER(switchedCipher))
     return switchedCipherStr
+'''
 def clearScoreEnglish(cipherText): # clear Score function that returns % english when string inputted 
     def searchWords(cipherWord,freqWords):
         freqPosition = 0
@@ -146,6 +148,7 @@ def clearScoreEnglish(cipherText): # clear Score function that returns % english
     clearScore = round((trues / len(cipherEnglishArray)) * 100) # Calculates how many T's there are in array and outputs a % english
     cipherEnglishArray.clear()
     return clearScore
+'''
 def characterFrequency(encryptedTextUnformatted):
     encryptedText = removeSpaces(removePunctuation(encryptedTextUnformatted))
     frequencies = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -160,24 +163,6 @@ def characterFrequency(encryptedTextUnformatted):
         else: #increments relative index dependant upon character contained within i
             if i == letter[index]:
                 frequencies[index] = frequencies[index] + 1 #if character in encrypted_text is a space,data @ alphabet[26] ++:           
-    return frequencies
-def characterFrequencySpaces(encryptedText):
-    frequencies=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-    letter=["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"," "]
-    for i in encryptedText: #iterates through each character in encrypted_cipher text
-        index = 0 #element index set at 0
-        #WHEN data at index (character in encrypted text) does not equal first element
-        #AND the alphabet index is less than 25, (i.e all letters encompassed only):
-        while i != letter[index] and index < 25: #THEN increment pos index ++, avoids indexing greater than alphabet list
-           if index <= 24:
-               index += 1
-        else: #increments relative index dependant upon character contained within i
-            if i == letter[index]:
-                frequencies[index] = frequencies[index] + 1 #if character in encrypted_text is a space,data @ alphabet[26] ++:
-            elif i == " ":
-                 frequencies[26]= frequencies[26] + 1 #if character in encrypted_text therefore is not a recognised characer,data @ alphabet[27] ++
-            else:
-                frequencies[27]= frequencies[27] + 1              
     return frequencies
 def indexOfCoincidence(text): #String input to calculate the Index of Coincidence of a text
     def letter(letterCount,textLength):
@@ -382,7 +367,7 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
     return finalKey
 
 
-
+'''
 def iterativeSolving(userCipherText):
     parentKey = randomKey()#frequencyKey(userCipherText) #parent Key is generated using frequency analysis
     decipher = substitionKeyCipher(userCipherText,parentKey) #solves parent cipher using the parent key
@@ -404,8 +389,8 @@ def iterativeSolving(userCipherText):
         if childScore > -150:
             return childKey
     return childKey
-#import re
-def testIter(cipherTextYY,maxScore):
+'''
+def iterativeSolving(cipherTextYY,maxScore):
     #cipherText  = re.sub("[^A-Z]","",cipherTextYY.upper())
     cipherText = removePunctuation(removeSpaces(cipherTextYY)).upper()
     parentKey = list(randomKey().upper())
@@ -441,6 +426,7 @@ def testIter(cipherTextYY,maxScore):
 
 userKey = "abcdefghijklmnopqrstuvwxyz" #Sets a defult user key ~~~~WARNING~~~~ Wont show error if there is not a key generated as this one will take over ~~~~WARNING~~~~
 keyIterations = keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = ceaserShifts = iterativeSolvingIndex = REPLACEME123 = 0
+maxScoreIterative = -99e9
 #Turn each function on or off
 keyWordAlphabetStart = False
 keyWordRandomStart = False
@@ -476,15 +462,13 @@ while True == True: #Loops the entire program
             cipherOut = substitionKeyCipher(userCipher,userKey)
             randomKeyIndex += 1
         elif iterativeSolvingStart == True: # Last resort random keys
-            #userKey = iterativeSolving(userCipher)
-            maxScoree = -99e9
-            userKey = testIter(userCipher,maxScoree)
+            userKey = iterativeSolving(userCipher,maxScoreIterative)
             cipherOut = substitionKeyCipher(userCipher,userKey)
             iterativeSolvingIndex += 1
         #########################################################
         #                   Text statistics
         #########################################################
-        clearScore = clearScoreEnglish(cipherOut) 
+        #clearScore = clearScoreEnglish(cipherOut) 
         indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
         chiSquaredText = round(chiSquaredStat(cipherOut),10)
         ngramScore = ngramFitness(cipherOut,ngramDitionaryEnglish)
@@ -495,14 +479,13 @@ while True == True: #Loops the entire program
 {printedUserKey}
 ================= STATISTICS: ==================
 Number of keys          {printedAttempts}
-English Score           {printedClearScore}%
 log Ngram Score         {printedNgramScore}
 Index Of Coincidence    {printedIoC}
 Chi Squared             {printedChi}
-'''.format(
+'''.format( #English Score           {printedClearScore}%
         printedCipherOut = cipherOut, 
         printedUserKey = userKey,
-        printedClearScore = clearScore,
+        #printedClearScore = clearScore,
         printedNgramScore = ngramScore,
         printedAttempts = keyIterations, 
         printedIoC = indexOfCoincidenceText, 

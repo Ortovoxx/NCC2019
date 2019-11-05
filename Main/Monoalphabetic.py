@@ -115,7 +115,7 @@ def substitionKeyCipher(userCipherText,userKey): #maps a ciphertext to plaintext
     def switchChar(cipherChar): #Switches a single character from its chiphertext to its plaintext
         alphaPerm = 0
         newChar = 0
-        while alphaPerm < len(alphabetASCII): #as it goes through a letter it changes it 
+        while alphaPerm < 26: #as it goes through a letter it changes it 
             if cipherChar == key[alphaPerm]:
                 newChar = alphabetASCII[alphaPerm]
             alphaPerm += 1
@@ -172,7 +172,7 @@ def indexOfCoincidence(text): #String input to calculate the Index of Coincidenc
     alphaIndex = 0
     textArray = convertToASCII(list(removeSpaces(removePunctuation(text))))
     textLength = len(textArray)
-    while alphaIndex < len(alphabetASCII):
+    while alphaIndex < 26:
         letterCount = textArray.count(alphaIndex + 97)
         IoCARRAYStore = (letter(letterCount,textLength))
         IoCARRAY.append(IoCARRAYStore)
@@ -187,7 +187,7 @@ def chiSquaredStat(text): #String input which calculates the chi-squared statist
     alphaIndex = 0
     textArray = convertToASCII(list(removeSpaces(removePunctuation(text))))
     textLength = len(textArray)
-    while alphaIndex < len(alphabetASCII): 
+    while alphaIndex < 26: 
         realLetterCount = textArray.count(alphaIndex + 97)
         expectedLetterCount = textLength * englishLetterFrequencyProbability[alphaIndex] #Compares it against an english distribution
         chiSquaredARRAYStore = letter(realLetterCount,expectedLetterCount)
@@ -246,7 +246,7 @@ def ceaser(string, shift): # Ceaser shift function
 def randomKey(): #generates a random key
     perms = 0
     key = []
-    while perms < len(alphabetASCII): #Ensures 26 letters in the alphabet
+    while perms < 26: #Ensures 26 letters in the alphabet
         randomNo = random.randint(97, 122)
         repeat = search(randomNo,key) #Ensures each letter is unique
         if repeat == False:
@@ -257,7 +257,7 @@ def randomKey(): #generates a random key
 def keyWordRandom(index): #Keyword key generator - filled in bit being random characters
     key = convertToASCII(list(freqWords[index]))
     countIndex = 0
-    while countIndex < len(alphabetASCII): #Removes duplicate letters any words may have
+    while countIndex < 26: #Removes duplicate letters any words may have
         howMany = key.count(alphabetASCII[countIndex])
         if howMany >= 2:
             where = key.index(alphabetASCII[countIndex])
@@ -267,7 +267,7 @@ def keyWordRandom(index): #Keyword key generator - filled in bit being random ch
                 howMany -= 1
         countIndex += 1
     perms = len(key)
-    while perms < len(alphabetASCII): #Ensures 26 letters in the alphabet
+    while perms < 26: #Ensures 26 letters in the alphabet
         randomNo = random.randint(97, 122)
         repeat = search(randomNo,key) #Ensures each letter is unique
         if repeat == False:
@@ -278,7 +278,7 @@ def keyWordRandom(index): #Keyword key generator - filled in bit being random ch
 def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alphabet
     key = convertToASCII(list(freqWords[index]))
     countIndex = 0
-    while countIndex < len(alphabetASCII): #Removes duplicate letters any words may have
+    while countIndex < 26: #Removes duplicate letters any words may have
         howMany = key.count(alphabetASCII[countIndex])
         if howMany >= 2:
             where = key.index(alphabetASCII[countIndex])
@@ -289,7 +289,7 @@ def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alp
         countIndex += 1
     perms = 0
     repeat = False
-    while perms < len(alphabetASCII): #Ensures 26 letters in the alphabet
+    while perms < 26: #Ensures 26 letters in the alphabet
         newChar = alphabetASCII[perms]
         repeat = search(newChar,key) #Ensures each letter is unique
         if repeat == False:
@@ -305,7 +305,7 @@ def searchFrequencyAnalysis(itemToCheckFor): #Compares the inputted value to sta
         return mappedPosition
     position = 0
     betweenValues = positionSortedAlphabetZero = False
-    while position < len(englishLetterFrequencySorted) and not betweenValues:
+    while position < 26 and not betweenValues:
         if englishLetterFrequencySorted[position] > itemToCheckFor: #compares to the first, and because sorted, highest value and if it is less than it will move onto the second ( next highest)
             if position == 25: #If a value lower than the lowest value is inputted it will bypass everything else (ie input of 0 or less than 0.074)
                 positionSortedAlphabetZero = True
@@ -335,7 +335,7 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
     cipherTextNoSpaces = removePunctuation(removeSpaces(cipherTextToBeFREQQED)) #removes spaces and punctuation of ciphertext
     cipherTextNoSpacesArray = list(cipherTextNoSpaces) #converts the formatted ciphertext into an array
     indexOfFrequencyAnalysis = 0
-    while indexOfFrequencyAnalysis < len(frequencyOfCipherText): #Converts frequency analysis data from number of occurrences into a % of text frequency analysis
+    while indexOfFrequencyAnalysis < 26: #Converts frequency analysis data from number of occurrences into a % of text frequency analysis
         frequencyOfCipherText[indexOfFrequencyAnalysis] = round(((frequencyOfCipherText[indexOfFrequencyAnalysis] / len(cipherTextNoSpacesArray))*100),3 )
         indexOfFrequencyAnalysis += 1
     indexToCompare = loopIteration = 0
@@ -360,7 +360,7 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
             randomIncrease += 200
         loopIteration += 1
     convertASCIIIndex = 0 # Text formatting
-    while convertASCIIIndex < len(englishIndexOrderArray): #converts the a=0 b=1 (positional data) to ASCII numbers
+    while convertASCIIIndex < 26: #converts the a=0 b=1 (positional data) to ASCII numbers
         englishIndexOrderArray[convertASCIIIndex] = englishIndexOrderArray[convertASCIIIndex] + 96
         convertASCIIIndex += 1
     finalKey = "".join(convertToCHARACTER(englishIndexOrderArray)) #converts the ASCII index to a plaintext string key with 26 characters

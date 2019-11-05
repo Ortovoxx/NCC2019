@@ -164,7 +164,7 @@ coach
 cold
 collection
 college
-color
+colour
 come
 commercial
 common
@@ -208,7 +208,7 @@ decade
 decide
 decision
 deep
-defense
+defence
 degree
 Democrat
 democratic

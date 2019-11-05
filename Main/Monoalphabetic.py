@@ -237,6 +237,9 @@ def randomKey(): #generates a random key
     finalKey = "".join(convertToCHARACTER(key))
     return finalKey
 def keyWordRandom(index): #Keyword key generator - filled in bit being random characters
+    lenFreq = len(freqWords)
+    if index > lenFreq - 1:
+        index = index - ( ( index // lenFreq ) * lenFreq )
     key = convertToASCII(list(freqWords[index]))
     countIndex = 0
     while countIndex < 26: #Removes duplicate letters any words may have
@@ -258,6 +261,9 @@ def keyWordRandom(index): #Keyword key generator - filled in bit being random ch
     finalKey = "".join(convertToCHARACTER(key))
     return finalKey
 def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alphabet
+    lenFreq = len(freqWords)
+    if index > lenFreq - 1:
+        index = index - ( ( index // lenFreq ) * lenFreq )
     key = convertToASCII(list(freqWords[index]))
     countIndex = 0
     while countIndex < 26: #Removes duplicate letters any words may have

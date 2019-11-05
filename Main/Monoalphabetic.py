@@ -51,13 +51,11 @@ freqWords = ["the","of","to","and","a","in","is","it","you","that","he","was","f
 def loadEnglishNgram(): #loads a ngram file to a python ditionary
         os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/Text_training_data") #path of ngram file to load make sure .txt file is in this folder MAKE SURE NGRAMS ARE LOWER CASE
         quadramDitionaryEnglish = {}
-        index = 0
         with open("ngram_output.txt", "r") as f:
-            quadramData = f.read()
-            quadramArray = quadramData.split()
-            while index < len(quadramArray):
-                quadramDitionaryEnglish[quadramArray[index]] = float(quadramArray[index + 1])
-                index += 2
+            for line in f:
+                quadramData = line
+                quadramArray = quadramData.split()
+                quadramDitionaryEnglish[quadramArray[0]] = float(quadramArray[1])
         return quadramDitionaryEnglish
 ngramDitionaryEnglish = loadEnglishNgram()
 
@@ -458,7 +456,6 @@ Chi Squared             {printedChi}
 
 #WORK ON EFFICIENCY OF FILES TODO:
 # Find some typical log probabilities for english texts and for texts with different ciphers put through them to get a rough guage of how fit it is
-#make the quadgram file readlines
 #make everything transmit data with lowercase strings
 #make remove spaces and remove punctuation more efficient using re.
 #remove clearscore

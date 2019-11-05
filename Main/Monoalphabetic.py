@@ -65,18 +65,26 @@ ngramDitionaryEnglish = loadEnglishNgram()
 #                                                       TEXT MANIPULATION AND REPEATED USE FUNCTIONS - DO NOT EDIT
 #==============================================================================================================================================================
 
-def convertToASCII(textArray): #Converts an array of characters into an array of their ASCII equivalent numbers
+def convertToASCII(string): #Converts an array of characters into an array of their ASCII equivalent numbers
     index = 0
+    textArray = list(string)
     while index < len(textArray): #goes through each array index and turns it from Character to ASCII
         textArray[index] = ord(textArray[index])
         index += 1
-    return textArray
-def convertToCHARACTER(textArray): #Converts an array of ASCII equivalent numbers into an array of their ASCII equivalent characters
+    text = "".join(textArray)
+    return text
+def convertToCHARACTER(string): #Converts an array of ASCII equivalent numbers into an array of their ASCII equivalent characters
     index = 0
+    textArray = list(string)
     while index < len(textArray): #goes through each array index and turns it from ASCII number to Character
         textArray[index] = chr(textArray[index])
         index += 1
-    return textArray
+    text = "".join(textArray)
+    return text
+def formatString(string): #removes everything apart from a-z lower case from a string
+    noPunctuationArray = re.findall("[a-z]",string)
+    outputString = "".join(noPunctuationArray)
+    return outputString
 def removePunctuation(string): #Removes punctuation from a string input
     plainText = string.lower() 
     characters = list(plainText)
@@ -110,8 +118,8 @@ def search(itemToCheckFor,listToSearchFrom): #LINEAR SEARCH GLOBAL FUNCTION - Se
         position += 1
     return found
 def substitionKeyCipher(userCipherText,userKey): #maps a ciphertext to plaintext according to the key given to it
-    cipherText = convertToASCII(list(userCipherText)) #Converting cipher to numbers
-    key = convertToASCII(list(userKey)) #Converting key to numbers
+    cipherText = convertToASCII(formatString(userCipherText)) #Converting cipher to numbers
+    key = convertToASCII(formatString(userKey)) #Converting key to numbers
     def switchChar(cipherChar): #Switches a single character from its chiphertext to its plaintext
         alphaPerm = 0
         newChar = 0
@@ -125,7 +133,7 @@ def substitionKeyCipher(userCipherText,userKey): #maps a ciphertext to plaintext
     while textPerm < len(cipherText): #Goes through each character one by one and sends to the function which converts cipher to plain
         switchedCipher.append(switchChar(cipherText[textPerm]))
         textPerm += 1
-    switchedCipherStr = "".join(convertToCHARACTER(switchedCipher))
+    switchedCipherStr = convertToCHARACTER("".join(switchedCipher))
     return switchedCipherStr
 '''
 def clearScoreEnglish(cipherText): # clear Score function that returns % english when string inputted 
@@ -150,7 +158,7 @@ def clearScoreEnglish(cipherText): # clear Score function that returns % english
     return clearScore
 '''
 def characterFrequency(encryptedTextUnformatted):
-    encryptedText = removeSpaces(removePunctuation(encryptedTextUnformatted))
+    encryptedText = formatString(encryptedTextUnformatted)
     frequencies = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     letter = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
     for i in encryptedText: #iterates through each character in encrypted_cipher text
@@ -170,7 +178,7 @@ def indexOfCoincidence(text): #String input to calculate the Index of Coincidenc
         return letterValue
     IoCARRAY = []
     alphaIndex = 0
-    textArray = convertToASCII(list(removeSpaces(removePunctuation(text))))
+    textArray = list(convertToASCII(formatString(text)))
     textLength = len(textArray)
     while alphaIndex < 26:
         letterCount = textArray.count(alphaIndex + 97)
@@ -185,7 +193,7 @@ def chiSquaredStat(text): #String input which calculates the chi-squared statist
         return letterValue
     chiSquaredARRAY = []
     alphaIndex = 0
-    textArray = convertToASCII(list(removeSpaces(removePunctuation(text))))
+    textArray = list(convertToASCII(formatString(text)))
     textLength = len(textArray)
     while alphaIndex < 26: 
         realLetterCount = textArray.count(alphaIndex + 97)
@@ -197,7 +205,7 @@ def chiSquaredStat(text): #String input which calculates the chi-squared statist
     return chiSquared
 def ngramFitness(userCiperText,ngramDitionaryEnglish):
     def ngramExtraction(userCiperText): #Finds quadgrams from a ciphertext
-        cipherText = list(removeSpaces(removePunctuation(userCiperText)))
+        cipherText = list(formatString(userCiperText))
         quadramDitionaryCiphertext = {}
         index = 0
         n = 4 # the n in ngram -  change to 2 for bigrams and 3 for trigrams etc
@@ -252,10 +260,10 @@ def randomKey(): #generates a random key
         if repeat == False:
             key.append(randomNo)
             perms += 1
-    finalKey = "".join(convertToCHARACTER(key))
+    finalKey = convertToCHARACTER("".join(key))
     return finalKey
 def keyWordRandom(index): #Keyword key generator - filled in bit being random characters
-    key = convertToASCII(list(freqWords[index]))
+    key = list(convertToASCII(freqWords[index]))
     countIndex = 0
     while countIndex < 26: #Removes duplicate letters any words may have
         howMany = key.count(alphabetASCII[countIndex])
@@ -273,10 +281,10 @@ def keyWordRandom(index): #Keyword key generator - filled in bit being random ch
         if repeat == False:
             key.append(randomNo)
             perms += 1
-    finalKey = "".join(convertToCHARACTER(key))
+    finalKey = convertToCHARACTER("".join(key))
     return finalKey
 def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alphabet
-    key = convertToASCII(list(freqWords[index]))
+    key = list(convertToASCII(freqWords[index]))
     countIndex = 0
     while countIndex < 26: #Removes duplicate letters any words may have
         howMany = key.count(alphabetASCII[countIndex])
@@ -295,7 +303,7 @@ def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alp
         if repeat == False:
             key.append(newChar)
         perms += 1
-    finalKey = "".join(convertToCHARACTER(key))
+    finalKey = convertToCHARACTER("".join(key))
     return finalKey
 
 def searchFrequencyAnalysis(itemToCheckFor): #Compares the inputted value to standard english language letter freuqnecy and finds the closest value and returns its letter position (a=0 b=1 etc) [all in %]
@@ -332,7 +340,7 @@ def searchFrequencyAnalysis(itemToCheckFor): #Compares the inputted value to sta
 def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accordance to comparisons between the ciphertext frequency analysis and the frequency analysis of english plaintext
     #cipherTextToBeFREQQED is a user inputted string
     frequencyOfCipherText = characterFrequency(cipherTextToBeFREQQED) #gets the frequency analysis data of the string inputted
-    cipherTextNoSpaces = removePunctuation(removeSpaces(cipherTextToBeFREQQED)) #removes spaces and punctuation of ciphertext
+    cipherTextNoSpaces = formatString(cipherTextToBeFREQQED) #removes spaces and punctuation of ciphertext
     cipherTextNoSpacesArray = list(cipherTextNoSpaces) #converts the formatted ciphertext into an array
     indexOfFrequencyAnalysis = 0
     while indexOfFrequencyAnalysis < 26: #Converts frequency analysis data from number of occurrences into a % of text frequency analysis
@@ -363,7 +371,7 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
     while convertASCIIIndex < 26: #converts the a=0 b=1 (positional data) to ASCII numbers
         englishIndexOrderArray[convertASCIIIndex] = englishIndexOrderArray[convertASCIIIndex] + 96
         convertASCIIIndex += 1
-    finalKey = "".join(convertToCHARACTER(englishIndexOrderArray)) #converts the ASCII index to a plaintext string key with 26 characters
+    finalKey = convertToCHARACTER("".join(englishIndexOrderArray)) #converts the ASCII index to a plaintext string key with 26 characters
     return finalKey
 
 
@@ -392,7 +400,7 @@ def iterativeSolving(userCipherText):
 '''
 def iterativeSolving(cipherTextYY,maxScore):
     #cipherText  = re.sub("[^A-Z]","",cipherTextYY.upper())
-    cipherText = removePunctuation(removeSpaces(cipherTextYY)).upper()
+    cipherText = formatString(cipherTextYY).upper()
     parentKey = list(randomKey().upper())
     deciphered = substitionKeyCipher(cipherText,"".join(parentKey))
     parentScore = ngramFitness(deciphered,ngramDitionaryEnglish)
@@ -436,7 +444,7 @@ ceaserStart = False
 iterativeSolvingStart = True
 
 while True == True: #Loops the entire program
-    userCipher = removeSpaces(removePunctuation((input(cipherSolverInputFormat)).lower()))
+    userCipher = formatString((input(cipherSolverInputFormat)).lower())
     #########################################################
     #           Calling different deciphering functions
     #########################################################

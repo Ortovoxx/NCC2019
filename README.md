@@ -7,24 +7,14 @@
 2. Frequency analysis based key generation sometimes returns all 5% values
 
 ### TODO:
-- [x] Text manipulator
-  - [x] Upper, Lower
-  - [x] Remove Spaces, punctuation
-  - [ ] Statistics
-- [x] English language detection
-- [x] Substition key mapping
-- [x] Substition key generation
-  - [x] Random key generation
-  - [x] Key word key generation
-  - [x] Frequency analysis based key generation
-- [x] Ceaser Shift
-- [ ] Affine Shift
-- [ ] Frequency Analysis
-  - [ ] Character count
-  - [ ] Word count
-  - [ ] 1,2,3 etc word combo count
+- [ ] Monoalphabetic Solver
+    - [ ] Functions to specifically decrypt common cipher algorithms
 - [ ] Transposition Solver
 - [ ] Polyalphabetic Solver
+- [ ] Improve ngram fitness efficiency
+- [ ] Look on [NCC](https://www.cipherchallenge.org/) website and import text files copied from there for possible key data
+- [ ] Find some typical log probabilities for english texts and for texts with different ciphers put through them to get a rough idea of ngram scores
+
 
 ### Variable naming conventions
 - Please try to keep global variables to a minimum

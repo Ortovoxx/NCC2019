@@ -114,8 +114,8 @@ def search(itemToCheckFor,listToSearchFrom): #LINEAR SEARCH GLOBAL FUNCTION - Se
         position += 1
     return found
 def substitionKeyCipher(userCipherText,userKey): #maps a ciphertext to plaintext according to the key given to it
-    cipherText = convertToASCII(list(formatString(userCipherText))) #Converting cipher to numbers
-    key = convertToASCII(list(formatString(userKey))) #Converting key to numbers
+    cipherText = convertToASCII(list(userCipherText)) #Converting cipher to numbers
+    key = convertToASCII(list(userKey)) #Converting key to numbers
     def switchChar(cipherChar): #Switches a single character from its chiphertext to its plaintext
         alphaPerm = 0
         newChar = 0
@@ -131,8 +131,7 @@ def substitionKeyCipher(userCipherText,userKey): #maps a ciphertext to plaintext
         textPerm += 1
     switchedCipherStr = "".join(convertToCHARACTER(switchedCipher))
     return switchedCipherStr
-def characterFrequency(encryptedTextUnformatted):
-    encryptedText = formatString(encryptedTextUnformatted)
+def characterFrequency(encryptedText):
     frequencies = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     letter = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
     for i in encryptedText: #iterates through each character in encrypted_cipher text
@@ -152,7 +151,7 @@ def indexOfCoincidence(text): #String input to calculate the Index of Coincidenc
         return letterValue
     IoCARRAY = []
     alphaIndex = 0
-    textArray = convertToASCII(list(formatString(text)))
+    textArray = convertToASCII(list(text))
     textLength = len(textArray)
     while alphaIndex < 26:
         letterCount = textArray.count(alphaIndex + 97)
@@ -167,7 +166,7 @@ def chiSquaredStat(text): #String input which calculates the chi-squared statist
         return letterValue
     chiSquaredARRAY = []
     alphaIndex = 0
-    textArray = convertToASCII(list(formatString(text)))
+    textArray = convertToASCII(list(text))
     textLength = len(textArray)
     while alphaIndex < 26: 
         realLetterCount = textArray.count(alphaIndex + 97)
@@ -179,7 +178,7 @@ def chiSquaredStat(text): #String input which calculates the chi-squared statist
     return chiSquared
 def ngramFitness(userCiperText,ngramDitionaryEnglish):
     def ngramExtraction(userCiperText): #Finds quadgrams from a ciphertext
-        cipherText = list(formatString(userCiperText))
+        cipherText = list(userCiperText)
         quadramDitionaryCiphertext = {}
         index = 0
         n = 4 # the n in ngram -  change to 2 for bigrams and 3 for trigrams etc
@@ -314,7 +313,7 @@ def searchFrequencyAnalysis(itemToCheckFor): #Compares the inputted value to sta
 def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accordance to comparisons between the ciphertext frequency analysis and the frequency analysis of english plaintext
     #cipherTextToBeFREQQED is a user inputted string
     frequencyOfCipherText = characterFrequency(cipherTextToBeFREQQED) #gets the frequency analysis data of the string inputted
-    cipherTextNoSpaces = formatString(cipherTextToBeFREQQED) #removes spaces and punctuation of ciphertext
+    cipherTextNoSpaces = cipherTextToBeFREQQED #removes spaces and punctuation of ciphertext
     cipherTextNoSpacesArray = list(cipherTextNoSpaces) #converts the formatted ciphertext into an array
     indexOfFrequencyAnalysis = 0
     while indexOfFrequencyAnalysis < 26: #Converts frequency analysis data from number of occurrences into a % of text frequency analysis
@@ -348,8 +347,7 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
     finalKey = "".join(convertToCHARACTER(englishIndexOrderArray)) #converts the ASCII index to a plaintext string key with 26 characters
     return finalKey
 
-def iterativeSolving(userCipherText,maxScore):
-    cipherText = formatString(userCipherText)
+def iterativeSolving(cipherText,maxScore):
     parentKey = list(randomKey()) #parentKey = randomKey()#frequencyKey(userCipherText) #parent Key is generated using frequency analysis
     deciphered = substitionKeyCipher(cipherText,"".join(parentKey))
     parentScore = ngramFitness(deciphered,ngramDitionaryEnglish)
@@ -392,7 +390,7 @@ ceaserStart = False
 iterativeSolvingStart = True
 
 while True == True: #Loops the entire program
-    userCipher = formatString((input(cipherSolverInputFormat)).lower())
+    userCipher = formatString((input(cipherSolverInputFormat)).lower())#ensures all ciphertext given to functions is correclty formatted
     #########################################################
     #           Calling different deciphering functions
     #########################################################

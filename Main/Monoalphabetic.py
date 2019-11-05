@@ -65,22 +65,18 @@ ngramDitionaryEnglish = loadEnglishNgram()
 #                                                       TEXT MANIPULATION AND REPEATED USE FUNCTIONS - DO NOT EDIT
 #==============================================================================================================================================================
 
-def convertToASCII(string): #Converts an array of characters into an array of their ASCII equivalent numbers
+def convertToASCII(textArray): #Converts an array of characters into an array of their ASCII equivalent numbers
     index = 0
-    textArray = list(string)
     while index < len(textArray): #goes through each array index and turns it from Character to ASCII
         textArray[index] = ord(textArray[index])
         index += 1
-    text = "".join(textArray)
-    return text
-def convertToCHARACTER(string): #Converts an array of ASCII equivalent numbers into an array of their ASCII equivalent characters
+    return textArray
+def convertToCHARACTER(textArray): #Converts an array of ASCII equivalent numbers into an array of their ASCII equivalent characters
     index = 0
-    textArray = list(string)
     while index < len(textArray): #goes through each array index and turns it from ASCII number to Character
         textArray[index] = chr(textArray[index])
         index += 1
-    text = "".join(textArray)
-    return text
+    return textArray
 def formatString(string): #removes everything apart from a-z lower case from a string
     noPunctuationArray = re.findall("[a-z]",string)
     outputString = "".join(noPunctuationArray)
@@ -118,8 +114,8 @@ def search(itemToCheckFor,listToSearchFrom): #LINEAR SEARCH GLOBAL FUNCTION - Se
         position += 1
     return found
 def substitionKeyCipher(userCipherText,userKey): #maps a ciphertext to plaintext according to the key given to it
-    cipherText = convertToASCII(formatString(userCipherText)) #Converting cipher to numbers
-    key = convertToASCII(formatString(userKey)) #Converting key to numbers
+    cipherText = convertToASCII(list(formatString(userCipherText))) #Converting cipher to numbers
+    key = convertToASCII(list(formatString(userKey))) #Converting key to numbers
     def switchChar(cipherChar): #Switches a single character from its chiphertext to its plaintext
         alphaPerm = 0
         newChar = 0
@@ -133,30 +129,8 @@ def substitionKeyCipher(userCipherText,userKey): #maps a ciphertext to plaintext
     while textPerm < len(cipherText): #Goes through each character one by one and sends to the function which converts cipher to plain
         switchedCipher.append(switchChar(cipherText[textPerm]))
         textPerm += 1
-    switchedCipherStr = convertToCHARACTER("".join(switchedCipher))
+    switchedCipherStr = "".join(convertToCHARACTER(switchedCipher))
     return switchedCipherStr
-'''
-def clearScoreEnglish(cipherText): # clear Score function that returns % english when string inputted 
-    def searchWords(cipherWord,freqWords):
-        freqPosition = 0
-        english = False
-        while freqPosition < len(freqWords) and not english: # Linear searches a specific word with the english language
-            if freqWords[freqPosition] == cipherWord:
-                english = True
-            freqPosition += 1
-        return english
-    cipherEnglishArray = []
-    cipherTextSplit = cipherText.split()
-    cipherPosition = 0
-    while cipherPosition < len(cipherTextSplit):
-        cipherEnglish = searchWords(cipherTextSplit[cipherPosition],freqWords) 
-        cipherEnglishArray.append(cipherEnglish) # puts all the T's and F's into an array
-        cipherPosition += 1
-    trues = cipherEnglishArray.count(True)
-    clearScore = round((trues / len(cipherEnglishArray)) * 100) # Calculates how many T's there are in array and outputs a % english
-    cipherEnglishArray.clear()
-    return clearScore
-'''
 def characterFrequency(encryptedTextUnformatted):
     encryptedText = formatString(encryptedTextUnformatted)
     frequencies = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -178,7 +152,7 @@ def indexOfCoincidence(text): #String input to calculate the Index of Coincidenc
         return letterValue
     IoCARRAY = []
     alphaIndex = 0
-    textArray = list(convertToASCII(formatString(text)))
+    textArray = convertToASCII(list(formatString(text)))
     textLength = len(textArray)
     while alphaIndex < 26:
         letterCount = textArray.count(alphaIndex + 97)
@@ -193,7 +167,7 @@ def chiSquaredStat(text): #String input which calculates the chi-squared statist
         return letterValue
     chiSquaredARRAY = []
     alphaIndex = 0
-    textArray = list(convertToASCII(formatString(text)))
+    textArray = convertToASCII(list(formatString(text)))
     textLength = len(textArray)
     while alphaIndex < 26: 
         realLetterCount = textArray.count(alphaIndex + 97)
@@ -260,10 +234,10 @@ def randomKey(): #generates a random key
         if repeat == False:
             key.append(randomNo)
             perms += 1
-    finalKey = convertToCHARACTER("".join(key))
+    finalKey = "".join(convertToCHARACTER(key))
     return finalKey
 def keyWordRandom(index): #Keyword key generator - filled in bit being random characters
-    key = list(convertToASCII(freqWords[index]))
+    key = convertToASCII(list(freqWords[index]))
     countIndex = 0
     while countIndex < 26: #Removes duplicate letters any words may have
         howMany = key.count(alphabetASCII[countIndex])
@@ -281,10 +255,10 @@ def keyWordRandom(index): #Keyword key generator - filled in bit being random ch
         if repeat == False:
             key.append(randomNo)
             perms += 1
-    finalKey = convertToCHARACTER("".join(key))
+    finalKey = "".join(convertToCHARACTER(key))
     return finalKey
 def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alphabet
-    key = list(convertToASCII(freqWords[index]))
+    key = convertToASCII(list(freqWords[index]))
     countIndex = 0
     while countIndex < 26: #Removes duplicate letters any words may have
         howMany = key.count(alphabetASCII[countIndex])
@@ -303,7 +277,7 @@ def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alp
         if repeat == False:
             key.append(newChar)
         perms += 1
-    finalKey = convertToCHARACTER("".join(key))
+    finalKey = "".join(convertToCHARACTER(key))
     return finalKey
 
 def searchFrequencyAnalysis(itemToCheckFor): #Compares the inputted value to standard english language letter freuqnecy and finds the closest value and returns its letter position (a=0 b=1 etc) [all in %]
@@ -371,37 +345,12 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
     while convertASCIIIndex < 26: #converts the a=0 b=1 (positional data) to ASCII numbers
         englishIndexOrderArray[convertASCIIIndex] = englishIndexOrderArray[convertASCIIIndex] + 96
         convertASCIIIndex += 1
-    finalKey = convertToCHARACTER("".join(englishIndexOrderArray)) #converts the ASCII index to a plaintext string key with 26 characters
+    finalKey = "".join(convertToCHARACTER(englishIndexOrderArray)) #converts the ASCII index to a plaintext string key with 26 characters
     return finalKey
 
-
-'''
-def iterativeSolving(userCipherText):
-    parentKey = randomKey()#frequencyKey(userCipherText) #parent Key is generated using frequency analysis
-    decipher = substitionKeyCipher(userCipherText,parentKey) #solves parent cipher using the parent key
-    parentScore = ngramFitness(userCipherText,ngramDitionaryEnglish) #Gets the text fitness of this ciphertext
-    iteration = 0
-    while iteration < 1000:
-        a = random.randint(0,25) #2 random letters (numbers) generated
-        b = random.randint(0,25)
-        childKeyArray = list(parentKey) #converts parent key string into a child array
-        childKeyArray[a],childKeyArray[b] = childKeyArray[b],childKeyArray[a] # swap two characters in the child
-        childKey = "".join(childKeyArray) #converts child key array into a string
-        decipher = substitionKeyCipher(userCipherText,childKey) #deciphers the ciphertext with the new jumbled key
-        childScore = ngramFitness(decipher,ngramDitionaryEnglish) #gets the text fitness score of the new ciphertext
-        if childScore > parentScore: # if the child was better, replace the parent with it. Else dont...
-            parentScore = childScore
-            parentKey = childKey
-            iteration = 0 #reset the iteration count to 0 as it is getting better and is not at a local minimum
-        iteration += 1
-        if childScore > -150:
-            return childKey
-    return childKey
-'''
-def iterativeSolving(cipherTextYY,maxScore):
-    #cipherText  = re.sub("[^A-Z]","",cipherTextYY.upper())
-    cipherText = formatString(cipherTextYY).upper()
-    parentKey = list(randomKey().upper())
+def iterativeSolving(userCipherText,maxScore):
+    cipherText = formatString(userCipherText)
+    parentKey = list(randomKey()) #parentKey = randomKey()#frequencyKey(userCipherText) #parent Key is generated using frequency analysis
     deciphered = substitionKeyCipher(cipherText,"".join(parentKey))
     parentScore = ngramFitness(deciphered,ngramDitionaryEnglish)
     count = 0
@@ -423,10 +372,9 @@ def iterativeSolving(cipherTextYY,maxScore):
     if parentScore > maxScore:
         maxScore = parentScore
         r = "".join(parentKey)
-        t = r.lower()
-        return t
+        return r
+#pmpafxaikkitprdsikcplifhwceigixkirradfeirdgkipgigudkcekiigpwrpucikceiginasikwduearrxiiqepcceindgmieinpwdfprduppcedoikiqiasafmfddfipfgmdafmfdteiki
 
-#rbo rpktigo vcrb bwucja wj kloj hcjd km sktpqo cq rbwr loklgo vcgg cjqcqr kj skhcja wgkja wjd rpycja rk ltr rbcjaq cj cr
 
 #==============================================================================================================================================================
 #                                                   USER INPUT / OUTPUT                   MAIN PROGRAM
@@ -510,12 +458,8 @@ Chi Squared             {printedChi}
 
 #WKMPC ZKXDV SYEZU KYLTV ICYFK BVDDN KZKXD VMYXO BPKLP XMDNK CDVLL VXTDB IPXMD YMVEM KDNKW YYTDN KBKIY EVBKB PMNDD NKNVG RCVBK MKDDP XMZBK DDIBK CDUKC CVXTN VFKWY BKYBU KCCTK SPTKT VUBKV TIDNV DDNKC YFPKD CVBKD YOUVW KLYBB KSKXD KFKXD CYXDN KVZYU UYZBY MBVWW KCYWK YLDNK MKXKB VUCTY XDXKK TWESN YLVXK HSECK DYDEB XEZDN KNKVD OEDIY ETYXD MKDLY EBCDV BCGPD NYEDE XTKBC DVXTP XMDNK XKKTL YBZYU PDPSV UCEZZ YBDVX TDNKB KNVCO KKXVS YXSKB DKTGN PCZKB PXMSV WZVPM XDYSY XFPXS KDNKZ BKCPT KXDDY DVRKV CDBYX MUPXK DNKWY CDCDB PTKXD VBKSV UUPXM LYBVU VBMKO EPUTE ZYLLY BSKCV UYXMD NKOYB TKBGP DNKVC DMKBW VXIVC VCNYG YLCDB KXMDN VBMEP XMDNV DDNKV DDVSR YXDNK CZVSK ZBYMB VWWKW ECDNV FKOKK XVEDN YBPCK TOIDN KZYUP DOEBY DNVDW VRKCX YCKXC KDYWK LPBCD DNKBE CCPVX CVBKW YBKUP RKUID YDBID YGPXD NKZBY ZVMVX TVGVB DNVXD YBPCR SYXLU PSDVX TCKSY XTDNK CVOYD VMKPL DNVDP CGNVD PDPCP CXDCY ZNPCD PSVDK TKXYE MNLYB VRMOY ZKBVD PYXOE DPDPC NVBTD YSYXF PXSKD NKMKX KBVUC DNVDD NVDPC DBEKC YWKYL DNKWY BKSVE DPYEC ZUVXX KBCWY CDUID NYCKG NYVSD EVUUI LYEMN DPXDN KUVCD GVBNV FKWVX VMKTD YOUYS RDNKO EPUTE ZZBYZ YCPXM VXKGD BVXSN KYLGV BMVWK CPXCD KVTWY OPUPC PXMDN VDGVI PCCDP UUVZB YFYSV DPYXO EDPCU KCCUP RKUID YVSSP TKXDV UUIDB PMMKB VGVBK CZKSP VUUIP LGKXY DPLIZ VFUYF CRIPX VTFVX SKVUU DNKCV WKWIY GXDPW KPXOK BUPXS YXFPX SKTWK GKNVF KDYDB KVTFK BICYL DUIDN KBKCY PNKVT KTYFK BDYUV XMUKI VXTSY XFPXS KTDNK WDYCE MMKCD VXVUD KBXVD PFKGK GPUUC DKZEZ PXCZK SDPYX CVDSN KSRZY PXDSN VBUPK DYWVR KPDNV BTKBL YBCYF PKDVM KXDCD YSBYC CVXTS BVXRE ZDNKD KELKU COKBM UPCDK XPXMY ZKBVD PYXDY CKKPL DNVDD EBXCE ZVXID NPXMB KUVDK TPVWV UCYMY PXMDY CKXTV SYEZU KYLYE BOKCD YFKBD YOVPR YXEBD YDBIV XTLPX TYEDG NVDPC MYPXM YXDNK BKDNK CYFPK DCVBK ZBKDD ICKSB KDPFK VOYED DNKPB YGXCZ VSKZB YMBVW WKVXT GPDNY EDDNK GYBUT CZBKC CGVDS NPXMG KTYXD BKVUU INVFK VSUKV BZPSD EBKYL DNKPB ZBYMB KCCYB DNKPB ZUVXC EXUKC CDNKI VBKSU YCKDY ZEDDP XMDNK PBYGX WKXYX DNKWY YXPSV XDCKK GNVDD NKINV FKDYM VPXGP DNGNV DCKKW CDYOK VLVPB UITPC YBMVX PCKTV DDKWZ DDYTK BVPUY EBCZV SKZBY MBVWW KOEDP GYEUT CDPUU UPRKD YRXYG GNVDD NKIVB KEZDY RKKZV SUYCK KIKYX DNKWP CCPYX ZUVXX PXMVX TUKDW KRXYG PLIYE NKVBV XIDNP XMGYB BIPXM PGPUU OKOVS RVOYE DVGKK ROKLY BKDNK UVEXS NNVBB I
 
-# Find some typical log probabilities for english texts and for texts with different ciphers put through them to get a rough guage of how fit it is
-
-
-
-#out  = re.sub("[^A-Z]","",string)
 #WORK ON EFFICIENCY OF FILES TODO:
+# Find some typical log probabilities for english texts and for texts with different ciphers put through them to get a rough guage of how fit it is
 #make the quadgram file readlines
 #make everything transmit data with lowercase strings
 #make remove spaces and remove punctuation more efficient using re.

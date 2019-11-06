@@ -177,7 +177,7 @@ def chiSquaredStat(text): #String input which calculates the chi-squared statist
         alphaIndex += 1
     chiSquared = sum(chiSquaredLIST)
     return chiSquared
-def ngramFitness(userCiperText,ngramDitionaryEnglish):
+def ngramFitness(userCiperText):
     def ngramExtraction(userCiperText): #Finds quadgrams from a ciphertext
         cipherText = list(userCiperText)
         quadramDitionaryCiphertext = {}
@@ -357,7 +357,7 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
 def iterativeSolving(cipherText,maxScore):
     parentKey = list(randomKey()) #parentKey = randomKey()#frequencyKey(userCipherText) #parent Key is generated using frequency analysis
     deciphered = substitionKeyCipher(cipherText,"".join(parentKey))
-    parentScore = ngramFitness(deciphered,ngramDitionaryEnglish)
+    parentScore = ngramFitness(deciphered)
     count = 0
     while count < 1000:
         a = random.randint(0,25)
@@ -366,7 +366,7 @@ def iterativeSolving(cipherText,maxScore):
         # swap two characters in the child
         childKey[a],childKey[b] = childKey[b],childKey[a]
         deciphered = substitionKeyCipher(cipherText,"".join(childKey))
-        childScore = ngramFitness(deciphered,ngramDitionaryEnglish)
+        childScore = ngramFitness(deciphered)
         # if the child was better, replace the parent with it
         if childScore > parentScore:
             parentScore = childScore
@@ -388,6 +388,7 @@ def iterativeSolving(cipherText,maxScore):
 userKey = "abcdefghijklmnopqrstuvwxyz" #Sets a defult user key ~~~~WARNING~~~~ Wont show error if there is not a key generated as this one will take over ~~~~WARNING~~~~
 keyIterations = keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = ceaserShifts = iterativeSolvingIndex = REPLACEME123 = 0
 maxScoreIterative = -99e9
+tryKeys = []
 #Turn each function on or off
 keyWordAlphabetStart = False
 keyWordRandomStart = False
@@ -409,10 +410,14 @@ while True == True: #Loops the entire program
         elif keyWordAlphabetStart == True: # Keyword keys done for all key words with the last letters being random
             userKey = keyWordAlphabet(keyWordAlphabetIndex)
             cipherOut = substitionKeyCipher(userCipher,userKey)
+            if ngramFitness(cipherOut) > -500:
+                tryKeys.append(cipherOut)
             keyWordAlphabetIndex += 1
         elif keyWordRandomStart == True: # Keyword keys done for all key words with the last letters being the alphabet
             userKey = keyWordRandom(keyWordRandomIndex)
             cipherOut = substitionKeyCipher(userCipher,userKey)
+            if ngramFitness(cipherOut) > -500:
+                tryKeys.append(cipherOut)
             keyWordRandomIndex += 1
         elif frequencyKeyStart == True: #Key generated from advanced frequency analysis
             userKey = frequencyKey(userCipher)
@@ -431,7 +436,7 @@ while True == True: #Loops the entire program
         #########################################################
         indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
         chiSquaredText = round(chiSquaredStat(cipherOut),10)
-        ngramScore = ngramFitness(cipherOut,ngramDitionaryEnglish)
+        ngramScore = ngramFitness(cipherOut)
         cipherOutKeyOut ='''
 ================== PLAINTEXT: ==================
 {printedCipherOut}
@@ -449,6 +454,6 @@ Chi Squared             {printedChi}
         printedAttempts = keyIterations,
         printedIoC = indexOfCoincidenceText, 
         printedChi = chiSquaredText )#Formatting
-        if ngramScore > -300:
+        if ngramScore > -2000:
             print(cipherOutKeyOut)
         keyIterations += 1

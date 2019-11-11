@@ -25,10 +25,10 @@ loadKeyWordsDirectory = "/Users/Euan/Desktop/NCC2019/Cryptanalysis"
 
 #WORK ON EFFICIENCY OF FILES TODO:
 # Find some typical log probabilities for english texts and for texts with different ciphers put through them to get a rough guage of how fit it is
-#make ngram fitness more efficent
-#improve general efficieny
-#add functions to different files then import them into main program
-#add extra words to the list to get better accuracy when detecting english and generating key
+# Make ngram fitness more efficent
+# Improve general efficieny
+# Add functions to different files then import them into main program
+# Add extra words to the list to get better accuracy when detecting english and generating key
 
 #Menu and input formats
 cipherSolverInputFormat = '''*************** CIPHERTEXT: **************
@@ -376,8 +376,8 @@ def iterativeSolving(cipherText,maxScore):
     # keep track of best score seen so far
     if parentScore > maxScore:
         maxScore = parentScore
-        r = "".join(parentKey)
-        return r
+        jointParentKey = "".join(parentKey)
+        return jointParentKey
 
 
 
@@ -454,6 +454,6 @@ Chi Squared             {printedChi}
         printedAttempts = keyIterations,
         printedIoC = indexOfCoincidenceText, 
         printedChi = chiSquaredText )#Formatting
-        if ngramScore > -2000:
+        if ngramScore > -2000: #Change this number here the closer to 0 the less it will accept and print
             print(cipherOutKeyOut)
         keyIterations += 1

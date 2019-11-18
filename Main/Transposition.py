@@ -181,42 +181,35 @@ while t < 5000:
   t += 1
   '''
 
-'''
-from word_score import word_score
-fitness = word_score()
-x = fitness.score('HELLOHOWAREYOUTODAY')
-print(x)
-'''
+
 from math import log10
 import os
 
 class word_score(object):
     def __init__(self):
         ''' load a file containing ngrams and counts, calculate log probabilities '''
-        os.chdir("/Users/Euan/Desktop/NCC2019/Cryptanalysis/word counts")
-        with open("Double word counts.txt") as file:
-            self.Pw = {}
-            for line in file('count_1w.txt'):
-                key,count = line.split('\t') 
-                self.Pw[key.upper()] = self.Pw.get(key.upper(), 0) + int(count)
-            self.N = 1024908267229 ## Number of tokens
-            #calculate first order log probabilities
-            for key in self.Pw.keys():
-                self.Pw[key] = log10(float(self.Pw[key])/self.N)
-            #get second order word model 
-            self.Pw2 = {}
-            for line in file('count_2w.txt'):
-                key,count = line.split('\t') 
-                self.Pw2[key.upper()] = self.Pw2.get(key.upper(), 0) + int(count)
-            #calculate second order log probabilities
-            for key in self.Pw2.keys():
-                word1,word2 = key.split()
-                if word1 not in self.Pw: 
-                    self.Pw2[key] = log10(float(self.Pw2[key])/self.N)
-                else: 
-                    self.Pw2[key] = log10(float(self.Pw2[key])/self.N) - self.Pw[word1]
-            # precalculate the probabilities we assign to words not in our dict, L is length of word
-            self.unseen = [log10(10./(self.N * 10**L)) for L in range(50)]        
+        self.Pw = {}
+        for line in file('count_1w.txt'):
+            key,count = line.split('\t') 
+            self.Pw[key.upper()] = self.Pw.get(key.upper(), 0) + int(count)
+        self.N = 1024908267229 ## Number of tokens
+        #calculate first order log probabilities
+        for key in self.Pw.keys():
+            self.Pw[key] = log10(float(self.Pw[key])/self.N)
+        #get second order word model 
+        self.Pw2 = {}
+        for line in file('count_2w.txt'):
+            key,count = line.split('\t') 
+            self.Pw2[key.upper()] = self.Pw2.get(key.upper(), 0) + int(count)
+        #calculate second order log probabilities
+        for key in self.Pw2.keys():
+            word1,word2 = key.split()
+            if word1 not in self.Pw: 
+                self.Pw2[key] = log10(float(self.Pw2[key])/self.N)
+            else: 
+                self.Pw2[key] = log10(float(self.Pw2[key])/self.N) - self.Pw[word1]
+        # precalculate the probabilities we assign to words not in our dict, L is length of word
+        self.unseen = [log10(10./(self.N * 10**L)) for L in range(50)]        
         
     # conditional word probability    
     def cPw(self,word,prev='<UNK>'):
@@ -241,3 +234,11 @@ class word_score(object):
                 prob[i][j], strs[i][j] = max(candidates)
         ends = [(prob[-i-1][i],strs[-i-1][i]) for i in range(min(len(text),maxwordlen))]
         return max(ends)
+
+
+
+
+
+fitness = word_score()
+x = fitness.score('HELLOHOWAREYOUTODAY')
+print(x)

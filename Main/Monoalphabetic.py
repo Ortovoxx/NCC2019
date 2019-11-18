@@ -10,23 +10,22 @@ import time
 import requests
 import re
 
-######## IMPORTANT INFO BEFORE USING THIS PROGRAM ########
+############# IMPORTANT INFO BEFORE USING THIS PROGRAM #############
 # Ensure you have an ngram.txt file in the correct directory:
 loadEnglishNgramDirectory = "/Users/Euan/Desktop/NCC2019/Cryptanalysis/Text_training_data"
 loadKeyWordsDirectory = "/Users/Euan/Desktop/NCC2019/Cryptanalysis"
 # All functions should transfer data using lowercase no space no punctuation strings
 
-######  TEST CIPHERS TO TRY AND SOLVE  ######
+#########  TEST CIPHERS TO TRY AND SOLVE  #########
 #rbo rpktigo vcrb bwucja wj kloj hcjd km sktpqo cq rbwr loklgo vcgg cjqcqr kj skhcja wgkja wjd rpycja rk ltr rbcjaq cj cr
 #Tjf, B sppx r ippx rs sqj ubij vpd hjes pojw rey bs zrh mdhs r wpsrsbpe nbaqjw raaibjy sp sqj sjks. Rs ubwhs bs zrh qrwy sp hrv bu sqrs zrh r cdf pw r ujrsdwj rey epwtriiv B zpdiy rhhdtj cdf, cds bs hjjtjy pyy sqrs bs zrh sqj peiv ubij sqrs zrh ruujnsjy hp B rhxjy rwpdey sp hjj bu revpej qry hjje revsqbef hbtbirw. Bs sdweh pds sqrs sqbh zrh eps sqj ubwhs erobfrsbpe awpcijt sp qbs sqj awpfwrttj. Fjej wjapwsjy r trmpw bhhdj zbsq sqj fdbyrenj awpfwrttj upw Heppav pe sqj Rapiip Sje tbhhbpe zqbnq npdiy rfrbe qroj nrdhjy r trmpw awpcijt. Upw hptj wjrhpe sqj awpfwrttj npeswpiibef sqj ireybef wryrw zrhe’s dayrsjy zbsq sqj uibfqs aire rey bu Fjej qrye’s wrbhjy sqrs zbsq Bojwhpe sqje sqj cpvh tbfqs qroj qry wjri swpdcij fjssbef crnx. B ippxjy sqwpdfq sqj nptarev ubijh rey updey repsqjw pu pdw tvhsjwbpdhiv upwtrssjy wjapwsh: sqj tjtp beupwtbef sqjt rcpds sqj nqrefj, zqbnq jkairbeh zqv sqj awpfwrttj ejojw fps dayrsjy. Sqbh sbtj sqj nbaqjw zrh re ruubej hqbus, hp hibfqsiv qrwyjw sp nwrnx, cds epsqbef hjwbpdh. Hsbii, bs bh tdnq ijhh ibxjiv sqrs bs zrh r cdf sqrs sbtj, rey be rev nrhj szbnj bh spp tdnq pu r npbenbyjenj. Bs yby hsrws tj zpeyjwbef zqv sqj hjnpey nbaqjw zrh jrhbjw sp nwrnx sqre sqj ubwhs, cds sqje B wjribhjy sqrs sqj ruubej hqbus zrh spp tdnq pu r fbojrzrv. R wpsrsbpe nbaqjw wjriiv npdiy mdhs cj re jenpybef jwwpw, cds sqj ruubej hqbus bh spp hpaqbhsbnrsjy upw r tbhsrxj, hp zqpjojw trefijy sqj wjapwsh tdhs qroj wjribhjy sqjv qry tryj r cbs pu re jwwpw zbsq sqj ubwhs pej rey swbjy sp npojw sqjbw hsjah zbsq sqj hjnpey. Bs bh qrwy sp hjj sqbh rh revsqbef psqjw sqre rssjtasjy hrcpsrfj, cds B rt eps hdwj zqrs sqj tpsboj npdiy cj. B ypdcs bs bh ajwhperi. Sqj Rapiip Sje rey Jijoje nwjzh ype’s pojwira, hp jbsqjw hptjpej qrh r fwdyfj rfrbehs sqj zqpij Rhswperds npwah pw sqjv rwj swvbef sp yjwrbi sqj Rapiip awpfwrttj. Bs npdiy cj sqj Hpobjsh B hdaaphj. Rs ubwhs, B sqpdfqs sqrs sqjbw zbiibefejhh sp hqbus sqj IDER-UBUSJJE pwcbs hqpzjy sqrs sqjv zjwje’s arws pu bs, cds hptjpej be sqj Hsrsj Yjarwstjes apbesjy pds sqrs sqjv tbfqs mdhs qroj qry r fdbisv npehnbjenj, pw cjje xjje sp ybhsrenj sqjthjiojh penj sqj aips zrh ybhnpojwjy. B rt hsbii eps hdwj. Be sqj tjresbtj, npdiy vpd srxj r ippx rs sqj nptadsjw ubijh sp hjj zqp tbfqs qroj qry rnnjhh sp cpsq tjtph, rey zqp tbfqs qroj qry sqj paapwsdebsv rey tjreh sp ypnspw sqjt? B rt uivbef crnx sp Irefijv spebfqs, sp hjj bu sqj Hsrsj Yjarwstjes qroj rev byjrh zqrs tbfqs cj fpbef pe. Ejbi hrby qj npdiy uiv tj da be pej pu sqj ERHR nqrhj airejh, zqbnq bh hptjsqbef B qroj cjje xjje sp swv. B zbii nrii vpd bu B fjs revsqbef.
 #xqhho y qc dej ikhu yv oek muhu sefyut yd je jxu cuce qrekj husudj uludji rkj xuhu yi q ikccqho jme tqoi qwe qd evvtkjo wkytqdsu evvysuh qbuhjut cyiiyed sedjheb je q fejudjyqb fherbuc myjx jxu qfebbe vbywxj jxu fbqddut tuisudj jhqzusjeho qffuqhut je ru hkddydw ed q sebbyiyed sekhiu myjx
 #WKMPC ZKXDV SYEZU KYLTV ICYFK BVDDN KZKXD VMYXO BPKLP XMDNK CDVLL VXTDB IPXMD YMVEM KDNKW YYTDN KBKIY EVBKB PMNDD NKNVG RCVBK MKDDP XMZBK DDIBK CDUKC CVXTN VFKWY BKYBU KCCTK SPTKT VUBKV TIDNV DDNKC YFPKD CVBKD YOUVW KLYBB KSKXD KFKXD CYXDN KVZYU UYZBY MBVWW KCYWK YLDNK MKXKB VUCTY XDXKK TWESN YLVXK HSECK DYDEB XEZDN KNKVD OEDIY ETYXD MKDLY EBCDV BCGPD NYEDE XTKBC DVXTP XMDNK XKKTL YBZYU PDPSV UCEZZ YBDVX TDNKB KNVCO KKXVS YXSKB DKTGN PCZKB PXMSV WZVPM XDYSY XFPXS KDNKZ BKCPT KXDDY DVRKV CDBYX MUPXK DNKWY CDCDB PTKXD VBKSV UUPXM LYBVU VBMKO EPUTE ZYLLY BSKCV UYXMD NKOYB TKBGP DNKVC DMKBW VXIVC VCNYG YLCDB KXMDN VBMEP XMDNV DDNKV DDVSR YXDNK CZVSK ZBYMB VWWKW ECDNV FKOKK XVEDN YBPCK TOIDN KZYUP DOEBY DNVDW VRKCX YCKXC KDYWK LPBCD DNKBE CCPVX CVBKW YBKUP RKUID YDBID YGPXD NKZBY ZVMVX TVGVB DNVXD YBPCR SYXLU PSDVX TCKSY XTDNK CVOYD VMKPL DNVDP CGNVD PDPCP CXDCY ZNPCD PSVDK TKXYE MNLYB VRMOY ZKBVD PYXOE DPDPC NVBTD YSYXF PXSKD NKMKX KBVUC DNVDD NVDPC DBEKC YWKYL DNKWY BKSVE DPYEC ZUVXX KBCWY CDUID NYCKG NYVSD EVUUI LYEMN DPXDN KUVCD GVBNV FKWVX VMKTD YOUYS RDNKO EPUTE ZZBYZ YCPXM VXKGD BVXSN KYLGV BMVWK CPXCD KVTWY OPUPC PXMDN VDGVI PCCDP UUVZB YFYSV DPYXO EDPCU KCCUP RKUID YVSSP TKXDV UUIDB PMMKB VGVBK CZKSP VUUIP LGKXY DPLIZ VFUYF CRIPX VTFVX SKVUU DNKCV WKWIY GXDPW KPXOK BUPXS YXFPX SKTWK GKNVF KDYDB KVTFK BICYL DUIDN KBKCY PNKVT KTYFK BDYUV XMUKI VXTSY XFPXS KTDNK WDYCE MMKCD VXVUD KBXVD PFKGK GPUUC DKZEZ PXCZK SDPYX CVDSN KSRZY PXDSN VBUPK DYWVR KPDNV BTKBL YBCYF PKDVM KXDCD YSBYC CVXTS BVXRE ZDNKD KELKU COKBM UPCDK XPXMY ZKBVD PYXDY CKKPL DNVDD EBXCE ZVXID NPXMB KUVDK TPVWV UCYMY PXMDY CKXTV SYEZU KYLYE BOKCD YFKBD YOVPR YXEBD YDBIV XTLPX TYEDG NVDPC MYPXM YXDNK BKDNK CYFPK DCVBK ZBKDD ICKSB KDPFK VOYED DNKPB YGXCZ VSKZB YMBVW WKVXT GPDNY EDDNK GYBUT CZBKC CGVDS NPXMG KTYXD BKVUU INVFK VSUKV BZPSD EBKYL DNKPB ZBYMB KCCYB DNKPB ZUVXC EXUKC CDNKI VBKSU YCKDY ZEDDP XMDNK PBYGX WKXYX DNKWY YXPSV XDCKK GNVDD NKINV FKDYM VPXGP DNGNV DCKKW CDYOK VLVPB UITPC YBMVX PCKTV DDKWZ DDYTK BVPUY EBCZV SKZBY MBVWW KOEDP GYEUT CDPUU UPRKD YRXYG GNVDD NKIVB KEZDY RKKZV SUYCK KIKYX DNKWP CCPYX ZUVXX PXMVX TUKDW KRXYG PLIYE NKVBV XIDNP XMGYB BIPXM PGPUU OKOVS RVOYE DVGKK ROKLY BKDNK UVEXS NNVBB I
 #pmpafxaikkitprdsikcplifhwceigixkirradfeirdgkipgigudkcekiigpwrpucikceiginasikwduearrxiiqepcceindgmieinpwdfprduppcedoikiqiasafmfddfipfgmdafmfdteiki
 
-#WORK ON EFFICIENCY OF FILES TODO:
+# WORK ON EFFICIENCY OF FILES TODO:
 # Find some typical log probabilities for english texts and for texts with different ciphers put through them to get a rough guage of how fit it is
 # Make ngram fitness more efficent
-# Improve general efficieny
 # Add functions to different files then import them into main program
 # Add extra words to the list to get better accuracy when detecting english and generating key
 
@@ -82,28 +81,6 @@ def formatString(string): #removes everything apart from a-z lower case from a s
     noPunctuationList = re.findall("[a-z]",string)
     outputString = "".join(noPunctuationList)
     return outputString
-def removePunctuation(string): #Removes punctuation from a string input
-    plainText = string.lower() 
-    characters = list(plainText)
-    charactersNoSymbol = []
-    index = 0
-    while index < len(characters):
-        if ord(characters[index]) > 96 and ord(characters[index]) < 123 or ord(characters[index]) == 32: # 97 = A 122 = Z 32 = [SPACE]
-            charactersNoSymbol.append(characters[index])
-        index += 1
-    charactersNoSymbolJoint = "".join(charactersNoSymbol)
-    return charactersNoSymbolJoint
-def removeSpaces(string): #Removes spaces from a string input
-    plainText = string.lower()
-    characters = list(plainText)
-    charactersNoSpace = []
-    index = 0
-    while index < len(characters):
-        if ord(characters[index]) != 32: # 32 ASCII for space
-            charactersNoSpace.append(characters[index])
-        index += 1
-    charactersNoSpaceJoint = "".join(charactersNoSpace)
-    return charactersNoSpaceJoint
 def reverseString(string): #Reverses the text
     return string[::-1]
 def search(itemToCheckFor,listToSearchFrom): #LINEAR SEARCH GLOBAL FUNCTION - Searches to see if there are repeats for random and keyword keys
@@ -136,9 +113,7 @@ def characterFrequency(encryptedText):
     frequencies = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     letter = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
     for i in encryptedText: #iterates through each character in encrypted_cipher text
-        index = 0 #element index set at 0
-        #WHEN data at index (character in encrypted text) does not equal first element
-        #AND the alphabet index is less than 25, (i.e all letters encompassed only):
+        index = 0 #element index set at 0 #WHEN data at index (character in encrypted text) does not equal first element #AND the alphabet index is less than 25, (i.e all letters encompassed only):
         while i != letter[index] and index < 25: #THEN increment pos index ++, avoids indexing greater than alphabet list
            if index <= 24:
                index += 1
@@ -159,8 +134,7 @@ def indexOfCoincidence(text): #String input to calculate the Index of Coincidenc
         IoCLISTStore = (letter(letterCount,textLength))
         IoCLIST.append(IoCLISTStore)
         alphaIndex += 1
-    IoC = sum(IoCLIST)
-    return IoC
+    return sum(IoCLIST)
 def chiSquaredStat(text): #String input which calculates the chi-squared statistic of a text
     def letter(realLetterCount,expectedLetterCount):
         letterValue = ((realLetterCount - expectedLetterCount)**2) / expectedLetterCount
@@ -175,8 +149,7 @@ def chiSquaredStat(text): #String input which calculates the chi-squared statist
         chiSquaredLISTStore = letter(realLetterCount,expectedLetterCount)
         chiSquaredLIST.append(chiSquaredLISTStore)
         alphaIndex += 1
-    chiSquared = sum(chiSquaredLIST)
-    return chiSquared
+    return sum(chiSquaredLIST)
 def ngramFitness(userCiperText):
     def ngramExtraction(userCiperText): #Finds quadgrams from a ciphertext
         cipherText = list(userCiperText)
@@ -210,8 +183,7 @@ def ngramFitness(userCiperText):
             probQuadgram = 1e-50 #floors it as / 0 should be -infinity but that cannot be logged -- smaller this number bigger gap between english and non english
             loggedProbQuadgram = math.log10(probQuadgram)
             logAB.append(loggedProbQuadgram)
-    final = sum(logAB)
-    return final
+    return sum(logAB)
 
 #==============================================================================================================================================================
 #                                                            CIPHER SOLVING - EDITABLE
@@ -234,8 +206,7 @@ def randomKey(): #generates a random key
         if repeat == False:
             key.append(randomNo)
             perms += 1
-    finalKey = "".join(convertToCHARACTER(key))
-    return finalKey
+    return "".join(convertToCHARACTER(key))
 def keyWordRandom(index): #Keyword key generator - filled in bit being random characters
     lenFreq = len(keyWords)
     if index > lenFreq - 1:
@@ -258,8 +229,7 @@ def keyWordRandom(index): #Keyword key generator - filled in bit being random ch
         if repeat == False:
             key.append(randomNo)
             perms += 1
-    finalKey = "".join(convertToCHARACTER(key))
-    return finalKey
+    return "".join(convertToCHARACTER(key))
 def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alphabet
     lenFreq = len(keyWords)
     if index > lenFreq - 1:
@@ -283,8 +253,7 @@ def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alp
         if repeat == False:
             key.append(newChar)
         perms += 1
-    finalKey = "".join(convertToCHARACTER(key))
-    return finalKey
+    return "".join(convertToCHARACTER(key))
 
 def searchFrequencyAnalysis(itemToCheckFor): #Compares the inputted value to standard english language letter freuqnecy and finds the closest value and returns its letter position (a=0 b=1 etc) [all in %]
     def searchFrequencyAnalysisSorted(positionToMap): #Takes both the sorted alphabet and normal alphabet and maps the positions from the ciphertext frequency analysis
@@ -351,8 +320,7 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
     while convertASCIIIndex < 26: #converts the a=0 b=1 (positional data) to ASCII numbers
         englishIndexOrderList[convertASCIIIndex] = englishIndexOrderList[convertASCIIIndex] + 96
         convertASCIIIndex += 1
-    finalKey = "".join(convertToCHARACTER(englishIndexOrderList)) #converts the ASCII index to a plaintext string key with 26 characters
-    return finalKey
+    return "".join(convertToCHARACTER(englishIndexOrderList)) #converts the ASCII index to a plaintext string key with 26 characters
 
 def iterativeSolving(cipherText,maxScore):
     parentKey = list(randomKey()) #parentKey = randomKey()#frequencyKey(userCipherText) #parent Key is generated using frequency analysis
@@ -376,8 +344,7 @@ def iterativeSolving(cipherText,maxScore):
     # keep track of best score seen so far
     if parentScore > maxScore:
         maxScore = parentScore
-        jointParentKey = "".join(parentKey)
-        return jointParentKey
+        return "".join(parentKey)
 
 
 

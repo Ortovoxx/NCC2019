@@ -252,7 +252,7 @@ def ceaser(string, shift): # Ceaser shift function
     return cipher
 
 
-def right(a,r):
+def shiftRight(a,r):
     index = 0
     while index < r:
         x = a.pop()
@@ -261,7 +261,7 @@ def right(a,r):
     return a
 
 
-def keyWordCeaser(index,cindex,): #Keyword key generator - filled in bit being the alphabet
+def keyWordCeaser(index,shiftIndex): #Keyword key generator - filled in bit being the alphabet
     lenFreq = len(keyWords)
     if index > lenFreq - 1:
         index = index - ( ( index // lenFreq ) * lenFreq )
@@ -278,18 +278,17 @@ def keyWordCeaser(index,cindex,): #Keyword key generator - filled in bit being t
         countIndex += 1
     perms = 0
     repeat = False
-    keyNew = []
+    endKey = []
     while perms < 26: #Ensures 26 letters in the alphabet
         newChar = alphabetASCII[perms]
         repeat = search(newChar,key) #Ensures each letter is unique
         if repeat == False:
-            keyNew.append(newChar)
+            endKey.append(newChar)
         perms += 1
-    c = right(keyNew,cindex)
-    xdf = "".join(convertToCHARACTER(key))
-    c = "".join(convertToCHARACTER(c))
-    x = xdf + c
-    return x
+    shiftedEnd = shiftRight(endKey,shiftIndex)
+    keyStart = "".join(convertToCHARACTER(key))
+    shiftedEnd = "".join(convertToCHARACTER(shiftedEnd))
+    return keyStart + shiftedEnd
 
 
 
@@ -307,4 +306,4 @@ while i < 1000000:
     #,new,permsCC,keyCeaser
 
 #abcdefghijklmnopqrstuvwxyz
-#dtionalrsuvwxyzbcefghjkmpq
+#advnturesxyzbcfghijklmopqw

@@ -416,7 +416,8 @@ randomKeyStart = False
 ceaserStart = False
 iterativeSolvingStart = False
 keyWordCeaserStart = True
-c =1
+c = 1
+
 exporting = False
 
 userCipher = "wkqcntvhpkchtnujrscpqhqjpurwthkvrfvjrauhqancrwjcqprtsckcqtpjhajrwtqragnrrjchqaqqtnrhpcrajcarrtptqkonurnkxjcejcsrhqtrhkqnhqitvrqclcftpqpvtlstrvjrrpznuvzqcrhqhrnqpthscjrqoarqquzrhwthrorujrotjqrfcakkvpnrwkhxcqchqpcqtkxpcenqsjjuknrajcghqrncriirqnkkqpfkvcjkprpvtlkjrrjkqjcerhkosnsnpcutxtkrnjtikozxzaenksjcncaqvrizfunkhxpkxkafuvnkfukthavrwnntarcqukrhqtrptqqpevnuirhqkgnqrnnrhepctikprjftvcqtfjkatrsjctkqkffxqugntjtrhqpoqtbrnrjhkxwafuwrjvnrjukjrqvjtnkrqutnkhrbcvupgthppcjkcrwricjhrxqattrhrppcpqfljrvtvkqnntqczqukrhqgrgznkqikvrhijkjknqtqjkcrwkhqncgrcpporfrptejctoucqpoffjnujtphqaklrcppfcozqcjikfvuntrjjtchcqtfjkcqpcpkkknqqsjudkcqpqzipchnkpikqqvtjkcajcarrrhqfkloqcknupthqragnrrjchqaqqtnrhrvtpkqvtlpcrqronrqukiqhsjjcntrntrkhqconhxqrnrnukjxkvrqkjhskfthzftptrnlzawkncarrpqqifroklupcnrqnkirhpnctpqfrqqcfjtrhqacirqpnjtgarjtlpirvscfpqhnrxvtrgkvcflrhpzoanuknrhprkoqtectujkukngtncnrjtvgkvatngprhztrwtkhqhsupuqtrxhxexjrkgrarwnukjufkntconnrqrkqupjqrnprhritkzqhqincrncifqptjutfncajosjqqupchptxrjtcqjfrnqpzqtncsrkgvcrwrqjrajkqacuovafijkracrvjqrorrxukjxqntjkkcqxpjqthfcxhqfazrkjkhqxqqtqthrhqncifqptjutfncajhsjoptjrrvvtlgkpcfarhnkgtfrcajpsjxkhjtgkgznjkevktvphqjlzrppkfocrjztarxajqthfcxqcfpkvkiqhqnqgrnoksjcrhqkhgrrgnrwcgzcppqjkzrhutfhvjpcnvpetqtnqphlkivcfctrnuajtxkjpqcgrrhqpkqtkrjhqincrjxkxpcenksjcrkqupjqrnqrhtqkuhffcgqtcjkcqikvrhcltftqqpcpzpgrqtrghxjrfcnuktkstpfornqqrgnroqrqpzwcnsjcfkqntrnijqgktrhnrgtvcvpjlkktnrjcqhxsrnrgrxqpurkqupjqrnqthxrxxjcnrhrxrjtvptjattjcgqpcqtnpnkwthftrtrngzaratrwkuqnprnukqkvprvjcjndsjjckyrqkflqtnjkcajtnuktflpcjokqfcujkarhqznajratfojkswtntwkrnsrgrcqjrxijtvkkvcanqtjdtrjckcgqcppqjkpchkhpafuwcspurvvtpprpkqrgkqiktrhnrgtvcrqjjhvtvcjtfnqajctsjcqtgcnrpftchxkrfknunjxevkpqrqpzpgrrntntinkgkprchlcqpqtvqarjthrhqpncrhqnnccfrvjtjkrrhqcepkffhqincrqptjknqutrgppjtthqhqqhzrrwttrfrjntiakgntrnukohqqcfrqcgikpguhrjtuajjtntrvlajinrgnkvjthqrxjtthrorwjrrfotkqrikpcntcxqqffretgkpcqrqrgwkkvnrrgkrhqrgtvcnajtqpcpunikqnuktqptrqcajtpqjrsrcvuopptqjkfptsrhqkazqkjfrowrchqrxqtntrrorjchhqarnrjrvtpqqkorstqqtlgrqpqjrhhqcejcxrxffctrorfotkqchvrwrchqksptf"
@@ -457,38 +458,22 @@ while True == True: #Loops the entire program
         elif keyWordRandomStart == True: # Keyword keys done for all key words with the last letters being the alphabet
             userKey = keyWordRandom(keyWordRandomIndex)
             cipherOut = substitionKeyCipher(userCipher,userKey)
-            sim = similar(englishLetterFrequency,convertToPercent(characterFrequency(cipherOut)))
-            if sim < 0.03 and sim > -0.03:
-                #print(cipherOut)
-                #print(userKey)
-                #print(ioc)
-                print(keyWordRandomIndex)
-                dicc[userKey] = cipherOut
-            if keyWordRandomIndex == 10000:
-                print("exported!")
-                exporting = True
-            if exporting == True:
-                export()
-            keyWordRandomIndex += 1
         elif keyWordCeaserStart == True: # Keyword keys done for all key words with the last letters being the alphabet
             userKey = keyWordCeaser(keyWordRandomIndex,c)
             cipherOut = substitionKeyCipher(userCipher,userKey)
             sim = similar(englishLetterFrequency,convertToPercent(characterFrequency(cipherOut)))
+            print(userKey)
             if sim < 0.05 and sim > -0.05:
-                #print(cipherOut)
-                #print(userKey)
-                #print(ioc)
-                print(keyWordRandomIndex)
                 dicc[userKey] = cipherOut
             if keyWordRandomIndex == 10000:
                 print("exported!")
                 exporting = True
             if exporting == True:
                 export()
-            keyWordRandomIndex += 1
             c+=1
             if c > 26:
                 c = 1
+                keyWordRandomIndex += 1
         elif frequencyKeyStart == True: #Key generated from advanced frequency analysis
             userKey = frequencyKey(userCipher)
             cipherOut = substitionKeyCipher(userCipher,userKey)

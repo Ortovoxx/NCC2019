@@ -389,6 +389,8 @@ def iterativeSolving(cipherText,maxScore):
         maxScore = parentScore
         return "".join(parentKey)
 
+
+
 def convertToPercent(frequency):
     arrayNew = []
     for n in frequency:
@@ -414,25 +416,32 @@ def similar(english,cipherText):
 
 userKey = "abcdefghijklmnopqrstuvwxyz" #Sets a defult user key ~~~~WARNING~~~~ Wont show error if there is not a key generated as this one will take over ~~~~WARNING~~~~
 keyIterations = keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = ceaserShifts = iterativeSolvingIndex = REPLACEME123 = 0
-maxScoreIterative = -99e9
-tryKeys = []
-#Turn each function on or off
-keyWordAlphabetStart = False
-keyWordRandomStart = False
-frequencyKeyStart = False
-randomKeyStart = False
-ceaserStart = False
-iterativeSolvingStart = False
-keyWordCeaserStart = True
 shiftNumber = 1
-
+maxScoreIterative = -99e9
 exporting = False
 
-userCipher = "wkqcntvhpkchtnujrscpqhqjpurwthkvrfvjrauhqancrwjcqprtsckcqtpjhajrwtqragnrrjchqaqqtnrhpcrajcarrtptqkonurnkxjcejcsrhqtrhkqnhqitvrqclcftpqpvtlstrvjrrpznuvzqcrhqhrnqpthscjrqoarqquzrhwthrorujrotjqrfcakkvpnrwkhxcqchqpcqtkxpcenqsjjuknrajcghqrncriirqnkkqpfkvcjkprpvtlkjrrjkqjcerhkosnsnpcutxtkrnjtikozxzaenksjcncaqvrizfunkhxpkxkafuvnkfukthavrwnntarcqukrhqtrptqqpevnuirhqkgnqrnnrhepctikprjftvcqtfjkatrsjctkqkffxqugntjtrhqpoqtbrnrjhkxwafuwrjvnrjukjrqvjtnkrqutnkhrbcvupgthppcjkcrwricjhrxqattrhrppcpqfljrvtvkqnntqczqukrhqgrgznkqikvrhijkjknqtqjkcrwkhqncgrcpporfrptejctoucqpoffjnujtphqaklrcppfcozqcjikfvuntrjjtchcqtfjkcqpcpkkknqqsjudkcqpqzipchnkpikqqvtjkcajcarrrhqfkloqcknupthqragnrrjchqaqqtnrhrvtpkqvtlpcrqronrqukiqhsjjcntrntrkhqconhxqrnrnukjxkvrqkjhskfthzftptrnlzawkncarrpqqifroklupcnrqnkirhpnctpqfrqqcfjtrhqacirqpnjtgarjtlpirvscfpqhnrxvtrgkvcflrhpzoanuknrhprkoqtectujkukngtncnrjtvgkvatngprhztrwtkhqhsupuqtrxhxexjrkgrarwnukjufkntconnrqrkqupjqrnprhritkzqhqincrncifqptjutfncajosjqqupchptxrjtcqjfrnqpzqtncsrkgvcrwrqjrajkqacuovafijkracrvjqrorrxukjxqntjkkcqxpjqthfcxhqfazrkjkhqxqqtqthrhqncifqptjutfncajhsjoptjrrvvtlgkpcfarhnkgtfrcajpsjxkhjtgkgznjkevktvphqjlzrppkfocrjztarxajqthfcxqcfpkvkiqhqnqgrnoksjcrhqkhgrrgnrwcgzcppqjkzrhutfhvjpcnvpetqtnqphlkivcfctrnuajtxkjpqcgrrhqpkqtkrjhqincrjxkxpcenksjcrkqupjqrnqrhtqkuhffcgqtcjkcqikvrhcltftqqpcpzpgrqtrghxjrfcnuktkstpfornqqrgnroqrqpzwcnsjcfkqntrnijqgktrhnrgtvcvpjlkktnrjcqhxsrnrgrxqpurkqupjqrnqthxrxxjcnrhrxrjtvptjattjcgqpcqtnpnkwthftrtrngzaratrwkuqnprnukqkvprvjcjndsjjckyrqkflqtnjkcajtnuktflpcjokqfcujkarhqznajratfojkswtntwkrnsrgrcqjrxijtvkkvcanqtjdtrjckcgqcppqjkpchkhpafuwcspurvvtpprpkqrgkqiktrhnrgtvcrqjjhvtvcjtfnqajctsjcqtgcnrpftchxkrfknunjxevkpqrqpzpgrrntntinkgkprchlcqpqtvqarjthrhqpncrhqnnccfrvjtjkrrhqcepkffhqincrqptjknqutrgppjtthqhqqhzrrwttrfrjntiakgntrnukohqqcfrqcgikpguhrjtuajjtntrvlajinrgnkvjthqrxjtthrorwjrrfotkqrikpcntcxqqffretgkpcqrqrgwkkvnrrgkrhqrgtvcnajtqpcpunikqnuktqptrqcajtpqjrsrcvuopptqjkfptsrhqkazqkjfrowrchqrxqtntrrorjchhqarnrjrvtpqqkorstqqtlgrqpqjrhhqcejcxrxffctrorfotkqchvrwrchqksptf"
 
+
+#########  Turn each function on or off  #########
+
+# KEY WORD:
+keyWordAlphabetStart = False
+keyWordRandomStart = False
+keyWordCeaserStart = True
+# ADVANCED ANALYSIS
+frequencyKeyStart = False
+iterativeSolvingStart = False
+# CRYPTOGRAPHIC FUNCTIONS
+ceaserStart = False
+randomKeyStart = False
+
+
+
+# DECLARE USERCIPHER HERE AND COMMENT OUT THE USER INPUT IF YOU ARE WORKING ON THE SAME CIPHER
+userCipher = ""
 
 while True == True: #Loops the entire program
-    #userCipher = formatString((input(cipherSolverInputFormat)).lower())#ensures all ciphertext given to functions is correclty formatted
+    userCipher = formatString((input(cipherSolverInputFormat)).lower()) # ensures all ciphertext given to functions is correclty formatted
     #########################################################
     #           Calling different deciphering functions
     #########################################################
@@ -506,7 +515,7 @@ Chi Squared             {printedChi}
         printedNgramScore = ngramScore,
         printedAttempts = keyIterations,
         printedIoC = indexOfCoincidenceText, 
-        printedChi = chiSquaredText )#Formatting
-        if ngramScore > -2000: #Change this number here the closer to 0 the less it will accept and print
+        printedChi = chiSquaredText )# Formatting
+        if ngramScore > -2000: # Change this number here the closer to 0 the less it will accept and print
             print(cipherOutKeyOut)
         keyIterations += 1

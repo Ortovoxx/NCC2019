@@ -254,6 +254,43 @@ def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alp
             key.append(newChar)
         perms += 1
     return "".join(convertToCHARACTER(key))
+def right(a,r):
+    index = 0
+    while index < r:
+        x = a.pop()
+        a.insert(0, x)
+        index+=1
+    return a
+
+def keyWordCeaser(index,cindex,): #Keyword key generator - filled in bit being the alphabet
+    lenFreq = len(keyWords)
+    if index > lenFreq - 1:
+        index = index - ( ( index // lenFreq ) * lenFreq )
+    key = convertToASCII(list(keyWords[index]))
+    countIndex = 0
+    while countIndex < 26: #Removes duplicate letters any words may have
+        howMany = key.count(alphabetASCII[countIndex])
+        if howMany >= 2:
+            where = key.index(alphabetASCII[countIndex])
+            while howMany > 1:
+                key.pop(where)
+                where = key.index(alphabetASCII[countIndex])
+                howMany -= 1
+        countIndex += 1
+    perms = 0
+    repeat = False
+    keyNew = []
+    while perms < 26: #Ensures 26 letters in the alphabet
+        newChar = alphabetASCII[perms]
+        repeat = search(newChar,key) #Ensures each letter is unique
+        if repeat == False:
+            keyNew.append(newChar)
+        perms += 1
+    c = right(keyNew,cindex)
+    xdf = "".join(convertToCHARACTER(key))
+    c = "".join(convertToCHARACTER(c))
+    x = xdf + c
+    return x
 
 def searchFrequencyAnalysis(itemToCheckFor): #Compares the inputted value to standard english language letter freuqnecy and finds the closest value and returns its letter position (a=0 b=1 etc) [all in %]
     def searchFrequencyAnalysisSorted(positionToMap): #Takes both the sorted alphabet and normal alphabet and maps the positions from the ciphertext frequency analysis
@@ -346,6 +383,23 @@ def iterativeSolving(cipherText,maxScore):
         maxScore = parentScore
         return "".join(parentKey)
 
+def convertToPercent(frequency):
+    arrayNew = []
+    for n in frequency:
+        x = round((n / 2030)*100,3)
+        arrayNew.append(x)
+    return arrayNew
+
+
+def similar(english,cipherText):
+    index = 0
+    arrays = []
+    while index < 25:
+        difference = round(english[index] - cipherText[index],3)
+        arrays.append(difference)
+        index+=1
+    score = sum(arrays)
+    return round(score,3)
 
 
 #==============================================================================================================================================================
@@ -362,10 +416,22 @@ keyWordRandomStart = False
 frequencyKeyStart = False
 randomKeyStart = False
 ceaserStart = False
-iterativeSolvingStart = True
+iterativeSolvingStart = False
+keyWordCeaserStart = True
+c =1
+exporting = False
 
+userCipher = "wkqcntvhpkchtnujrscpqhqjpurwthkvrfvjrauhqancrwjcqprtsckcqtpjhajrwtqragnrrjchqaqqtnrhpcrajcarrtptqkonurnkxjcejcsrhqtrhkqnhqitvrqclcftpqpvtlstrvjrrpznuvzqcrhqhrnqpthscjrqoarqquzrhwthrorujrotjqrfcakkvpnrwkhxcqchqpcqtkxpcenqsjjuknrajcghqrncriirqnkkqpfkvcjkprpvtlkjrrjkqjcerhkosnsnpcutxtkrnjtikozxzaenksjcncaqvrizfunkhxpkxkafuvnkfukthavrwnntarcqukrhqtrptqqpevnuirhqkgnqrnnrhepctikprjftvcqtfjkatrsjctkqkffxqugntjtrhqpoqtbrnrjhkxwafuwrjvnrjukjrqvjtnkrqutnkhrbcvupgthppcjkcrwricjhrxqattrhrppcpqfljrvtvkqnntqczqukrhqgrgznkqikvrhijkjknqtqjkcrwkhqncgrcpporfrptejctoucqpoffjnujtphqaklrcppfcozqcjikfvuntrjjtchcqtfjkcqpcpkkknqqsjudkcqpqzipchnkpikqqvtjkcajcarrrhqfkloqcknupthqragnrrjchqaqqtnrhrvtpkqvtlpcrqronrqukiqhsjjcntrntrkhqconhxqrnrnukjxkvrqkjhskfthzftptrnlzawkncarrpqqifroklupcnrqnkirhpnctpqfrqqcfjtrhqacirqpnjtgarjtlpirvscfpqhnrxvtrgkvcflrhpzoanuknrhprkoqtectujkukngtncnrjtvgkvatngprhztrwtkhqhsupuqtrxhxexjrkgrarwnukjufkntconnrqrkqupjqrnprhritkzqhqincrncifqptjutfncajosjqqupchptxrjtcqjfrnqpzqtncsrkgvcrwrqjrajkqacuovafijkracrvjqrorrxukjxqntjkkcqxpjqthfcxhqfazrkjkhqxqqtqthrhqncifqptjutfncajhsjoptjrrvvtlgkpcfarhnkgtfrcajpsjxkhjtgkgznjkevktvphqjlzrppkfocrjztarxajqthfcxqcfpkvkiqhqnqgrnoksjcrhqkhgrrgnrwcgzcppqjkzrhutfhvjpcnvpetqtnqphlkivcfctrnuajtxkjpqcgrrhqpkqtkrjhqincrjxkxpcenksjcrkqupjqrnqrhtqkuhffcgqtcjkcqikvrhcltftqqpcpzpgrqtrghxjrfcnuktkstpfornqqrgnroqrqpzwcnsjcfkqntrnijqgktrhnrgtvcvpjlkktnrjcqhxsrnrgrxqpurkqupjqrnqthxrxxjcnrhrxrjtvptjattjcgqpcqtnpnkwthftrtrngzaratrwkuqnprnukqkvprvjcjndsjjckyrqkflqtnjkcajtnuktflpcjokqfcujkarhqznajratfojkswtntwkrnsrgrcqjrxijtvkkvcanqtjdtrjckcgqcppqjkpchkhpafuwcspurvvtpprpkqrgkqiktrhnrgtvcrqjjhvtvcjtfnqajctsjcqtgcnrpftchxkrfknunjxevkpqrqpzpgrrntntinkgkprchlcqpqtvqarjthrhqpncrhqnnccfrvjtjkrrhqcepkffhqincrqptjknqutrgppjtthqhqqhzrrwttrfrjntiakgntrnukohqqcfrqcgikpguhrjtuajjtntrvlajinrgnkvjthqrxjtthrorwjrrfotkqrikpcntcxqqffretgkpcqrqrgwkkvnrrgkrhqrgtvcnajtqpcpunikqnuktqptrqcajtpqjrsrcvuopptqjkfptsrhqkazqkjfrowrchqrxqtntrrorjchhqarnrjrvtpqqkorstqqtlgrqpqjrhhqcejcxrxffctrorfotkqchvrwrchqksptf"
+
+dicc = {}
+def export(): #loads a ngram file to a python ditionary
+    os.chdir("/Users/Euan/Desktop/NCC2019/Main") #path of ngram file to load make sure .txt file is in this folder MAKE SURE NGRAMS ARE LOWER CASE
+    with open("output.txt", "a") as f:
+        for n in dicc:
+            f.write(n +"\n")
+            f.write(dicc[n]+"\n")
 while True == True: #Loops the entire program
-    userCipher = formatString((input(cipherSolverInputFormat)).lower())#ensures all ciphertext given to functions is correclty formatted
+    #userCipher = formatString((input(cipherSolverInputFormat)).lower())#ensures all ciphertext given to functions is correclty formatted
     #########################################################
     #           Calling different deciphering functions
     #########################################################
@@ -377,15 +443,54 @@ while True == True: #Loops the entire program
         elif keyWordAlphabetStart == True: # Keyword keys done for all key words with the last letters being random
             userKey = keyWordAlphabet(keyWordAlphabetIndex)
             cipherOut = substitionKeyCipher(userCipher,userKey)
-            if ngramFitness(cipherOut) > -500:
-                tryKeys.append(cipherOut)
+            sim = similar(englishLetterFrequency,convertToPercent(characterFrequency(cipherOut)))
+            if sim < 0.05 and sim > -0.05:
+                #print(cipherOut)
+                #print(userKey)
+                #print(ioc)
+                print(keyWordAlphabetIndex)
+                dicc[userKey] = cipherOut
+                if keyWordAlphabetIndex > 10000:
+                    print("exported!")
+                    exporting = True
+                if exporting == True:
+                    export()
             keyWordAlphabetIndex += 1
         elif keyWordRandomStart == True: # Keyword keys done for all key words with the last letters being the alphabet
             userKey = keyWordRandom(keyWordRandomIndex)
             cipherOut = substitionKeyCipher(userCipher,userKey)
-            if ngramFitness(cipherOut) > -500:
-                tryKeys.append(cipherOut)
+            sim = similar(englishLetterFrequency,convertToPercent(characterFrequency(cipherOut)))
+            if sim < 0.03 and sim > -0.03:
+                #print(cipherOut)
+                #print(userKey)
+                #print(ioc)
+                print(keyWordRandomIndex)
+                dicc[userKey] = cipherOut
+            if keyWordRandomIndex == 10000:
+                print("exported!")
+                exporting = True
+            if exporting == True:
+                export()
             keyWordRandomIndex += 1
+        elif keyWordCeaserStart == True: # Keyword keys done for all key words with the last letters being the alphabet
+            userKey = keyWordCeaser(keyWordRandomIndex,c)
+            cipherOut = substitionKeyCipher(userCipher,userKey)
+            sim = similar(englishLetterFrequency,convertToPercent(characterFrequency(cipherOut)))
+            if sim < 0.05 and sim > -0.05:
+                #print(cipherOut)
+                #print(userKey)
+                #print(ioc)
+                print(keyWordRandomIndex)
+                dicc[userKey] = cipherOut
+            if keyWordRandomIndex == 10000:
+                print("exported!")
+                exporting = True
+            if exporting == True:
+                export()
+            keyWordRandomIndex += 1
+            c+=1
+            if c > 26:
+                c = 1
         elif frequencyKeyStart == True: #Key generated from advanced frequency analysis
             userKey = frequencyKey(userCipher)
             cipherOut = substitionKeyCipher(userCipher,userKey)
@@ -401,9 +506,9 @@ while True == True: #Loops the entire program
         #########################################################
         #                   Text statistics
         #########################################################
-        indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
-        chiSquaredText = round(chiSquaredStat(cipherOut),10)
-        ngramScore = ngramFitness(cipherOut)
+        #indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
+        #chiSquaredText = round(chiSquaredStat(cipherOut),10)
+        #ngramScore = ngramFitness(cipherOut)
         cipherOutKeyOut ='''
 ================== PLAINTEXT: ==================
 {printedCipherOut}
@@ -414,13 +519,50 @@ Number of keys          {printedAttempts}
 log Ngram Score         {printedNgramScore}
 Index Of Coincidence    {printedIoC}
 Chi Squared             {printedChi}
-'''.format(
-        printedCipherOut = cipherOut, 
-        printedUserKey = userKey,
-        printedNgramScore = ngramScore,
-        printedAttempts = keyIterations,
-        printedIoC = indexOfCoincidenceText, 
-        printedChi = chiSquaredText )#Formatting
-        if ngramScore > -2000: #Change this number here the closer to 0 the less it will accept and print
-            print(cipherOutKeyOut)
+'''#.format(
+        #printedCipherOut = cipherOut, 
+        #printedUserKey = userKey,
+        #printedNgramScore = ngramScore,
+        #printedAttempts = keyIterations,
+        #printedIoC = indexOfCoincidenceText, 
+        #printedChi = chiSquaredText )#Formatting
+        #if ngramScore > -2000: #Change this number here the closer to 0 the less it will accept and print
+            #print(cipherOutKeyOut)
         keyIterations += 1
+
+
+
+
+
+
+
+
+
+'''
+for test in keyWords:
+                    x = ColTrans(test).decipher(cipherOut)
+                    y = x.lower()
+                    n = ngramFitness(y)
+                    if n > -2000:
+                        print(x)
+
+
+
+sim = similar(englishLetterFrequency,convertToPercent(characterFrequency(cipherOut)))
+            iocc = indexOfCoincidence(cipherOut)
+            chi = chiSquaredStat(cipherOut) 
+            if sim < 0.05 and sim > -0.05 and iocc < 0.8 and iocc > 0.5 and chi < 3000:
+                print(sim)
+                print(cipherOut)
+                print(userKey)
+                print(iocc)
+                print(chi)
+
+
+
+            ioc = indexOfCoincidence(cipherOut)
+            if ioc < 0.0688 and ioc > 0.0684: #0.0686
+                print(cipherOut)
+                print(userKey)
+                print(ioc)
+'''

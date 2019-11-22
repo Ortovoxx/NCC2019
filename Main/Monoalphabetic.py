@@ -269,7 +269,7 @@ def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alp
             key.append(newChar)
         perms += 1
     return "".join(convertToCHARACTER(key))
-def keyWordCeaser(index,shiftIndex): #Keyword key generator - filled in bit being the alphabet
+def keyWordCeaser(index,shiftIndex): #Keyword key generator - filled in bit being the alphabet which is then shifted 26 times for the same keyword
     lenFreq = len(keyWords)
     if index > lenFreq - 1:
         index = index - ( ( index // lenFreq ) * lenFreq )
@@ -291,12 +291,12 @@ def keyWordCeaser(index,shiftIndex): #Keyword key generator - filled in bit bein
         newChar = alphabetASCII[perms]
         repeat = search(newChar,key) #Ensures each letter is unique
         if repeat == False:
-            endKey.append(newChar)
+            endKey.append(newChar) # adds all the extra characters to a new list to be shifted later
         perms += 1
-    shiftedEnd = shiftRight(endKey,shiftIndex)
+    shiftedEnd = shiftRight(endKey,shiftIndex) # shifts a list "shiftIndex" places to the right
     keyStart = "".join(convertToCHARACTER(key))
     shiftedEnd = "".join(convertToCHARACTER(shiftedEnd))
-    return keyStart + shiftedEnd
+    return keyStart + shiftedEnd # joins the two first keyword and the rest of the shifted string together to make an entire key
 
 def searchFrequencyAnalysis(itemToCheckFor): #Compares the inputted value to standard english language letter freuqnecy and finds the closest value and returns its letter position (a=0 b=1 etc) [all in %]
     def searchFrequencyAnalysisSorted(positionToMap): #Takes both the sorted alphabet and normal alphabet and maps the positions from the ciphertext frequency analysis
@@ -399,15 +399,15 @@ def convertToPercent(frequency):
     return arrayNew
 
 
-def similar(english,cipherText):
+def relationToEnglishFrequency(cipherText):
     index = 0
-    arrays = []
+    lists = []
     while index < 25:
-        difference = round(english[index] - cipherText[index],3)
-        arrays.append(difference)
+        difference = round(englishLetterFrequency[index] - cipherText[index],10)
+        lists.append(difference)
         index+=1
-    score = sum(arrays)
-    return round(score,3)
+    score = sum(lists)
+    return round(score,10)
 
 
 #==============================================================================================================================================================
@@ -453,7 +453,7 @@ while True == True: #Loops the entire program
         elif keyWordAlphabetStart == True: # Keyword keys done for all key words with the last letters being random
             userKey = keyWordAlphabet(keyWordAlphabetIndex)
             cipherOut = substitionKeyCipher(userCipher,userKey)
-            sim = similar(englishLetterFrequency,convertToPercent(characterFrequency(cipherOut)))
+            sim = relationToEnglishFrequency(convertToPercent(characterFrequency(cipherOut)))
             if sim < 0.05 and sim > -0.05:
                 print(keyWordAlphabetIndex)
                 outputExportDitionary[userKey] = cipherOut
@@ -469,7 +469,7 @@ while True == True: #Loops the entire program
         elif keyWordCeaserStart == True: # Keyword keys done for all key words with the last letters being the alphabet
             userKey = keyWordCeaser(keyWordRandomIndex,shiftNumber)
             cipherOut = substitionKeyCipher(userCipher,userKey)
-            sim = similar(englishLetterFrequency,convertToPercent(characterFrequency(cipherOut)))
+            sim = relationToEnglishFrequency(convertToPercent(characterFrequency(cipherOut)))
             if sim < 0.05 and sim > -0.05:
                 outputExportDitionary[userKey] = cipherOut
             if keyWordRandomIndex == 10000:

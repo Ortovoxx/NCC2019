@@ -261,7 +261,7 @@ def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alp
             key.append(newChar)
         perms += 1
     return "".join(convertToCHARACTER(key))
-def keyWordCeaser(index,cindex,): #Keyword key generator - filled in bit being the alphabet
+def keyWordCeaser(index,shiftIndex): #Keyword key generator - filled in bit being the alphabet
     lenFreq = len(keyWords)
     if index > lenFreq - 1:
         index = index - ( ( index // lenFreq ) * lenFreq )
@@ -278,18 +278,17 @@ def keyWordCeaser(index,cindex,): #Keyword key generator - filled in bit being t
         countIndex += 1
     perms = 0
     repeat = False
-    keyNew = []
+    endKey = []
     while perms < 26: #Ensures 26 letters in the alphabet
         newChar = alphabetASCII[perms]
         repeat = search(newChar,key) #Ensures each letter is unique
         if repeat == False:
-            keyNew.append(newChar)
+            endKey.append(newChar)
         perms += 1
-    c = shiftRight(keyNew,cindex)
-    xdf = "".join(convertToCHARACTER(key))
-    c = "".join(convertToCHARACTER(c))
-    x = xdf + c
-    return x
+    shiftedEnd = shiftRight(endKey,shiftIndex)
+    keyStart = "".join(convertToCHARACTER(key))
+    shiftedEnd = "".join(convertToCHARACTER(shiftedEnd))
+    return keyStart + shiftedEnd
 
 def searchFrequencyAnalysis(itemToCheckFor): #Compares the inputted value to standard english language letter freuqnecy and finds the closest value and returns its letter position (a=0 b=1 etc) [all in %]
     def searchFrequencyAnalysisSorted(positionToMap): #Takes both the sorted alphabet and normal alphabet and maps the positions from the ciphertext frequency analysis

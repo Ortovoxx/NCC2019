@@ -14,6 +14,7 @@ import re
 # Ensure you have an ngram.txt file in the correct directory:
 loadEnglishNgramDirectory = "/Users/Euan/Desktop/NCC2019/Cryptanalysis/Text_training_data"
 loadKeyWordsDirectory = "/Users/Euan/Desktop/NCC2019/Cryptanalysis"
+outputFilesHere = "/Users/Euan/Desktop/NCC2019/Out"
 # All functions should transfer data using lowercase no space no punctuation strings
 
 #########  TEST CIPHERS TO TRY AND SOLVE  #########
@@ -58,8 +59,15 @@ def loadKeyWords(): #loads a keyword file to a python list
             for line in f:
                 keyWords.append(line.strip("\n"))
         return keyWords
+def export(): #loads a ngram file to a python ditionary
+    os.chdir(outputFilesHere) #path of ngram file to load make sure .txt file is in this folder MAKE SURE NGRAMS ARE LOWER CASE
+    with open("output.txt", "a") as f:
+        for key in outputExportDitionary:
+            f.write(key +"\n")
+            f.write(outputExportDitionary[key]+"\n")
 keyWords = loadKeyWords()
 ngramDitionaryEnglish = loadEnglishNgram()
+outputExportDitionary = {}
 
 #==============================================================================================================================================================
 #                                                       TEXT MANIPULATION AND REPEATED USE FUNCTIONS - DO NOT EDIT
@@ -416,19 +424,13 @@ randomKeyStart = False
 ceaserStart = False
 iterativeSolvingStart = False
 keyWordCeaserStart = True
-c = 1
+shiftNumber = 1
 
 exporting = False
 
 userCipher = "wkqcntvhpkchtnujrscpqhqjpurwthkvrfvjrauhqancrwjcqprtsckcqtpjhajrwtqragnrrjchqaqqtnrhpcrajcarrtptqkonurnkxjcejcsrhqtrhkqnhqitvrqclcftpqpvtlstrvjrrpznuvzqcrhqhrnqpthscjrqoarqquzrhwthrorujrotjqrfcakkvpnrwkhxcqchqpcqtkxpcenqsjjuknrajcghqrncriirqnkkqpfkvcjkprpvtlkjrrjkqjcerhkosnsnpcutxtkrnjtikozxzaenksjcncaqvrizfunkhxpkxkafuvnkfukthavrwnntarcqukrhqtrptqqpevnuirhqkgnqrnnrhepctikprjftvcqtfjkatrsjctkqkffxqugntjtrhqpoqtbrnrjhkxwafuwrjvnrjukjrqvjtnkrqutnkhrbcvupgthppcjkcrwricjhrxqattrhrppcpqfljrvtvkqnntqczqukrhqgrgznkqikvrhijkjknqtqjkcrwkhqncgrcpporfrptejctoucqpoffjnujtphqaklrcppfcozqcjikfvuntrjjtchcqtfjkcqpcpkkknqqsjudkcqpqzipchnkpikqqvtjkcajcarrrhqfkloqcknupthqragnrrjchqaqqtnrhrvtpkqvtlpcrqronrqukiqhsjjcntrntrkhqconhxqrnrnukjxkvrqkjhskfthzftptrnlzawkncarrpqqifroklupcnrqnkirhpnctpqfrqqcfjtrhqacirqpnjtgarjtlpirvscfpqhnrxvtrgkvcflrhpzoanuknrhprkoqtectujkukngtncnrjtvgkvatngprhztrwtkhqhsupuqtrxhxexjrkgrarwnukjufkntconnrqrkqupjqrnprhritkzqhqincrncifqptjutfncajosjqqupchptxrjtcqjfrnqpzqtncsrkgvcrwrqjrajkqacuovafijkracrvjqrorrxukjxqntjkkcqxpjqthfcxhqfazrkjkhqxqqtqthrhqncifqptjutfncajhsjoptjrrvvtlgkpcfarhnkgtfrcajpsjxkhjtgkgznjkevktvphqjlzrppkfocrjztarxajqthfcxqcfpkvkiqhqnqgrnoksjcrhqkhgrrgnrwcgzcppqjkzrhutfhvjpcnvpetqtnqphlkivcfctrnuajtxkjpqcgrrhqpkqtkrjhqincrjxkxpcenksjcrkqupjqrnqrhtqkuhffcgqtcjkcqikvrhcltftqqpcpzpgrqtrghxjrfcnuktkstpfornqqrgnroqrqpzwcnsjcfkqntrnijqgktrhnrgtvcvpjlkktnrjcqhxsrnrgrxqpurkqupjqrnqthxrxxjcnrhrxrjtvptjattjcgqpcqtnpnkwthftrtrngzaratrwkuqnprnukqkvprvjcjndsjjckyrqkflqtnjkcajtnuktflpcjokqfcujkarhqznajratfojkswtntwkrnsrgrcqjrxijtvkkvcanqtjdtrjckcgqcppqjkpchkhpafuwcspurvvtpprpkqrgkqiktrhnrgtvcrqjjhvtvcjtfnqajctsjcqtgcnrpftchxkrfknunjxevkpqrqpzpgrrntntinkgkprchlcqpqtvqarjthrhqpncrhqnnccfrvjtjkrrhqcepkffhqincrqptjknqutrgppjtthqhqqhzrrwttrfrjntiakgntrnukohqqcfrqcgikpguhrjtuajjtntrvlajinrgnkvjthqrxjtthrorwjrrfotkqrikpcntcxqqffretgkpcqrqrgwkkvnrrgkrhqrgtvcnajtqpcpunikqnuktqptrqcajtpqjrsrcvuopptqjkfptsrhqkazqkjfrowrchqrxqtntrrorjchhqarnrjrvtpqqkorstqqtlgrqpqjrhhqcejcxrxffctrorfotkqchvrwrchqksptf"
 
-dicc = {}
-def export(): #loads a ngram file to a python ditionary
-    os.chdir("/Users/Euan/Desktop/NCC2019/Main") #path of ngram file to load make sure .txt file is in this folder MAKE SURE NGRAMS ARE LOWER CASE
-    with open("output.txt", "a") as f:
-        for n in dicc:
-            f.write(n +"\n")
-            f.write(dicc[n]+"\n")
+
 while True == True: #Loops the entire program
     #userCipher = formatString((input(cipherSolverInputFormat)).lower())#ensures all ciphertext given to functions is correclty formatted
     #########################################################
@@ -444,11 +446,8 @@ while True == True: #Loops the entire program
             cipherOut = substitionKeyCipher(userCipher,userKey)
             sim = similar(englishLetterFrequency,convertToPercent(characterFrequency(cipherOut)))
             if sim < 0.05 and sim > -0.05:
-                #print(cipherOut)
-                #print(userKey)
-                #print(ioc)
                 print(keyWordAlphabetIndex)
-                dicc[userKey] = cipherOut
+                outputExportDitionary[userKey] = cipherOut
                 if keyWordAlphabetIndex > 10000:
                     print("exported!")
                     exporting = True
@@ -459,20 +458,19 @@ while True == True: #Loops the entire program
             userKey = keyWordRandom(keyWordRandomIndex)
             cipherOut = substitionKeyCipher(userCipher,userKey)
         elif keyWordCeaserStart == True: # Keyword keys done for all key words with the last letters being the alphabet
-            userKey = keyWordCeaser(keyWordRandomIndex,c)
+            userKey = keyWordCeaser(keyWordRandomIndex,shiftNumber)
             cipherOut = substitionKeyCipher(userCipher,userKey)
             sim = similar(englishLetterFrequency,convertToPercent(characterFrequency(cipherOut)))
-            print(userKey)
             if sim < 0.05 and sim > -0.05:
-                dicc[userKey] = cipherOut
+                outputExportDitionary[userKey] = cipherOut
             if keyWordRandomIndex == 10000:
                 print("exported!")
                 exporting = True
             if exporting == True:
                 export()
-            c+=1
-            if c > 26:
-                c = 1
+            shiftNumber += 1
+            if shiftNumber > 26:
+                shiftNumber = 1
                 keyWordRandomIndex += 1
         elif frequencyKeyStart == True: #Key generated from advanced frequency analysis
             userKey = frequencyKey(userCipher)
@@ -489,9 +487,9 @@ while True == True: #Loops the entire program
         #########################################################
         #                   Text statistics
         #########################################################
-        #indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
-        #chiSquaredText = round(chiSquaredStat(cipherOut),10)
-        #ngramScore = ngramFitness(cipherOut)
+        indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
+        chiSquaredText = round(chiSquaredStat(cipherOut),10)
+        ngramScore = ngramFitness(cipherOut)
         cipherOutKeyOut ='''
 ================== PLAINTEXT: ==================
 {printedCipherOut}
@@ -502,50 +500,13 @@ Number of keys          {printedAttempts}
 log Ngram Score         {printedNgramScore}
 Index Of Coincidence    {printedIoC}
 Chi Squared             {printedChi}
-'''#.format(
-        #printedCipherOut = cipherOut, 
-        #printedUserKey = userKey,
-        #printedNgramScore = ngramScore,
-        #printedAttempts = keyIterations,
-        #printedIoC = indexOfCoincidenceText, 
-        #printedChi = chiSquaredText )#Formatting
-        #if ngramScore > -2000: #Change this number here the closer to 0 the less it will accept and print
-            #print(cipherOutKeyOut)
+'''.format(
+        printedCipherOut = cipherOut, 
+        printedUserKey = userKey,
+        printedNgramScore = ngramScore,
+        printedAttempts = keyIterations,
+        printedIoC = indexOfCoincidenceText, 
+        printedChi = chiSquaredText )#Formatting
+        if ngramScore > -2000: #Change this number here the closer to 0 the less it will accept and print
+            print(cipherOutKeyOut)
         keyIterations += 1
-
-
-
-
-
-
-
-
-
-'''
-for test in keyWords:
-                    x = ColTrans(test).decipher(cipherOut)
-                    y = x.lower()
-                    n = ngramFitness(y)
-                    if n > -2000:
-                        print(x)
-
-
-
-sim = similar(englishLetterFrequency,convertToPercent(characterFrequency(cipherOut)))
-            iocc = indexOfCoincidence(cipherOut)
-            chi = chiSquaredStat(cipherOut) 
-            if sim < 0.05 and sim > -0.05 and iocc < 0.8 and iocc > 0.5 and chi < 3000:
-                print(sim)
-                print(cipherOut)
-                print(userKey)
-                print(iocc)
-                print(chi)
-
-
-
-            ioc = indexOfCoincidence(cipherOut)
-            if ioc < 0.0688 and ioc > 0.0684: #0.0686
-                print(cipherOut)
-                print(userKey)
-                print(ioc)
-'''

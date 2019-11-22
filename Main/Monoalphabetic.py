@@ -91,6 +91,13 @@ def search(itemToCheckFor,listToSearchFrom): #LINEAR SEARCH GLOBAL FUNCTION - Se
             found = True
         position += 1
     return found
+def shiftRight(listToMove,numberToMoveBy):
+    index = 0
+    while index < numberToMoveBy:
+        position = listToMove.pop()
+        listToMove.insert(0, position)
+        index += 1
+    return listToMove
 def substitionKeyCipher(userCipherText,userKey): #maps a ciphertext to plaintext according to the key given to it
     cipherText = convertToASCII(list(userCipherText)) #Converting cipher to numbers
     key = convertToASCII(list(userKey)) #Converting key to numbers
@@ -254,14 +261,6 @@ def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alp
             key.append(newChar)
         perms += 1
     return "".join(convertToCHARACTER(key))
-def right(a,r):
-    index = 0
-    while index < r:
-        x = a.pop()
-        a.insert(0, x)
-        index+=1
-    return a
-
 def keyWordCeaser(index,cindex,): #Keyword key generator - filled in bit being the alphabet
     lenFreq = len(keyWords)
     if index > lenFreq - 1:
@@ -286,7 +285,7 @@ def keyWordCeaser(index,cindex,): #Keyword key generator - filled in bit being t
         if repeat == False:
             keyNew.append(newChar)
         perms += 1
-    c = right(keyNew,cindex)
+    c = shiftRight(keyNew,cindex)
     xdf = "".join(convertToCHARACTER(key))
     c = "".join(convertToCHARACTER(c))
     x = xdf + c

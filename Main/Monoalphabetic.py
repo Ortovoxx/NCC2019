@@ -219,7 +219,7 @@ def relationToEnglishFrequency(cipherTextFrequency): # Finds the difference betw
     index = 0
     lists = []
     while index < 25:
-        difference = round(englishLetterFrequency[index] - cipherTextFrequency[index],10)
+        difference = round(englishLetterFrequency[index] - (cipherTextFrequency[index])*100,10)
         lists.append(difference)
         index+=1
     score = sum(lists)
@@ -431,25 +431,22 @@ shiftNumber = 1
 maxScoreIterative = -99e9
 exporting = False
 
-
-
 #########  Turn each function on or off  #########
 
 # KEY WORD:
 keyWordAlphabetStart = False
 keyWordRandomStart = False
-keyWordCeaserStart = True
+keyWordCeaserStart = False
 # ADVANCED ANALYSIS
 frequencyKeyStart = False
 iterativeSolvingStart = False
 # CRYPTOGRAPHIC FUNCTIONS
 ceaserStart = False
-randomKeyStart = False
-
-
+randomKeyStart = True
 
 # DECLARE USERCIPHER HERE AND COMMENT OUT THE USER INPUT IF YOU ARE WORKING ON THE SAME CIPHER
-userCipher = ""
+userCipherNoFormatBypass = ""
+userCipher = formatString((userCipherNoFormatBypass).lower())
 
 while True: #Loops the entire program
     userCipher = formatString((input(cipherSolverInputFormat)).lower()) # ensures all ciphertext given to functions is correclty formatted
@@ -464,9 +461,8 @@ while True: #Loops the entire program
         elif keyWordAlphabetStart == True: # Keyword keys done for all key words with the last letters being random
             userKey = keyWordAlphabet(keyWordAlphabetIndex)
             cipherOut = substitionKeyCipher(userCipher,userKey)
-            relationScore = relationToEnglishFrequency(characterFrequencyProbability(cipherOut)*100)
+            relationScore = relationToEnglishFrequency(characterFrequencyProbability(cipherOut))
             if relationScore < 0.05 and relationScore > -0.05:
-                print(keyWordAlphabetIndex)
                 outputExportDitionary[userKey] = cipherOut
                 if keyWordAlphabetIndex > 10000:
                     exporting = True
@@ -477,10 +473,10 @@ while True: #Loops the entire program
         elif keyWordCeaserStart == True: # Keyword keys done for all key words with the last letters being the alphabet
             userKey = keyWordCeaser(keyWordRandomIndex,shiftNumber)
             cipherOut = substitionKeyCipher(userCipher,userKey)
-            relationScore = relationToEnglishFrequency(characterFrequencyProbability(cipherOut)*100)
+            relationScore = relationToEnglishFrequency(characterFrequencyProbability(cipherOut))
             if relationScore < 0.05 and relationScore > -0.05:
                 outputExportDitionary[userKey] = cipherOut
-            if keyWordRandomIndex == 10000:
+            if keyWordRandomIndex == 100000:
                 exporting = True
             shiftNumber += 1
             if shiftNumber > 26:
@@ -501,14 +497,22 @@ while True: #Loops the entire program
         if exporting == True:
             export()
             print("exported!")
+        keyIterations += 1
         #########################################################
         #                   Text statistics
         #########################################################
-        indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
-        chiSquaredText = round(chiSquaredStat(cipherOut),10)
+        ### Choose which scoring system you want to rank texts by: ###
+#        indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
+#        chiSquaredText = round(chiSquaredStat(cipherOut),10)
         ngramScore = ngramFitness(cipherOut)
-        relationScore = relationToEnglishFrequency(characterFrequencyProbability(cipherOut)*100)
-        cipherOutKeyOut ='''
+#        relationScore = relationToEnglishFrequency(characterFrequencyProbability(cipherOut)*100)
+
+        if ngramScore > -400: # Change this number here the closer to 0 the less it will accept and print
+            indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
+            chiSquaredText = round(chiSquaredStat(cipherOut),10)
+            ngramScore = ngramFitness(cipherOut)
+            relationScore = relationToEnglishFrequency(characterFrequencyProbability(cipherOut)*100)
+            cipherOutKeyOut ='''
 ================== PLAINTEXT: ==================
 {printedCipherOut}
 ===================== KEY: =====================
@@ -519,14 +523,5 @@ log Ngram Score             {printedNgramScore}
 Index Of Coincidence        {printedIoC}
 Chi Squared                 {printedChi}
 English Frequency Relation  {printedRelationScore}
-'''.format(
-        printedCipherOut = cipherOut, 
-        printedUserKey = userKey,
-        printedNgramScore = ngramScore,
-        printedAttempts = keyIterations,
-        printedIoC = indexOfCoincidenceText, 
-        printedChi = chiSquaredText,
-        printedRelationScore = relationScore)# Formatting
-        if ngramScore > -2000: # Change this number here the closer to 0 the less it will accept and print
+'''.format(printedCipherOut = cipherOut,printedUserKey = userKey,printedNgramScore = ngramScore,printedAttempts = keyIterations,printedIoC = indexOfCoincidenceText, printedChi = chiSquaredText,printedRelationScore = relationScore)
             print(cipherOutKeyOut)
-        keyIterations += 1

@@ -306,4 +306,4 @@ while i < 1000000:
     #,new,permsCC,keyCeaser
 
 #abcdefghijklmnopqrstuvwxyz
-#advnturesxyzbcfghijklmopqw
+#tovarishcdefgjklmnpquwxyzb

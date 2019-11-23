@@ -510,23 +510,26 @@ while True: #Loops the entire program
         indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
         chiSquaredText = round(chiSquaredStat(cipherOut),10)
         ngramScore = ngramFitness(cipherOut)
+        relationScore = relationToEnglishFrequency(characterFrequencyProbability(cipherOut)*100)
         cipherOutKeyOut ='''
 ================== PLAINTEXT: ==================
 {printedCipherOut}
 ===================== KEY: =====================
 {printedUserKey}
 ================= STATISTICS: ==================
-Number of keys          {printedAttempts}
-log Ngram Score         {printedNgramScore}
-Index Of Coincidence    {printedIoC}
-Chi Squared             {printedChi}
+Number of keys              {printedAttempts}
+log Ngram Score             {printedNgramScore}
+Index Of Coincidence        {printedIoC}
+Chi Squared                 {printedChi}
+English Frequency Relation  {printedRelationScore}
 '''.format(
         printedCipherOut = cipherOut, 
         printedUserKey = userKey,
         printedNgramScore = ngramScore,
         printedAttempts = keyIterations,
         printedIoC = indexOfCoincidenceText, 
-        printedChi = chiSquaredText )# Formatting
+        printedChi = chiSquaredText,
+        printedRelationScore = relationScore)# Formatting
         if ngramScore > -2000: # Change this number here the closer to 0 the less it will accept and print
             print(cipherOutKeyOut)
         keyIterations += 1

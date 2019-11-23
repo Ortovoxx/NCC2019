@@ -469,10 +469,7 @@ while True: #Loops the entire program
                 print(keyWordAlphabetIndex)
                 outputExportDitionary[userKey] = cipherOut
                 if keyWordAlphabetIndex > 10000:
-                    print("exported!")
                     exporting = True
-                if exporting == True:
-                    export()
             keyWordAlphabetIndex += 1
         elif keyWordRandomStart == True: # Keyword keys done for all key words with the last letters being the alphabet
             userKey = keyWordRandom(keyWordRandomIndex)
@@ -484,10 +481,7 @@ while True: #Loops the entire program
             if relationScore < 0.05 and relationScore > -0.05:
                 outputExportDitionary[userKey] = cipherOut
             if keyWordRandomIndex == 10000:
-                print("exported!")
                 exporting = True
-            if exporting == True:
-                export()
             shiftNumber += 1
             if shiftNumber > 26:
                 shiftNumber = 1
@@ -504,6 +498,9 @@ while True: #Loops the entire program
             userKey = iterativeSolving(userCipher,maxScoreIterative)
             cipherOut = substitionKeyCipher(userCipher,userKey)
             iterativeSolvingIndex += 1
+        if exporting == True:
+            export()
+            print("exported!")
         #########################################################
         #                   Text statistics
         #########################################################

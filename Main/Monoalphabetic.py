@@ -134,8 +134,24 @@ def characterFrequency(encryptedText):
                index += 1
         else: #increments relative index dependant upon character contained within i
             if i == letter[index]:
-                frequencies[index] = frequencies[index] + 1 #if character in encrypted_text is a space,data @ alphabet[26] ++:           
+                frequencies[index] = frequencies[index] + 1 #if character in encrypted_text is a space,data @ alphabet[26] ++:       
     return frequencies
+def characterFrequencyProbability(encryptedText):
+    frequencies = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    letter = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
+    probability = []
+    for i in encryptedText: #iterates through each character in encrypted_cipher text
+        index = 0 #element index set at 0 #WHEN data at index (character in encrypted text) does not equal first element #AND the alphabet index is less than 25, (i.e all letters encompassed only):
+        while i != letter[index] and index < 25: #THEN increment pos index ++, avoids indexing greater than alphabet list
+           if index <= 24:
+               index += 1
+        else: #increments relative index dependant upon character contained within i
+            if i == letter[index]:
+                frequencies[index] = frequencies[index] + 1 #if character in encrypted_text is a space,data @ alphabet[26] ++:
+    for n in frequencies:
+        x = round((n / len(encryptedText)),5)
+        probability.append(x)
+    return probability
 def indexOfCoincidence(text): #String input to calculate the Index of Coincidence of a text
     def letter(letterCount,textLength):
         letterValue = (letterCount / textLength)*((letterCount - 1)/(textLength - 1))
@@ -199,6 +215,15 @@ def ngramFitness(userCiperText):
             loggedProbQuadgram = math.log10(probQuadgram)
             logAB.append(loggedProbQuadgram)
     return sum(logAB)
+def relationToEnglishFrequency(cipherTextFrequency): # Finds the difference between a ciphertext frequency ( % ) and english frequency and outputs a score 
+    index = 0
+    lists = []
+    while index < 25:
+        difference = round(englishLetterFrequency[index] - cipherTextFrequency[index],10)
+        lists.append(difference)
+        index+=1
+    score = sum(lists)
+    return round(score,10)
 
 #==============================================================================================================================================================
 #                                                            CIPHER SOLVING - EDITABLE
@@ -391,23 +416,9 @@ def iterativeSolving(cipherText,maxScore):
 
 
 
-def convertToPercent(frequency):
-    arrayNew = []
-    for n in frequency:
-        x = round((n / 2030)*100,3)
-        arrayNew.append(x)
-    return arrayNew
 
 
-def relationToEnglishFrequency(cipherText):
-    index = 0
-    lists = []
-    while index < 25:
-        difference = round(englishLetterFrequency[index] - cipherText[index],10)
-        lists.append(difference)
-        index+=1
-    score = sum(lists)
-    return round(score,10)
+
 
 
 #==============================================================================================================================================================
@@ -440,7 +451,7 @@ randomKeyStart = False
 # DECLARE USERCIPHER HERE AND COMMENT OUT THE USER INPUT IF YOU ARE WORKING ON THE SAME CIPHER
 userCipher = ""
 
-while True == True: #Loops the entire program
+while True: #Loops the entire program
     userCipher = formatString((input(cipherSolverInputFormat)).lower()) # ensures all ciphertext given to functions is correclty formatted
     #########################################################
     #           Calling different deciphering functions
@@ -453,8 +464,8 @@ while True == True: #Loops the entire program
         elif keyWordAlphabetStart == True: # Keyword keys done for all key words with the last letters being random
             userKey = keyWordAlphabet(keyWordAlphabetIndex)
             cipherOut = substitionKeyCipher(userCipher,userKey)
-            sim = relationToEnglishFrequency(convertToPercent(characterFrequency(cipherOut)))
-            if sim < 0.05 and sim > -0.05:
+            relationScore = relationToEnglishFrequency(characterFrequencyProbability(cipherOut)*100)
+            if relationScore < 0.05 and relationScore > -0.05:
                 print(keyWordAlphabetIndex)
                 outputExportDitionary[userKey] = cipherOut
                 if keyWordAlphabetIndex > 10000:
@@ -469,8 +480,8 @@ while True == True: #Loops the entire program
         elif keyWordCeaserStart == True: # Keyword keys done for all key words with the last letters being the alphabet
             userKey = keyWordCeaser(keyWordRandomIndex,shiftNumber)
             cipherOut = substitionKeyCipher(userCipher,userKey)
-            sim = relationToEnglishFrequency(convertToPercent(characterFrequency(cipherOut)))
-            if sim < 0.05 and sim > -0.05:
+            relationScore = relationToEnglishFrequency(characterFrequencyProbability(cipherOut)*100)
+            if relationScore < 0.05 and relationScore > -0.05:
                 outputExportDitionary[userKey] = cipherOut
             if keyWordRandomIndex == 10000:
                 print("exported!")

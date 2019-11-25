@@ -291,6 +291,18 @@ def solve(array):
     #nn = ngramFitness(x)
 
     
+def addPadding(cipher,Key): # pads a transposition ciphertext with a padding character of X
+    cipher = list(cipher)
+    lengthCipher = len(cipher)
+    remainder = lengthCipher % key # Finds how many padding characters to add
+    if remainder == 0: #If the ciphertext length is divisible by the key perfectly then no padding is needed
+        return "".join(cipher)
+    else:
+        addPad = 0
+        while addPad < remainder: # Loops round the cipher text array adding a padding character each time
+            cipher.append("x") # The padding character
+            addPad+=1
+        return "".join(cipher)
     
     
     

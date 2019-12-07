@@ -85,10 +85,13 @@ def convertToCHARACTER(textList): #Converts an list of ASCII equivalent numbers 
         textList[index] = chr(textList[index])
         index += 1
     return textList
+def BINtoDEC(binary):
+    return int(str(binary),2)
+def DECtoBIN(decimal):
+    return int(re.sub("0b","",str(bin(decimal))))
 def formatString(string): #removes everything apart from a-z lower case from a string
     noPunctuationList = re.findall("[a-z]",string)
-    outputString = "".join(noPunctuationList)
-    return outputString
+    return "".join(noPunctuationList)
 def reverseString(string): #Reverses the text
     return string[::-1]
 def search(itemToCheckFor,listToSearchFrom): #LINEAR SEARCH GLOBAL FUNCTION - Searches to see if there are repeats for random and keyword keys

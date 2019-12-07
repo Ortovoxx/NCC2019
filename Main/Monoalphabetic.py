@@ -60,7 +60,7 @@ def loadKeyWords(): #loads a keyword file to a python list
             for line in f:
                 keyWords.append(line.strip("\n"))
         return keyWords
-def export(): #loads a ngram file to a python ditionary
+def export(): #exports
     os.chdir(outputFilesHere) #path of ngram file to load make sure .txt file is in this folder MAKE SURE NGRAMS ARE LOWER CASE
     with open("output.txt", "a") as f:
         for key in outputExportDitionary:

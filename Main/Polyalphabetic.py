@@ -214,11 +214,9 @@ def relationToEnglishFrequency(cipherTextFrequency): # Finds the difference betw
 #==============================================================================================================================================================
 #                                                            CIPHER SOLVING - EDITABLE
 #==============================================================================================================================================================
-
-
-
+ciphertext = ""
+key = "hello"
 ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
 def decrypt(ciphertext,key):
     plaintext = ''
     for i in range(len(ciphertext)):
@@ -229,10 +227,6 @@ def decrypt(ciphertext,key):
         c = (p - k) % 26
         plaintext += ALPHABET[c]
     return plaintext
-
-key = "hello"
-ciphertext = "Altd hlbe tg lrncmwxpo kpxs evl ztrsuicp qptspf Ivplyprr th pw clhoic pozc"
-
 key = ['']*3
 for key[0] in ALPHABET:
     for key[1] in ALPHABET:
@@ -248,6 +242,10 @@ for key[0] in ALPHABET:
             continue
     break
 plaintext = decrypt(ciphertext,key)
+
+
+
+
 
 
 #==============================================================================================================================================================
@@ -291,7 +289,7 @@ while True: #Loops the entire program
         #relationScore = relationToEnglishFrequency(characterFrequencyProbability(cipherOut))
 
         # if relationScore < 0.05 and relationScore > -0.05:
-
+        ngramScore = -400
         if ngramScore > -40: # Change this number here the closer to 0 the less it will accept and print
             indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
             chiSquaredText = round(chiSquaredStat(cipherOut),10)

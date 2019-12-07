@@ -91,6 +91,10 @@ def DECtoHEX(decimal):
     return re.sub("0x","",str(hex(decimal)))
 def HEXtoDEC(hexN):
     return int(str(hexN),16)
+def DECtoOCT(decimal):
+    return int(re.sub("0o","",str(oct(decimal))))
+def OCTtoDEC(octal):
+    return int(str(octal),8)
 def formatString(string): #removes everything apart from a-z lower case from a string
     return "".join(re.findall("[a-z]",string))
 def reverseString(string): #Reverses the text

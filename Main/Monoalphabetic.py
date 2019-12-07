@@ -87,6 +87,10 @@ def BINtoDEC(binary):
     return int(str(binary),2)
 def DECtoBIN(decimal):
     return int(re.sub("0b","",str(bin(decimal))))
+def DECtoHEX(decimal):
+    return re.sub("0x","",str(hex(decimal)))
+def HEXtoDEC(hexN):
+    return int(str(hexN),16)
 def formatString(string): #removes everything apart from a-z lower case from a string
     return "".join(re.findall("[a-z]",string))
 def reverseString(string): #Reverses the text

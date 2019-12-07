@@ -7,7 +7,6 @@ import random
 import os
 import math
 import time
-import requests
 import re
 
 ############# IMPORTANT INFO BEFORE USING THIS PROGRAM #############
@@ -28,7 +27,7 @@ outputFilesHere = "/Users/Euan/Desktop/NCC2019/Out"
 # Find some typical log probabilities for english texts and for texts with different ciphers put through them to get a rough guage of how fit it is
 # Make ngram fitness more efficent
 # Add functions to different files then import them into main program
-# Add extra words to the list to get better accuracy when detecting english and generating key
+# Add a english word blocker
 
 
 #Menu and input formats
@@ -499,7 +498,10 @@ while True: #Loops the entire program
         #relationScore = relationToEnglishFrequency(characterFrequencyProbability(cipherOut))
 
         # if relationScore < 0.05 and relationScore > -0.05:
-
+        # if ngramScore > -40:
+        # if indexOfCoincidenceText < 1:
+        # if chiSquaredText < 200:
+        ngramScore = -100
         if ngramScore > -40: # Change this number here the closer to 0 the less it will accept and print
             indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
             chiSquaredText = round(chiSquaredStat(cipherOut),10)

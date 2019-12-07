@@ -12,6 +12,8 @@
 - [ ] Polyalphabetic Solver
 - [ ] Improve ngram fitness efficiency
 - [ ] Find some typical log probabilities for english texts and for texts with different ciphers put through them to get a rough idea of ngram scores
+- [ ] Add a english word segmenter
+- [ ] Add functions to different files then import them into main program
 
 
 ### Variable naming conventions

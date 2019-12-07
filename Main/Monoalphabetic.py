@@ -74,24 +74,21 @@ outputExportDitionary = {}
 #==============================================================================================================================================================
 
 def convertToASCII(textList): #Converts an list of characters into an list of their ASCII equivalent numbers
-    index = 0
-    while index < len(textList): #goes through each list index and turns it from Character to ASCII
-        textList[index] = ord(textList[index])
-        index += 1
-    return textList
+    output = []
+    for n in textList: #goes through each list index and turns it from Character to ASCII
+        output.append(ord(n))
+    return output
 def convertToCHARACTER(textList): #Converts an list of ASCII equivalent numbers into an list of their ASCII equivalent characters
-    index = 0
-    while index < len(textList): #goes through each list index and turns it from ASCII number to Character
-        textList[index] = chr(textList[index])
-        index += 1
-    return textList
+    output = []
+    for n in textList: #goes through each list index and turns it from ASCII number to Character
+        output.append(chr(n))
+    return output
 def BINtoDEC(binary):
     return int(str(binary),2)
 def DECtoBIN(decimal):
     return int(re.sub("0b","",str(bin(decimal))))
 def formatString(string): #removes everything apart from a-z lower case from a string
-    noPunctuationList = re.findall("[a-z]",string)
-    return "".join(noPunctuationList)
+    return "".join(re.findall("[a-z]",string))
 def reverseString(string): #Reverses the text
     return string[::-1]
 def search(itemToCheckFor,listToSearchFrom): #LINEAR SEARCH GLOBAL FUNCTION - Searches to see if there are repeats for random and keyword keys
@@ -125,8 +122,7 @@ def substitionKeyCipher(userCipherText,userKey): #maps a ciphertext to plaintext
     while textPerm < len(cipherText): #Goes through each character one by one and sends to the function which converts cipher to plain
         switchedCipher.append(switchChar(cipherText[textPerm]))
         textPerm += 1
-    switchedCipherStr = "".join(convertToCHARACTER(switchedCipher))
-    return switchedCipherStr
+    return "".join(convertToCHARACTER(switchedCipher))
 def characterFrequency(encryptedText):
     frequencies = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     letter = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]

@@ -1,3 +1,4 @@
+import re
 def convertToASCII(text): #Converts an array of characters into an array of their ASCII equivalent numbers
     perm = 0
     while perm < len(text): #goes through each array index and turns it from Character to ASCII
@@ -34,3 +35,8 @@ def removeSpaces(plain): #Removes spaces
     return charactersNoSpaceJoint
 def reverseString(string): #Reverses the text
     return string[::-1]
+def spliting(string,separator):
+    return re.split(separator,string)
+
+x = spliting("01201110120101021010102101020","2")
+print(x)

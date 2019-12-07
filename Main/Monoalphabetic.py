@@ -99,6 +99,8 @@ def formatString(string): #removes everything apart from a-z lower case from a s
     return "".join(re.findall("[a-z]",string))
 def reverseString(string): #Reverses the text
     return string[::-1]
+def spliting(string,separator):
+    return re.split(separator,string)
 def search(itemToCheckFor,listToSearchFrom): #LINEAR SEARCH GLOBAL FUNCTION - Searches to see if there are repeats for random and keyword keys
     position = 0
     found = False

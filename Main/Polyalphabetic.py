@@ -272,6 +272,16 @@ def textReplace(textBlockIN,find,replace):#Takes an array with strings of blocke
         new = n.replace(find,replace)
         textBlockOUT.append(new)
     return textBlockOUT
+def factors(textIN):
+    text = list(textIN)
+    length = len(text)
+    factorList = [length]
+    for i in range(1,length):
+        if length % i == 0:
+            factorList.append(int(i))
+    #print(sorted(factorList))
+    #print(length)
+    return sorted(factorList)
 
 #==============================================================================================================================================================
 #                                                            CIPHER SOLVING - EDITABLE

@@ -46,6 +46,8 @@ englishLetterFrequency = [8.167,1.492,2.782,4.253,12.702,2.228,2.015,6.094,6.966
 englishLetterFrequencySorted = [12.702,9.056,8.167,7.507,6.966,6.749,6.327,6.094,5.987,4.253,4.025,2.782,2.758,2.406,2.360,2.228,2.015,1.974,1.929,1.492,0.978,0.772,0.153,0.150,0.095,0.074]
 #The above list numbers map to the following letters (in order) -- E T A O I N S H R D L C U M W F G Y P B V K J X Q Z
 
+clear = lambda: os.system("cls") #Clears the console
+
 def loadEnglishNgram(): #loads a ngram file to a ditionary
         os.chdir(loadEnglishNgramDirectory) #path of ngram file to load make sure .txt file is in this folder MAKE SURE NGRAMS ARE LOWER CASE
         quadramDitionaryEnglish = {}
@@ -85,24 +87,15 @@ def convertToCHARACTER(textList): #Converts an list of ASCII equivalent numbers 
     for n in textList: #goes through each list index and turns it from ASCII number to Character
         output.append(chr(n))
     return output
-def BINtoDEC(binary): # Binary to Decimal converter
-    return int(str(binary),2)
-def DECtoBIN(decimal): # Decimal to Binary converter
-    return int(re.sub("0b","",str(bin(decimal))))
-def DECtoHEX(decimal): # Decimal to Hexadecimal converter
-    return re.sub("0x","",str(hex(decimal)))
-def HEXtoDEC(hexN): # Hexadecimal to Decimal converter
-    return int(str(hexN),16)
-def DECtoOCT(decimal): # Decimal to Octal converter
-    return int(re.sub("0o","",str(oct(decimal))))
-def OCTtoDEC(octal): # Octal to Decimal converter
-    return int(str(octal),8)
-def formatString(string): #removes everything apart from a-z lower case from a string
-    return "".join(re.findall("[a-z]",string))
-def reverseString(string): #Reverses the text
-    return string[::-1]
-def spliting(string,separator): # Returns a list from a string which has been split with a set separator
-    return re.split(separator,string)
+BINtoDEC = lambda binary: int(str(binary),2) # Binary to Decimal converter
+DECtoBIN = lambda decimal: int(re.sub("0b","",str(bin(decimal)))) # Decimal to Binary converter
+DECtoHEX = lambda decimal: re.sub("0x","",str(hex(decimal))) # Decimal to Hexadecimal converter
+HEXtoDEC = lambda hexN: int(str(hexN),16) # Hexadecimal to Decimal converter
+DECtoOCT = lambda decimal: int(re.sub("0o","",str(oct(decimal)))) # Decimal to Octal converter
+OCTtoDEC = lambda octal: int(str(octal),8) # Octal to Decimal converter
+formatString = lambda string: "".join(re.findall("[a-z]",string)) #removes everything apart from a-z lower case from a string
+reverseString = lambda string: string[::-1] #Reverses the text
+spliting = lambda string,separator: re.split(separator,string)
 def search(itemToCheckFor,listToSearchFrom): #LINEAR SEARCH GLOBAL FUNCTION - Searches to see if there are repeats for random and keyword keys returns T or F
     position = 0
     found = False
@@ -555,11 +548,11 @@ while True: #Loops the entire program
             relationScore = relationToEnglishFrequency(characterFrequencyProbability(cipherOut))
             outputExportDitionary[userKey] = cipherOut
             cipherOutKeyOut ='''
-================== PLAINTEXT: ==================
+==================== PLAINTEXT: ====================
 {printedCipherOut}
-===================== KEY: =====================
+======================= KEY: =======================
 {printedUserKey}
-================= STATISTICS: ==================
+=================== STATISTICS: ====================
 Number of keys              {printedAttempts}
 log Ngram Score             {printedNgramScore}
 Index Of Coincidence        {printedIoC}

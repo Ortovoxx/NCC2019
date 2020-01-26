@@ -28,6 +28,7 @@ import os
 import math
 import time
 import re
+import json
 
 #Menu and input formats
 cipherSolverInputFormat = '''*************** CIPHERTEXT: **************
@@ -482,20 +483,20 @@ exporting = False
 # KEY WORD:
 keyWordAlphabetStart = False
 keyWordRandomStart = False
-keyWordCeaserStart = True
+keyWordCeaserStart = False
 # ADVANCED ANALYSIS
 frequencyKeyStart = False
-iterativeSolvingStart = False
+iterativeSolvingStart = True
 # CRYPTOGRAPHIC FUNCTIONS
 ceaserStart = False
 randomKeyStart = False
 
 # DECLARE USERCIPHER HERE AND COMMENT OUT THE USER INPUT IF YOU ARE WORKING ON THE SAME CIPHER
-userCipherNoFormatBypass = ""
+userCipherNoFormatBypass = "ZACEIVHAPZRCZWQCZRIZWRISCGVAOVYAEYAEJCNCCVIHEVVYCVCPZIWVWVMIVXILLPAEVXMPCIZMEYIVXWRAFCZRIZYAERIJCIRIFFYNWPZRXIYIUXCVBAYNCWVMUCJCZCCVYAEUCTYNCIUZHPAQMWLCUFUWGVAOVAZRWVMINAEZSWFRCPUUAWQMECUUWVMYAESPISGCXZRWUFPCZZYKEWSG"
 userCipher = formatString((userCipherNoFormatBypass).lower())
 
 while True: #Loops the entire program
-    userCipher = formatString((input(cipherSolverInputFormat)).lower()) # ensures all ciphertext given to functions is correclty formatted
+    #userCipher = formatString((input(cipherSolverInputFormat)).lower()) # ensures all ciphertext given to functions is correclty formatted
     #########################################################
     #           Calling different deciphering functions
     #########################################################
@@ -539,17 +540,15 @@ while True: #Loops the entire program
         #########################################################
         ### Choose which scoring system you want to rank texts by: ###
         
+        #relationScore = relationToEnglishFrequency(characterFrequencyProbability(cipherOut))
         #indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
         #chiSquaredText = round(chiSquaredStat(cipherOut),10)
-        #ngramScore = ngramFitness(cipherOut)
-        #relationScore = relationToEnglishFrequency(characterFrequencyProbability(cipherOut))
-
+        ngramScore = ngramFitness(cipherOut)
+        
         # if relationScore < 0.05 and relationScore > -0.05:
-        # if ngramScore > -40:
         # if indexOfCoincidenceText < 1:
         # if chiSquaredText < 200:
-        ngramScore = -100
-        if ngramScore > -40: # Change this number here the closer to 0 the less it will accept and print
+        if ngramScore > -6000: # Change this number here the closer to 0 the less it will accept and print
             indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
             chiSquaredText = round(chiSquaredStat(cipherOut),10)
             ngramScore = ngramFitness(cipherOut)
@@ -568,3 +567,15 @@ Chi Squared                 {printedChi}
 English Frequency Relation  {printedRelationScore}
 '''.format(printedCipherOut = cipherOut,printedUserKey = userKey,printedNgramScore = ngramScore,printedAttempts = keyIterations,printedIoC = indexOfCoincidenceText, printedChi = chiSquaredText,printedRelationScore = relationScore)
             print(cipherOutKeyOut)
+            jsonData = { 
+                "plaintext": cipherOut, 
+                "key": userKey, 
+                "noOfKeys": keyIterations, 
+                "ngramScore": ngramScore, 
+                "IOC": indexOfCoincidenceText, 
+                "chi2": chiSquaredText, 
+                "frequencyRelation": relationScore,
+            }
+            os.chdir(outputFilesHere)
+            with open("output.txt", "a") as f:
+                f.write(json.dumps(jsonData)+"\n")

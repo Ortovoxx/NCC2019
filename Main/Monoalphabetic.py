@@ -29,6 +29,10 @@ import math
 import time
 import re
 import json
+import sys
+
+#Custom modules to import
+import textManipulation as tx
 
 #Menu and input formats
 cipherSolverInputFormat = '''*************** CIPHERTEXT: **************
@@ -77,43 +81,9 @@ outputExportDitionary = {}
 #                                                       TEXT MANIPULATION AND REPEATED USE FUNCTIONS - DO NOT EDIT
 #==============================================================================================================================================================
 
-def convertToASCII(textList): #Converts an list of characters into an list of their ASCII equivalent numbers
-    output = []
-    for n in textList: #goes through each list index and turns it from Character to ASCII
-        output.append(ord(n))
-    return output
-def convertToCHARACTER(textList): #Converts an list of ASCII equivalent numbers into an list of their ASCII equivalent characters
-    output = []
-    for n in textList: #goes through each list index and turns it from ASCII number to Character
-        output.append(chr(n))
-    return output
-BINtoDEC = lambda binary: int(str(binary),2) # Binary to Decimal converter
-DECtoBIN = lambda decimal: int(re.sub("0b","",str(bin(decimal)))) # Decimal to Binary converter
-DECtoHEX = lambda decimal: re.sub("0x","",str(hex(decimal))) # Decimal to Hexadecimal converter
-HEXtoDEC = lambda hexN: int(str(hexN),16) # Hexadecimal to Decimal converter
-DECtoOCT = lambda decimal: int(re.sub("0o","",str(oct(decimal)))) # Decimal to Octal converter
-OCTtoDEC = lambda octal: int(str(octal),8) # Octal to Decimal converter
-formatString = lambda string: "".join(re.findall("[a-z]",string)) #removes everything apart from a-z lower case from a string
-reverseString = lambda string: string[::-1] #Reverses the text
-spliting = lambda string,separator: re.split(separator,string)
-def search(itemToCheckFor,listToSearchFrom): #LINEAR SEARCH GLOBAL FUNCTION - Searches to see if there are repeats for random and keyword keys returns T or F
-    position = 0
-    found = False
-    while position < len(listToSearchFrom) and not found:
-        if listToSearchFrom[position] == itemToCheckFor:
-            found = True
-        position += 1
-    return found
-def shiftRight(listToMove,numberToMoveBy): # Shifts a list one place to the right including wrap arrounds
-    index = 0
-    while index < numberToMoveBy:
-        position = listToMove.pop()
-        listToMove.insert(0, position)
-        index += 1
-    return listToMove
 def substitionKeyCipher(userCipherText,userKey): #maps a ciphertext to plaintext according to the key given to it
-    cipherText = convertToASCII(list(userCipherText)) #Converting cipher to numbers
-    key = convertToASCII(list(userKey)) #Converting key to numbers
+    cipherText = tx.convertToASCII(list(userCipherText)) #Converting cipher to numbers
+    key = tx.convertToASCII(list(userKey)) #Converting key to numbers
     def switchChar(cipherChar): #Switches a single character from its chiphertext to its plaintext
         alphaPerm = newChar = 0
         while alphaPerm < 26: #as it goes through a letter it changes it 
@@ -126,7 +96,7 @@ def substitionKeyCipher(userCipherText,userKey): #maps a ciphertext to plaintext
     while textPerm < len(cipherText): #Goes through each character one by one and sends to the function which converts cipher to plain
         switchedCipher.append(switchChar(cipherText[textPerm]))
         textPerm += 1
-    return "".join(convertToCHARACTER(switchedCipher))
+    return "".join(tx.convertToCHARACTER(switchedCipher))
 def characterFrequency(encryptedText):
     frequencies = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     letter = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
@@ -161,7 +131,7 @@ def indexOfCoincidence(text): #String input to calculate the Index of Coincidenc
         return letterValue
     IoCLIST = []
     alphaIndex = 0
-    textList = convertToASCII(list(text))
+    textList = tx.convertToASCII(list(text))
     textLength = len(textList)
     while alphaIndex < 26:
         letterCount = textList.count(alphaIndex + 97)
@@ -175,7 +145,7 @@ def chiSquaredStat(text): #String input which calculates the chi-squared statist
         return letterValue
     chiSquaredLIST = []
     alphaIndex = 0
-    textList = convertToASCII(list(text))
+    textList = tx.convertToASCII(list(text))
     textLength = len(textList)
     while alphaIndex < 26: 
         realLetterCount = textList.count(alphaIndex + 97)
@@ -227,56 +197,7 @@ def relationToEnglishFrequency(cipherTextFrequency): # Finds the difference betw
         index+=1
     score = sum(lists)
     return round(score,10)
-def addPadding(cipher,key): # pads a transposition ciphertext with a padding character of X
-    cipher = list(cipher)
-    lengthCipher = len(cipher)
-    remainder = lengthCipher % key # Finds how many padding characters to add
-    if remainder == 0: #If the ciphertext length is divisible by the key perfectly then no padding is needed
-        return "".join(cipher)
-    else:
-        addPad = 0
-        while addPad <= remainder: # Loops round the cipher text array adding a padding character each time
-            cipher.append("x") # The padding character
-            addPad+=1
-        return "".join(cipher)
-def textBlock(textIN): #Takes a plaintext string input and returns a list with a sublist of blocked characters
-    n = 3 #The size of the text blocks
-    text = list(textIN)
-    length = len(text)
-    blockedText = []
-    remainder = length % n
-    index = addPad = 0
-    if remainder != 0:
-        while addPad <= remainder: # Loops round the cipher text array adding a padding character each time
-            text.append("x") # The padding character
-            addPad+=1
-    while index < length:
-        blocked = []
-        blocking = 0
-        while blocking < n:
-            add = text[blocking + index]
-            blocked.append(add)
-            blocking+=1
-        blockedText.append("".join(blocked))
-        index+=n
-    return blockedText
-def textReplace(textBlockIN,find,replace):#Takes an array with strings of blocked characters and repalces them with others
-    textBlockOUT = []
-    for n in textBlockIN:
-        new = n.replace(find,replace)
-        textBlockOUT.append(new)
-    return textBlockOUT
-def factors(textIN):
-    text = list(textIN)
-    length = len(text)
-    factorList = [length]
-    for i in range(1,length):
-        if length % i == 0:
-            factorList.append(int(i))
-    #print(sorted(factorList))
-    #print(length)
-    return sorted(factorList)
-
+    
 #==============================================================================================================================================================
 #                                                            CIPHER SOLVING - EDITABLE
 #==============================================================================================================================================================
@@ -294,16 +215,16 @@ def randomKey(): #generates a random key
     key = []
     while perms < 26: #Ensures 26 letters in the alphabet
         randomNo = random.randint(97, 122)
-        repeat = search(randomNo,key) #Ensures each letter is unique
+        repeat = tx.search(randomNo,key) #Ensures each letter is unique
         if repeat == False:
             key.append(randomNo)
             perms += 1
-    return "".join(convertToCHARACTER(key))
+    return "".join(tx.convertToCHARACTER(key))
 def keyWordRandom(index): #Keyword key generator - filled in bit being random characters
     lenFreq = len(keyWords)
     if index > lenFreq - 1:
         index = index - ( ( index // lenFreq ) * lenFreq )
-    key = convertToASCII(list(keyWords[index]))
+    key = tx.convertToASCII(list(keyWords[index]))
     countIndex = 0
     while countIndex < 26: #Removes duplicate letters any words may have
         howMany = key.count(alphabetASCII[countIndex])
@@ -317,16 +238,16 @@ def keyWordRandom(index): #Keyword key generator - filled in bit being random ch
     perms = len(key)
     while perms < 26: #Ensures 26 letters in the alphabet
         randomNo = random.randint(97, 122)
-        repeat = search(randomNo,key) #Ensures each letter is unique
+        repeat = tx.search(randomNo,key) #Ensures each letter is unique
         if repeat == False:
             key.append(randomNo)
             perms += 1
-    return "".join(convertToCHARACTER(key))
+    return "".join(tx.convertToCHARACTER(key))
 def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alphabet
     lenFreq = len(keyWords)
     if index > lenFreq - 1:
         index = index - ( ( index // lenFreq ) * lenFreq )
-    key = convertToASCII(list(keyWords[index]))
+    key = tx.convertToASCII(list(keyWords[index]))
     countIndex = 0
     while countIndex < 26: #Removes duplicate letters any words may have
         howMany = key.count(alphabetASCII[countIndex])
@@ -341,16 +262,16 @@ def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alp
     repeat = False
     while perms < 26: #Ensures 26 letters in the alphabet
         newChar = alphabetASCII[perms]
-        repeat = search(newChar,key) #Ensures each letter is unique
+        repeat = tx.search(newChar,key) #Ensures each letter is unique
         if repeat == False:
             key.append(newChar)
         perms += 1
-    return "".join(convertToCHARACTER(key))
+    return "".join(tx.convertToCHARACTER(key))
 def keyWordCeaser(index,shiftIndex): #Keyword key generator - filled in bit being the alphabet which is then shifted 26 times for the same keyword
     lenFreq = len(keyWords)
     if index > lenFreq - 1:
         index = index - ( ( index // lenFreq ) * lenFreq )
-    key = convertToASCII(list(keyWords[index]))
+    key = tx.convertToASCII(list(keyWords[index]))
     countIndex = 0
     while countIndex < 26: #Removes duplicate letters any words may have
         howMany = key.count(alphabetASCII[countIndex])
@@ -366,13 +287,13 @@ def keyWordCeaser(index,shiftIndex): #Keyword key generator - filled in bit bein
     endKey = []
     while perms < 26: #Ensures 26 letters in the alphabet
         newChar = alphabetASCII[perms]
-        repeat = search(newChar,key) #Ensures each letter is unique
+        repeat = tx.search(newChar,key) #Ensures each letter is unique
         if repeat == False:
             endKey.append(newChar) # adds all the extra characters to a new list to be shifted later
         perms += 1
-    shiftedEnd = shiftRight(endKey,shiftIndex) # shifts a list "shiftIndex" places to the right
-    keyStart = "".join(convertToCHARACTER(key))
-    shiftedEnd = "".join(convertToCHARACTER(shiftedEnd))
+    shiftedEnd = tx.shiftRight(endKey,shiftIndex) # shifts a list "shiftIndex" places to the right
+    keyStart = "".join(tx.convertToCHARACTER(key))
+    shiftedEnd = "".join(tx.convertToCHARACTER(shiftedEnd))
     return keyStart + shiftedEnd # joins the two first keyword and the rest of the shifted string together to make an entire key
 def searchFrequencyAnalysis(itemToCheckFor): #Compares the inputted value to standard english language letter freuqnecy and finds the closest value and returns its letter position (a=0 b=1 etc) [all in %]
     def searchFrequencyAnalysisSorted(positionToMap): #Takes both the sorted alphabet and normal alphabet and maps the positions from the ciphertext frequency analysis
@@ -424,7 +345,7 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
         duplicates = False
         unCertainty = random.randint(lowerRandom,upperRandom) #Adds uncertainty to the letters so higher chance of finding a correct key (bigger numbers longer key generation time)
         randomisedEnglishIndex = englishIndex + unCertainty
-        duplicates = search(randomisedEnglishIndex,englishIndexOrderList) #Ensures no duplicates of positions
+        duplicates = tx.search(randomisedEnglishIndex,englishIndexOrderList) #Ensures no duplicates of positions
         if duplicates == False and randomisedEnglishIndex < 27 and randomisedEnglishIndex > 0:
             englishIndexOrderList.append(randomisedEnglishIndex) #adds each letter mapped to the new letter position to this list (a=0 b=1 etc etc)
             indexToCompare = indexToCompare + 1 #Only increases if there is no duplicates and therefore something new got added else it will repeat until this does happen
@@ -437,7 +358,7 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
     while convertASCIIIndex < 26: #converts the a=0 b=1 (positional data) to ASCII numbers
         englishIndexOrderList[convertASCIIIndex] = englishIndexOrderList[convertASCIIIndex] + 96
         convertASCIIIndex += 1
-    return "".join(convertToCHARACTER(englishIndexOrderList)) #converts the ASCII index to a plaintext string key with 26 characters
+    return "".join(tx.convertToCHARACTER(englishIndexOrderList)) #converts the ASCII index to a plaintext string key with 26 characters
 def iterativeSolving(cipherText,maxScore):
     parentKey = list(randomKey()) #parentKey = randomKey()#frequencyKey(userCipherText) #parent Key is generated using frequency analysis
     deciphered = substitionKeyCipher(cipherText,"".join(parentKey))
@@ -479,14 +400,14 @@ keyWordRandomStart = False
 keyWordCeaserStart = False
 # ADVANCED ANALYSIS
 frequencyKeyStart = False
-iterativeSolvingStart = True
+iterativeSolvingStart = False
 # CRYPTOGRAPHIC FUNCTIONS
 ceaserStart = False
-randomKeyStart = False
+randomKeyStart = True
 
 # DECLARE USERCIPHER HERE AND COMMENT OUT THE USER INPUT IF YOU ARE WORKING ON THE SAME CIPHER
 userCipherNoFormatBypass = "ZACEIVHAPZRCZWQCZRIZWRISCGVAOVYAEYAEJCNCCVIHEVVYCVCPZIWVWVMIVXILLPAEVXMPCIZMEYIVXWRAFCZRIZYAERIJCIRIFFYNWPZRXIYIUXCVBAYNCWVMUCJCZCCVYAEUCTYNCIUZHPAQMWLCUFUWGVAOVAZRWVMINAEZSWFRCPUUAWQMECUUWVMYAESPISGCXZRWUFPCZZYKEWSG"
-userCipher = formatString((userCipherNoFormatBypass).lower())
+userCipher = tx.formatString((userCipherNoFormatBypass).lower())
 
 while True: #Loops the entire program
     #userCipher = formatString((input(cipherSolverInputFormat)).lower()) # ensures all ciphertext given to functions is correclty formatted

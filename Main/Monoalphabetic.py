@@ -9,6 +9,7 @@
 loadEnglishNgramDirectory = "/Users/Euan/Desktop/NCC2019/Cryptanalysis/Text_training_data"
 loadKeyWordsDirectory = "/Users/Euan/Desktop/NCC2019/Cryptanalysis"
 outputFilesHere = "/Users/Euan/Desktop/NCC2019/Out"
+wordScoreDir = "/Users/Euan/Desktop/NCC2019/Cryptanalysis/word counts"
 # All functions should transfer data using lowercase no space no punctuation strings
 
 #########  TEST CIPHERS TO TRY AND SOLVE  #########
@@ -26,6 +27,7 @@ outputFilesHere = "/Users/Euan/Desktop/NCC2019/Out"
 import random
 import os
 import math
+from math import log10
 import time
 import re
 import json
@@ -67,19 +69,69 @@ def loadKeyWords(): #loads a keyword file to a list
             for line in f:
                 keyWords.append(line.strip("\n")) # Adds the keywords to a list and removes the newline character
         return keyWords
-def export(): #exports brute forced ciphers to a text file for easy access later
-    os.chdir(outputFilesHere) #path of output file to save to
-    with open("output.txt", "a") as f:
-        for key in outputExportDitionary:
-            f.write(key +"\n") # Writes the key used to solve the cipher
-            f.write(outputExportDitionary[key]+"\n") # Writes the actual solved cipher
 keyWords = loadKeyWords() #Calls the above functions to load them into memory from a file - Comment out if you dont need them and want to go faster
-ngramDitionaryEnglish = loadEnglishNgram() # ''
-outputExportDitionary = {}
+ngramDitionaryEnglish = loadEnglishNgram()
 
 #==============================================================================================================================================================
 #                                                       TEXT MANIPULATION AND REPEATED USE FUNCTIONS - DO NOT EDIT
 #==============================================================================================================================================================
+
+class wordScore(object):
+    os.chdir(wordScoreDir)
+    def __init__(self):
+        ''' load a file containing ngrams and counts, calculate log probabilities '''
+        self.Pw = {}
+        with open('1word_counts.txt', "r") as f:
+            lines  = f.readlines()
+            for line in lines:
+                key,count = line.split('\t') 
+                self.Pw[key.upper()] = self.Pw.get(key.upper(), 0) + int(count)
+        self.N = 1024908267229 ## Number of tokens
+        #calculate first order log probabilities
+        for key in self.Pw.keys():
+            self.Pw[key] = log10(float(self.Pw[key])/self.N)
+        #get second order word model 
+        self.Pw2 = {}
+        with open('2word_counts.txt', "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                key,count = line.split('\t') 
+                self.Pw2[key.upper()] = self.Pw2.get(key.upper(), 0) + int(count)
+        #calculate second order log probabilities
+        for key in self.Pw2.keys():
+            word1,word2 = key.split()
+            if word1 not in self.Pw: 
+                self.Pw2[key] = log10(float(self.Pw2[key])/self.N)
+            else: 
+                self.Pw2[key] = log10(float(self.Pw2[key])/self.N) - self.Pw[word1]
+        # precalculate the probabilities we assign to words not in our dict, L is length of word
+        self.unseen = [log10(10./(self.N * 10**L)) for L in range(50)]        
+        
+    # conditional word probability    
+    def cPw(self,word,prev='<UNK>'):
+        if word not in self.Pw: 
+            return self.unseen[len(word)]
+        elif prev+' '+word not in self.Pw2: 
+            return self.Pw[word]
+        else: 
+            return self.Pw2[prev+' '+word]
+    
+    def words(self,text,maxwordlen=20):
+        text = "".join(re.findall("[a-z]",text.lower())).upper()
+        prob = [[-99e99]*maxwordlen for _ in range(len(text))]
+        strs = [['']*maxwordlen for _ in range(len(text))]
+        for j in range(maxwordlen):
+            prob[0][j] = self.cPw(text[:j+1])
+            strs[0][j] = [text[:j+1]]
+        for i in range(1,len(text)):
+            for j in range(maxwordlen):
+                if i+j+1 > len(text): break
+                candidates = [(prob[i-k-1][k] + self.cPw(text[i:i+j+1],strs[i-k-1][k][-1]),
+                               strs[i-k-1][k] + [text[i:i+j+1]] ) for k in range(min(i,maxwordlen))]
+                prob[i][j], strs[i][j] = max(candidates)
+        ends = [(prob[-i-1][i],strs[-i-1][i]) for i in range(min(len(text),maxwordlen))]
+        return " ".join(max(ends)[1]).lower()
+defrag = wordScore()
 
 def substitionKeyCipher(userCipherText,userKey): #maps a ciphertext to plaintext according to the key given to it
     cipherText = tx.convertToASCII(list(userCipherText)) #Converting cipher to numbers
@@ -97,6 +149,7 @@ def substitionKeyCipher(userCipherText,userKey): #maps a ciphertext to plaintext
         switchedCipher.append(switchChar(cipherText[textPerm]))
         textPerm += 1
     return "".join(tx.convertToCHARACTER(switchedCipher))
+
 def characterFrequency(encryptedText):
     frequencies = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     letter = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
@@ -109,6 +162,7 @@ def characterFrequency(encryptedText):
             if i == letter[index]:
                 frequencies[index] = frequencies[index] + 1 #if character in encrypted_text is a space,data @ alphabet[26] ++:       
     return frequencies
+
 def characterFrequencyProbability(encryptedText):
     frequencies = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     letter = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
@@ -125,6 +179,7 @@ def characterFrequencyProbability(encryptedText):
         x = round((n / len(encryptedText)),5)
         probability.append(x)
     return probability
+
 def indexOfCoincidence(text): #String input to calculate the Index of Coincidence of a text
     def letter(letterCount,textLength):
         letterValue = (letterCount / textLength)*((letterCount - 1)/(textLength - 1))
@@ -139,6 +194,7 @@ def indexOfCoincidence(text): #String input to calculate the Index of Coincidenc
         IoCLIST.append(IoCLISTStore)
         alphaIndex += 1
     return sum(IoCLIST)
+
 def chiSquaredStat(text): #String input which calculates the chi-squared statistic of a text
     def letter(realLetterCount,expectedLetterCount):
         letterValue = ((realLetterCount - expectedLetterCount)**2) / expectedLetterCount
@@ -154,7 +210,9 @@ def chiSquaredStat(text): #String input which calculates the chi-squared statist
         chiSquaredLIST.append(chiSquaredLISTStore)
         alphaIndex += 1
     return sum(chiSquaredLIST)
+
 def ngramFitness(userCiperText):
+
     def ngramExtraction(userCiperText): #Finds quadgrams from a ciphertext
         cipherText = list(userCiperText)
         quadramDitionaryCiphertext = {}
@@ -175,6 +233,7 @@ def ngramFitness(userCiperText):
                 quadramDitionaryCiphertext[quad] = 1
             index += 1
         return quadramDitionaryCiphertext
+    
     quadramDitionaryCiphertext = ngramExtraction(userCiperText)
     logAB = []
     probQuadgram = 0
@@ -188,6 +247,7 @@ def ngramFitness(userCiperText):
             loggedProbQuadgram = math.log10(probQuadgram)
             logAB.append(loggedProbQuadgram)
     return sum(logAB)
+
 def relationToEnglishFrequency(cipherTextFrequency): # Finds the difference between a ciphertext frequency ( % ) and english frequency and outputs a score 
     index = 0
     lists = []
@@ -390,7 +450,6 @@ def iterativeSolving(cipherText,maxScore):
 userKey = "abcdefghijklmnopqrstuvwxyz" #Sets a defult user key ~~~~WARNING~~~~ Wont show error if there is not a key generated as this one will take over ~~~~WARNING~~~~
 keyIterations = keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = ceaserShifts = iterativeSolvingIndex = shiftNumber = REPLACEME123 = 0
 maxScoreIterative = -99e9
-exporting = False
 
 #########  Turn each function on or off  #########
 
@@ -400,10 +459,10 @@ keyWordRandomStart = False
 keyWordCeaserStart = False
 # ADVANCED ANALYSIS
 frequencyKeyStart = False
-iterativeSolvingStart = False
+iterativeSolvingStart = True
 # CRYPTOGRAPHIC FUNCTIONS
 ceaserStart = False
-randomKeyStart = True
+randomKeyStart = False
 
 # DECLARE USERCIPHER HERE AND COMMENT OUT THE USER INPUT IF YOU ARE WORKING ON THE SAME CIPHER
 userCipherNoFormatBypass = "ZACEIVHAPZRCZWQCZRIZWRISCGVAOVYAEYAEJCNCCVIHEVVYCVCPZIWVWVMIVXILLPAEVXMPCIZMEYIVXWRAFCZRIZYAERIJCIRIFFYNWPZRXIYIUXCVBAYNCWVMUCJCZCCVYAEUCTYNCIUZHPAQMWLCUFUWGVAOVAZRWVMINAEZSWFRCPUUAWQMECUUWVMYAESPISGCXZRWUFPCZZYKEWSG"
@@ -445,9 +504,6 @@ while True: #Loops the entire program
             userKey = iterativeSolving(userCipher,maxScoreIterative)
             cipherOut = substitionKeyCipher(userCipher,userKey)
             iterativeSolvingIndex += 1
-        if exporting == True or keyWordRandomIndex == 100000 or keyWordAlphabetIndex == 100000:
-            export()
-            print("exported!")
         keyIterations += 1
         #########################################################
         #                   Text statistics
@@ -462,12 +518,13 @@ while True: #Loops the entire program
         # if relationScore < 0.05 and relationScore > -0.05:
         # if indexOfCoincidenceText < 1:
         # if chiSquaredText < 200:
-        if ngramScore > -6000: # Change this number here the closer to 0 the less it will accept and print
+        if ngramScore > -600: # Change this number here the closer to 0 the less it will accept and print
             indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
             chiSquaredText = round(chiSquaredStat(cipherOut),10)
             ngramScore = ngramFitness(cipherOut)
             relationScore = relationToEnglishFrequency(characterFrequencyProbability(cipherOut))
             outputExportDitionary[userKey] = cipherOut
+            readablePlaintext = defrag.words(cipherOut)
             cipherOutKeyOut ='''
 ==================== PLAINTEXT: ====================
 {printedCipherOut}
@@ -479,11 +536,12 @@ log Ngram Score             {printedNgramScore}
 Index Of Coincidence        {printedIoC}
 Chi Squared                 {printedChi}
 English Frequency Relation  {printedRelationScore}
-'''.format(printedCipherOut = cipherOut,printedUserKey = userKey,printedNgramScore = ngramScore,printedAttempts = keyIterations,printedIoC = indexOfCoincidenceText, printedChi = chiSquaredText,printedRelationScore = relationScore)
+'''.format(printedCipherOut = readablePlaintext,printedUserKey = userKey,printedNgramScore = ngramScore,printedAttempts = keyIterations,printedIoC = indexOfCoincidenceText, printedChi = chiSquaredText,printedRelationScore = relationScore)
             print(cipherOutKeyOut)
             jsonData = { 
-                "plaintext": cipherOut, 
-                "key": userKey, 
+                "readablePlaintext": readablePlaintext,
+                "plaintext": cipherOut,
+                "key": userKey,
                 "noOfKeys": keyIterations, 
                 "ngramScore": ngramScore, 
                 "IOC": indexOfCoincidenceText, 
@@ -493,3 +551,5 @@ English Frequency Relation  {printedRelationScore}
             os.chdir(outputFilesHere)
             with open("output.txt", "a") as f:
                 f.write(json.dumps(jsonData)+"\n")
+
+                

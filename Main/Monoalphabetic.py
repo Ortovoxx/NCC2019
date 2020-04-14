@@ -435,7 +435,6 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
     return "".join(tx.convertToCHARACTER(englishIndexOrderList)) #converts the ASCII index to a plaintext string key with 26 characters
 
 def iterativeSolving(cipherText,maxScore):
-
     parentKey = list(randomKey()) #parentKey = randomKey()#frequencyKey(userCipherText) #parent Key is generated using frequency analysis
     deciphered = substitionKeyCipher(cipherText,"".join(parentKey))
     parentScore = ngramFitness(deciphered)
@@ -481,10 +480,10 @@ ceaserStart = False
 randomKeyStart = False
 
 # DECLARE USERCIPHER HERE AND COMMENT OUT THE USER INPUT IF YOU ARE WORKING ON THE SAME CIPHER
-userCipherNoFormatBypass = "ZACEIVHAPZRCZWQCZRIZWRISCGVAOVYAEYAEJCNCCVIHEVVYCVCPZIWVWVMIVXILLPAEVXMPCIZMEYIVXWRAFCZRIZYAERIJCIRIFFYNWPZRXIYIUXCVBAYNCWVMUCJCZCCVYAEUCTYNCIUZHPAQMWLCUFUWGVAOVAZRWVMINAEZSWFRCPUUAWQMECUUWVMYAESPISGCXZRWUFPCZZYKEWSG"
+userCipherNoFormatBypass = "GLKKF, J RGXRPXU BTQ QGX ELQXYQ FBT LNPXU VX LOBTQ. J QGJYP JQ VJDGQ OX KXSLQXU QB L SXRQTKX RBRPRKBAQ UXSJWXKXU LQ QGX JYNQJQTQX BA XSXRQKJRLS XYDJYXXKN BY LEKJS QZXYQF QGJKU YJYXQXXY QGJKQF NJC. QGX QBEJR ZLN QGX QKLYNVTQLQJBY BA VLQQXK OF GJDG XYXKDF ELKQJRSXN LYU KLUJLQJBYN. DJWXY QGX SLOXS BY QGX GJYUXYOTKD XYWXSBEX J QGJYP QGX ABSSBZJYD XCQKLRQ JN ELKQJRTSLKSF JYQXKXNQJYD: JY QGX RLNX BA YTRSXLK QKLYNVTQLQJBYN, JQ NXXVN QGLQ QGX SBNN BA VLNN JN EKXRJNXSF XHTLS QB QGX JYRKXLNX JY QGX PJYXQJR XYXKDF QGLQ GLN QLPXY ESLRX. QGJN DJWXN L NQKJPJYD EKBBA BA QGX VBUXKY EGFNJRLS SLZ QGLQ VLNN LYU XYXKDF LKX XHTJWLSXYQ. JY YJYXQXXY QGJKQF QZB RGLUZJRP UJNRBWXKXU QGX YXTQKBY, L YXZ QFEX BA LQBVJR ELKQJRSX ZGJRG GLN YB XSXRQKJR RGLKDX. JQ UBXN YBQ QGXKXABKX JYQXKLRQ ZJQG BQGXK XSXRQKBYN LYU EKBUTRXN YB JBYJNLQJBY ZGXY ELNNJYD QGKBTDG L DLN. JQ JN BA BTQNQLYUJYD JVEBKQLYRX OXRLTNX BA JQN EBZXK QB EKBUTRX QKLYNVTQLQJBYN. QGXKX JN SJQQSX GBEX QGLQ QGJN EKBRXNN RLY OX TNXU BY LY XYDJYXXKJYD NRLSX QB RBYWXKQ VLNN JYQB XYXKDF. NB ALK, BTK SLOBKLQBKF XCEXKJVXYQN EKBUTRX QGX RBYWXKNX KXNTSQ. QGXBKF JYUJRLQXN QGLQ LQ QXVEXKLQTKXN XHTLS QB QGBNX BA QGX JYQXKJBK BA QGX NTY BK NQLKN, JQ VJDGQ OX EBNNJOSX QB RBYWXKQ QGX JYXCEXYNJWX NJVESX XSXVXYQN QB QGX VBKX WLSTLOSX GXLWJXK RBVOJYLQJBYN, OTQ EKLRQJRLSSF, QGXKX JN YB VXQGBU BA EKBUTRJYD QGX XAAXRQN ABKVXKSF LQQKJOTQXU QB QGX EGJSBNBEGXKN NQBYX."
 userCipher = tx.formatString((userCipherNoFormatBypass).lower())
 
-while True: #Loops the entire program
+while True: #Loops the entire program   
     #userCipher = formatString((input(cipherSolverInputFormat)).lower()) # ensures all ciphertext given to functions is correclty formatted
     #########################################################
     #           Calling different deciphering functions
@@ -534,7 +533,7 @@ while True: #Loops the entire program
         # if relationScore < 0.05 and relationScore > -0.05:
         # if indexOfCoincidenceText < 1:
         # if chiSquaredText < 200:
-        if ngramScore > -600: # Change this number here the closer to 0 the less it will accept and print
+        if ngramScore > -6000: # Change this number here the closer to 0 the less it will accept and print
             indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
             chiSquaredText = round(chiSquaredStat(cipherOut),10)
             ngramScore = ngramFitness(cipherOut)

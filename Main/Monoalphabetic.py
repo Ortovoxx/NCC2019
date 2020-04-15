@@ -277,16 +277,10 @@ def ceaser(string, shift): # Ceaser shift function
         cipher = cipher + chr((ord(char) + shift - 97) % 26 + 97) #Shifts all lowercases
     return cipher
 
-def randomKey(): #generates a random key
-    perms = 0
-    key = []
-    while perms < 26: #Ensures 26 letters in the alphabet
-        randomNo = random.randint(97, 122)
-        repeat = tx.search(randomNo,key) #Ensures each letter is unique
-        if repeat == False:
-            key.append(randomNo)
-            perms += 1
-    return "".join(tx.convertToCHARACTER(key))
+def randomKey(): # Generates a random key
+    toShuffle = alphabetCHARACTER
+    random.shuffle(toShuffle)
+    return "".join(toShuffle)
 
 def keyWordRandom(index): #Keyword key generator - filled in bit being random characters
     lenFreq = len(keyWords)

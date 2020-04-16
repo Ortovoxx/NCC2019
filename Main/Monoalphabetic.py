@@ -452,7 +452,7 @@ def iterativeSolving(cipherText,maxScore):
         maxScore = parentScore
         return "".join(parentKey)
 
-def manualKeySwitch(cipherText): # borealistuvwxyzcdfghjkmnpq
+def manualKeySwitch(cipherText): # Allows users to manurally switch letters around # borealistuvwxyzcdfghjkmnpq
     key = input("User key: ")
     keyList = list(key)
     toRemove = str(input("What is the incorrect char: ")).lower()

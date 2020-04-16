@@ -264,6 +264,8 @@ def relationToEnglishFrequency(cipherTextFrequency): # Finds the difference betw
     score = sum(lists)
     return round(score,10)
 
+# Transposition specific functions
+
 def addPadding(cipher,key): # pads a transposition ciphertext with a padding character of X
     cipher = list(cipher)
     lengthCipher = len(cipher)
@@ -361,28 +363,31 @@ def solve(array):
     return x
     #nn = ngramFitness(x)
 
-def iterativeSolving(cipherText,maxScore):
-    parentText = list(cipherText)
-    parentScore = ngramFitness(cipherText)
-    count = 0
-    while count < 1000:
-        a = random.randint(0,25)
-        b = random.randint(0,25)
-        childText = parentText[:]
-        # swap two characters in the child
-        childText[a],childText[b] = childText[b],childText[a]
-        childScore = ngramFitness("".join(childText))
-        # if the child was better, replace the parent with it
-        if childScore > parentScore:
-            parentScore = childScore
-            parentText = childText[:]
-            count = 0
-        count += 1
-        print(childScore)
-    # keep track of best score seen so far
-    if parentScore > maxScore:
-        maxScore = parentScore
-        return "".join(parentText)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #==============================================================================================================================================================
 #                                                   USER INPUT / OUTPUT                   MAIN PROGRAM

@@ -250,6 +250,17 @@ def relationToEnglishFrequency(cipherTextFrequency): # Finds the difference betw
         index+=1
     score = sum(lists)
     return round(score,10)
+
+def jsonCipherIn():
+    output = []
+    os.chdir(outputFilesHere)
+    with open("output.txt", "r") as f:
+        jsonIN = f.readlines()
+        for i in jsonIN:
+            x = json.loads(i)
+            plainText = x["plaintext"]
+            output.append(plainText)
+    return output
     
 #==============================================================================================================================================================
 #                                                            CIPHER SOLVING - EDITABLE
@@ -441,9 +452,27 @@ def iterativeSolving(cipherText,maxScore):
         maxScore = parentScore
         return "".join(parentKey)
 
+def manualKeySwitch(cipherText): # borealistuvwxyzcdfghjkmnpq
+    key = input("User key: ")
+    keyList = list(key)
+    toRemove = str(input("What is the incorrect char: ")).lower()
+    toAdd = str(input("What do you want to change it to: ")).lower() ###### all the below will need switching around and testing I do now know if I have gotten it right
+    toRemovePos = re.search(toRemove,key)
+    toAddPos = re.search(toAdd,key)
+    keyList.pop(toRemovePos)
+    keyList.insert(toRemovePos,toAdd)
+    keyList.pop(toAddPos)
+    keyList.insert(toAddPos,toRemove)
+    print("".join(keyList))
+
 #==============================================================================================================================================================
 #                                                   USER INPUT / OUTPUT                   MAIN PROGRAM
 #==============================================================================================================================================================
+
+# add a english word length probablity ( take average word length and compare it to that of the plaintext)
+# add a way to manuallly manipulate the key 
+# add matplot lib graphs for frequency analysis
+# add a json input
 
 userKey = "abcdefghijklmnopqrstuvwxyz" #Sets a defult user key ~~~~WARNING~~~~ Wont show error if there is not a key generated as this one will take over ~~~~WARNING~~~~
 keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = ceaserShifts = iterativeSolvingIndex = shiftNumber = REPLACEME123 = 0
@@ -457,78 +486,75 @@ keyWordRandomStart = False
 keyWordCeaserStart = False
 # ADVANCED ANALYSIS
 frequencyKeyStart = False
-iterativeSolvingStart = True
+iterativeSolvingStart = False
 # CRYPTOGRAPHIC FUNCTIONS
 ceaserStart = False
-randomKeyStart = False
+randomKeyStart = True
 
 # DECLARE USERCIPHER HERE AND COMMENT OUT THE USER INPUT IF YOU ARE WORKING ON THE SAME CIPHER
-userCipherNoFormatBypass = "CSTW, T BX SABETYI HZ GMAEAY HZ GCABV MTHS WTGA XATHYAF. GSA MBG CBFH ZL HSA HABX MSZ GCWTH HSA BHZX BYE HZIAHSAF MTHS LFTGRS SBG MZFVAE ZJH HSA EAHBTWG ZL SZM TH MZFVG. GSA TG B OFTWWTBYH RSAXTGH BG MAWW BG B CSPGTRTGH BYE T BX SZCTYI GSA RBY GSAE GZXA WTISH ZY SZM WTVAWP TH TG HSBH HSBH ETA BWRSAXTGHAY RZJWE EAKAWZC B YJRWABF CZMAF IAYAFBHTZY GPGHAX LFZX HSA CFZRAGG.ZY HSA MBP OBRV, T CWBY HZ BWGZ KTGTH GZXA CAZCWA T VYZM TY YZFMBP. B YAM CZMAF GZJFRA MTWW OA ZL YZ JGA HZ HSA YBQTG MTHSZJH HSA FBM XBHAFTBWG LZF XBYJLBRHJFTYI, BYE B WZH ZL HSA XBUZF OBJNTHA GXAWHAFG TY AJFZCA BFA OBGAE TY HSA RZJYHFP. AKAY MTHSZJH B YAM GZJFRA ZL CZMAF HSA IAFXBY XTWTHBFP CWBYYAFG MTWW SBKA HSATF APA ZY GJCCWP WTYAG BYE HSA YZFMAITBY BWJXTYTJX RZXCBYTAG XJGH OA ZYA ZL HSATF CFTXA HBFIAHG. T HSZJISH T MZJWE EFZC TY BYE HFP HZ IAH B GAYGA ZL SZM MAWW EALAYEAE HSAGA CWBRAG BFA. HSAFA XBP BWFABEP SBKA OAAY BCCFZBRSAG LFZX IAFXBYP BG CBFH ZL HSATF BFXG OJTWE-JC BYE TH MZJWE OA IZZE HZ VYZM HSBH HZZ. TL HSA MZFGH SBCCAYG BYE YZFMBP TG TYKBEAE, HSAY T MBYH HZ SBKA GZXA BIAYHG BWFABEP AXOAEEAE TY HSA YBHTZYBW TYLFBGHFJRHJFA BYE MA YAAE HZ HSTYV BOZJH SZM MA MZJWE GARJFA RZXXJYTRBHTZYG TY BY ZRRJCTAE RZJYHFP. TL PZJ ZF HSA BIAYRP SBKA BYP RZYHBRHG HSAFA HSAY WAH XA VYZM. MTHS B WTHHWA WJRV T XBP AKAY IAH HZ GAA HSA YZFHSAFY WTISHG MSTWA T BX HSAFA."
-userCipher = tx.formatString((userCipherNoFormatBypass).lower())
+ciphers = ["CSTW, T BX SABETYI HZ GMAEAY HZ GCABV MTHS WTGA XATHYAF. GSA MBG CBFH ZL HSA HABX MSZ GCWTH HSA BHZX BYE HZIAHSAF MTHS LFTGRS SBG MZFVAE ZJH HSA EAHBTWG ZL SZM TH MZFVG. GSA TG B OFTWWTBYH RSAXTGH BG MAWW BG B CSPGTRTGH BYE T BX SZCTYI GSA RBY GSAE GZXA WTISH ZY SZM WTVAWP TH TG HSBH HSBH ETA BWRSAXTGHAY RZJWE EAKAWZC B YJRWABF CZMAF IAYAFBHTZY GPGHAX LFZX HSA CFZRAGG.ZY HSA MBP OBRV, T CWBY HZ BWGZ KTGTH GZXA CAZCWA T VYZM TY YZFMBP. B YAM CZMAF GZJFRA MTWW OA ZL YZ JGA HZ HSA YBQTG MTHSZJH HSA FBM XBHAFTBWG LZF XBYJLBRHJFTYI, BYE B WZH ZL HSA XBUZF OBJNTHA GXAWHAFG TY AJFZCA BFA OBGAE TY HSA RZJYHFP. AKAY MTHSZJH B YAM GZJFRA ZL CZMAF HSA IAFXBY XTWTHBFP CWBYYAFG MTWW SBKA HSATF APA ZY GJCCWP WTYAG BYE HSA YZFMAITBY BWJXTYTJX RZXCBYTAG XJGH OA ZYA ZL HSATF CFTXA HBFIAHG. T HSZJISH T MZJWE EFZC TY BYE HFP HZ IAH B GAYGA ZL SZM MAWW EALAYEAE HSAGA CWBRAG BFA. HSAFA XBP BWFABEP SBKA OAAY BCCFZBRSAG LFZX IAFXBYP BG CBFH ZL HSATF BFXG OJTWE-JC BYE TH MZJWE OA IZZE HZ VYZM HSBH HZZ. TL HSA MZFGH SBCCAYG BYE YZFMBP TG TYKBEAE, HSAY T MBYH HZ SBKA GZXA BIAYHG BWFABEP AXOAEEAE TY HSA YBHTZYBW TYLFBGHFJRHJFA BYE MA YAAE HZ HSTYV BOZJH SZM MA MZJWE GARJFA RZXXJYTRBHTZYG TY BY ZRRJCTAE RZJYHFP. TL PZJ ZF HSA BIAYRP SBKA BYP RZYHBRHG HSAFA HSAY WAH XA VYZM. MTHS B WTHHWA WJRV T XBP AKAY IAH HZ GAA HSA YZFHSAFY WTISHG MSTWA T BX HSAFA."]
 
-# add a english word length probablity ( take average word length and compare it to that of the plaintext)
-# add a way to manuallly manipulate the key 
-# add matplot lib graphs for frequency analysis
-# add a higher key count for the iterative solver
-# rewrite frequency function
+#ciphers = jsonCipherIn() # comment out if just doing a single cipher
 
 while True: #Loops the entire program   
     #userCipher = formatString((input(cipherSolverInputFormat)).lower()) # ensures all ciphertext given to functions is correclty formatted
     #########################################################
     #           Calling different deciphering functions
     #########################################################
-    while keyIterations < keyIterations + 1:
-        if ceaserStart == True: #Ceaser shifts done 26 times
-            userKey = ceaser("abcdefghijklmnopqrstuvwxyz", 26 - ceaserShifts)
-            cipherOut = ceaser(userCipher, ceaserShifts)
-            ceaserShifts += 1
-        elif keyWordAlphabetStart == True: # Keyword keys done for all key words with the last letters being random
-            userKey = keyWordAlphabet(keyWordAlphabetIndex)
-            cipherOut = substitionKeyCipher(userCipher,userKey)
-            keyWordAlphabetIndex += 1
-        elif keyWordRandomStart == True: # Keyword keys done for all key words with the last letters being the alphabet
-            userKey = keyWordRandom(keyWordRandomIndex)
-            cipherOut = substitionKeyCipher(userCipher,userKey)
-        elif keyWordCeaserStart == True: # Keyword keys done for all key words with the last letters being the alphabet
-            userKey = keyWordCeaser(keyWordRandomIndex,shiftNumber)
-            cipherOut = substitionKeyCipher(userCipher,userKey)
-            if shiftNumber > 26:
-                shiftNumber = 1
-                keyWordRandomIndex += 1
-            shiftNumber += 1
-        elif frequencyKeyStart == True: #Key generated from advanced frequency analysis
-            userKey = frequencyKey(userCipher)
-            cipherOut = substitionKeyCipher(userCipher,userKey)
-            frequencyKeyIndex += 1
-        elif randomKeyStart == True: # Last resort random keys
-            userKey = randomKey()
-            cipherOut = substitionKeyCipher(userCipher,userKey)
-            randomKeyIndex += 1
-        elif iterativeSolvingStart == True: # Last resort random keys
-            userKey = iterativeSolving(userCipher,maxScoreIterative)
-            cipherOut = substitionKeyCipher(userCipher,userKey)
-            iterativeSolvingIndex += 1
-        keyIterations += 1
-        #########################################################
-        #                   Text statistics
-        #########################################################
-        ### Choose which scoring system you want to rank texts by:
-        
-        #relationScore = relationToEnglishFrequency(characterFrequencyProbability(cipherOut))
-        #indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
-        #chiSquaredText = round(chiSquaredStat(cipherOut),10)
-        ngramScore = ngramFitness(cipherOut)
-        
-        # if relationScore < 0.05 and relationScore > -0.05:
-        # if indexOfCoincidenceText < 1:
-        # if chiSquaredText < 200:
-        if ngramScore > -6000: # Change this number here the closer to 0 the less it will accept and print
-            indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
-            chiSquaredText = round(chiSquaredStat(cipherOut),10)
+    for userCipherNoFormat in ciphers:
+        userCipher = tx.formatString((userCipherNoFormat).lower())
+        while keyIterations < 10000: # how many key iterations you want to spend on one cipher
+            if ceaserStart == True: #Ceaser shifts done 26 times
+                userKey = ceaser("abcdefghijklmnopqrstuvwxyz", 26 - ceaserShifts)
+                cipherOut = ceaser(userCipher, ceaserShifts)
+                ceaserShifts += 1
+            elif keyWordAlphabetStart == True: # Keyword keys done for all key words with the last letters being random
+                userKey = keyWordAlphabet(keyWordAlphabetIndex)
+                cipherOut = substitionKeyCipher(userCipher,userKey)
+                keyWordAlphabetIndex += 1
+            elif keyWordRandomStart == True: # Keyword keys done for all key words with the last letters being the alphabet
+                userKey = keyWordRandom(keyWordRandomIndex)
+                cipherOut = substitionKeyCipher(userCipher,userKey)
+            elif keyWordCeaserStart == True: # Keyword keys done for all key words with the last letters being the alphabet
+                userKey = keyWordCeaser(keyWordRandomIndex,shiftNumber)
+                cipherOut = substitionKeyCipher(userCipher,userKey)
+                if shiftNumber > 26:
+                    shiftNumber = 1
+                    keyWordRandomIndex += 1
+                shiftNumber += 1
+            elif frequencyKeyStart == True: #Key generated from advanced frequency analysis
+                userKey = frequencyKey(userCipher)
+                cipherOut = substitionKeyCipher(userCipher,userKey)
+                frequencyKeyIndex += 1
+            elif randomKeyStart == True: # Last resort random keys
+                userKey = randomKey()
+                cipherOut = substitionKeyCipher(userCipher,userKey)
+                randomKeyIndex += 1
+            elif iterativeSolvingStart == True: # Iterative key solving -- most efficient
+                userKey = iterativeSolving(userCipher,maxScoreIterative)
+                cipherOut = substitionKeyCipher(userCipher,userKey)
+                iterativeSolvingIndex += 1
+            keyIterations += 1
+            #########################################################
+            #                   Text statistics
+            #########################################################
+            ### Choose which scoring system you want to rank texts by:
+
+            #relationScore = relationToEnglishFrequency(characterFrequencyProbability(cipherOut))
+            #indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
+            #chiSquaredText = round(chiSquaredStat(cipherOut),10)
             ngramScore = ngramFitness(cipherOut)
-            relationScore = relationToEnglishFrequency(characterFrequencyProbability(cipherOut))
-            readablePlaintext = defrag.words(cipherOut)
-            cipherOutKeyOut ='''
+
+            # if relationScore < 0.05 and relationScore > -0.05:
+            # if indexOfCoincidenceText < 1:
+            # if chiSquaredText < 200:
+            if ngramScore > -2000: # Change this number here the closer to 0 the less it will accept and print
+                indexOfCoincidenceText = round(indexOfCoincidence(cipherOut),10)
+                chiSquaredText = round(chiSquaredStat(cipherOut),10)
+                ngramScore = ngramFitness(cipherOut)
+                relationScore = relationToEnglishFrequency(characterFrequencyProbability(cipherOut))
+                readablePlaintext = defrag.words(cipherOut)
+                cipherOutKeyOut ='''
 ==================== PLAINTEXT: ====================
 {printedCipherOut}
 ======================= KEY: =======================
@@ -539,20 +565,26 @@ log Ngram Score             {printedNgramScore}
 Index Of Coincidence        {printedIoC}
 Chi Squared                 {printedChi}
 English Frequency Relation  {printedRelationScore}
-'''.format(printedCipherOut = readablePlaintext,printedUserKey = userKey,printedNgramScore = ngramScore,printedAttempts = keyIterations,printedIoC = indexOfCoincidenceText, printedChi = chiSquaredText,printedRelationScore = relationScore)
-            print(cipherOutKeyOut)
-            jsonData = { 
-                "readablePlaintext": readablePlaintext,
-                "plaintext": cipherOut,
-                "key": userKey,
-                "noOfKeys": keyIterations, 
-                "ngramScore": ngramScore, 
-                "IOC": indexOfCoincidenceText, 
-                "chi2": chiSquaredText, 
-                "frequencyRelation": relationScore,
-            }
-            os.chdir(outputFilesHere)
-            with open("output.txt", "a") as f:
-                f.write(json.dumps(jsonData)+"\n")
+'''.format(printedCipherOut = readablePlaintext,
+                printedUserKey = userKey,
+                printedNgramScore = ngramScore,
+                printedAttempts = keyIterations,
+                printedIoC = indexOfCoincidenceText, 
+                printedChi = chiSquaredText,
+                printedRelationScore = relationScore)
+                print(cipherOutKeyOut)
+                jsonData = { 
+                    "readablePlaintext": readablePlaintext,
+                    "plaintext": cipherOut,
+                    "key": userKey,
+                    "noOfKeys": keyIterations, 
+                    "ngramScore": ngramScore, 
+                    "IOC": indexOfCoincidenceText, 
+                    "chi2": chiSquaredText, 
+                    "frequencyRelation": relationScore,
+                }
+                os.chdir(outputFilesHere)
+                with open("output.txt", "a") as f:
+                    f.write(json.dumps(jsonData)+"\n")
 
                 

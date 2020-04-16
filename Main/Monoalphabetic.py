@@ -60,6 +60,8 @@ englishLetterFrequencySorted = [12.702,9.056,8.167,7.507,6.966,6.749,6.327,6.094
 
 clear = lambda: os.system("cls") #Clears the console
 
+keyIterations = 0
+
 def loadEnglishNgram(): #loads a ngram file to a ditionary
         os.chdir(loadEnglishNgramDirectory) #path of ngram file to load make sure .txt file is in this folder MAKE SURE NGRAMS ARE LOWER CASE
         quadramDitionaryEnglish = {}
@@ -156,34 +158,19 @@ def substitionKeyCipher(userCipherText,userKey): #maps a ciphertext to plaintext
         textPerm += 1
     return "".join(tx.convertToCHARACTER(switchedCipher))
 
-def characterFrequency(encryptedText):
-    frequencies = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-    letter = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
-    for i in encryptedText: #iterates through each character in encrypted_cipher text
-        index = 0 #element index set at 0 #WHEN data at index (character in encrypted text) does not equal first element #AND the alphabet index is less than 25, (i.e all letters encompassed only):
-        while i != letter[index] and index < 25: #THEN increment pos index ++, avoids indexing greater than alphabet list
-           if index <= 24:
-               index += 1
-        else: #increments relative index dependant upon character contained within i
-            if i == letter[index]:
-                frequencies[index] = frequencies[index] + 1 #if character in encrypted_text is a space,data @ alphabet[26] ++:       
-    return frequencies
+def characterFrequency(cipherText):
+    frequency = []
+    for letter in alphabetCHARACTER: # Iterates through the alphabet 
+        total = re.findall(letter,cipherText) # Find each of the occurances of a letter and puts them into list total
+        frequency.append(len(total)) # finds the length of the list and appends it to another list 
+    return frequency
 
-def characterFrequencyProbability(encryptedText):
-    frequencies = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-    letter = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
+
+def characterFrequencyProbability(cipherText):
     probability = []
-    for i in encryptedText: #iterates through each character in encrypted_cipher text
-        index = 0 #element index set at 0 #WHEN data at index (character in encrypted text) does not equal first element #AND the alphabet index is less than 25, (i.e all letters encompassed only):
-        while i != letter[index] and index < 25: #THEN increment pos index ++, avoids indexing greater than alphabet list
-           if index <= 24:
-               index += 1
-        else: #increments relative index dependant upon character contained within i
-            if i == letter[index]:
-                frequencies[index] = frequencies[index] + 1 #if character in encrypted_text is a space,data @ alphabet[26] ++:
-    for n in frequencies:
-        x = round((n / len(encryptedText)),5)
-        probability.append(x)
+    frequency = characterFrequency(cipherText)
+    for n in frequency:
+        probability.append(round((n / len(cipherText)),5))
     return probability
 
 def indexOfCoincidence(text): #String input to calculate the Index of Coincidence of a text
@@ -429,6 +416,7 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
     return "".join(tx.convertToCHARACTER(englishIndexOrderList)) #converts the ASCII index to a plaintext string key with 26 characters
 
 def iterativeSolving(cipherText,maxScore):
+    global keyIterations
     parentKey = list(randomKey()) #parentKey = randomKey()#frequencyKey(userCipherText) #parent Key is generated using frequency analysis
     deciphered = substitionKeyCipher(cipherText,"".join(parentKey))
     parentScore = ngramFitness(deciphered)
@@ -447,6 +435,7 @@ def iterativeSolving(cipherText,maxScore):
             parentKey = childKey[:]
             count = 0
         count += 1
+        keyIterations += 1
     # keep track of best score seen so far
     if parentScore > maxScore:
         maxScore = parentScore
@@ -457,7 +446,7 @@ def iterativeSolving(cipherText,maxScore):
 #==============================================================================================================================================================
 
 userKey = "abcdefghijklmnopqrstuvwxyz" #Sets a defult user key ~~~~WARNING~~~~ Wont show error if there is not a key generated as this one will take over ~~~~WARNING~~~~
-keyIterations = keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = ceaserShifts = iterativeSolvingIndex = shiftNumber = REPLACEME123 = 0
+keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = ceaserShifts = iterativeSolvingIndex = shiftNumber = REPLACEME123 = 0
 maxScoreIterative = -99e9
 
 #########  Turn each function on or off  #########
@@ -474,8 +463,14 @@ ceaserStart = False
 randomKeyStart = False
 
 # DECLARE USERCIPHER HERE AND COMMENT OUT THE USER INPUT IF YOU ARE WORKING ON THE SAME CIPHER
-userCipherNoFormatBypass = "GLKKF, J RGXRPXU BTQ QGX ELQXYQ FBT LNPXU VX LOBTQ. J QGJYP JQ VJDGQ OX KXSLQXU QB L SXRQTKX RBRPRKBAQ UXSJWXKXU LQ QGX JYNQJQTQX BA XSXRQKJRLS XYDJYXXKN BY LEKJS QZXYQF QGJKU YJYXQXXY QGJKQF NJC. QGX QBEJR ZLN QGX QKLYNVTQLQJBY BA VLQQXK OF GJDG XYXKDF ELKQJRSXN LYU KLUJLQJBYN. DJWXY QGX SLOXS BY QGX GJYUXYOTKD XYWXSBEX J QGJYP QGX ABSSBZJYD XCQKLRQ JN ELKQJRTSLKSF JYQXKXNQJYD: JY QGX RLNX BA YTRSXLK QKLYNVTQLQJBYN, JQ NXXVN QGLQ QGX SBNN BA VLNN JN EKXRJNXSF XHTLS QB QGX JYRKXLNX JY QGX PJYXQJR XYXKDF QGLQ GLN QLPXY ESLRX. QGJN DJWXN L NQKJPJYD EKBBA BA QGX VBUXKY EGFNJRLS SLZ QGLQ VLNN LYU XYXKDF LKX XHTJWLSXYQ. JY YJYXQXXY QGJKQF QZB RGLUZJRP UJNRBWXKXU QGX YXTQKBY, L YXZ QFEX BA LQBVJR ELKQJRSX ZGJRG GLN YB XSXRQKJR RGLKDX. JQ UBXN YBQ QGXKXABKX JYQXKLRQ ZJQG BQGXK XSXRQKBYN LYU EKBUTRXN YB JBYJNLQJBY ZGXY ELNNJYD QGKBTDG L DLN. JQ JN BA BTQNQLYUJYD JVEBKQLYRX OXRLTNX BA JQN EBZXK QB EKBUTRX QKLYNVTQLQJBYN. QGXKX JN SJQQSX GBEX QGLQ QGJN EKBRXNN RLY OX TNXU BY LY XYDJYXXKJYD NRLSX QB RBYWXKQ VLNN JYQB XYXKDF. NB ALK, BTK SLOBKLQBKF XCEXKJVXYQN EKBUTRX QGX RBYWXKNX KXNTSQ. QGXBKF JYUJRLQXN QGLQ LQ QXVEXKLQTKXN XHTLS QB QGBNX BA QGX JYQXKJBK BA QGX NTY BK NQLKN, JQ VJDGQ OX EBNNJOSX QB RBYWXKQ QGX JYXCEXYNJWX NJVESX XSXVXYQN QB QGX VBKX WLSTLOSX GXLWJXK RBVOJYLQJBYN, OTQ EKLRQJRLSSF, QGXKX JN YB VXQGBU BA EKBUTRJYD QGX XAAXRQN ABKVXKSF LQQKJOTQXU QB QGX EGJSBNBEGXKN NQBYX."
+userCipherNoFormatBypass = "CSTW, T BX SABETYI HZ GMAEAY HZ GCABV MTHS WTGA XATHYAF. GSA MBG CBFH ZL HSA HABX MSZ GCWTH HSA BHZX BYE HZIAHSAF MTHS LFTGRS SBG MZFVAE ZJH HSA EAHBTWG ZL SZM TH MZFVG. GSA TG B OFTWWTBYH RSAXTGH BG MAWW BG B CSPGTRTGH BYE T BX SZCTYI GSA RBY GSAE GZXA WTISH ZY SZM WTVAWP TH TG HSBH HSBH ETA BWRSAXTGHAY RZJWE EAKAWZC B YJRWABF CZMAF IAYAFBHTZY GPGHAX LFZX HSA CFZRAGG.ZY HSA MBP OBRV, T CWBY HZ BWGZ KTGTH GZXA CAZCWA T VYZM TY YZFMBP. B YAM CZMAF GZJFRA MTWW OA ZL YZ JGA HZ HSA YBQTG MTHSZJH HSA FBM XBHAFTBWG LZF XBYJLBRHJFTYI, BYE B WZH ZL HSA XBUZF OBJNTHA GXAWHAFG TY AJFZCA BFA OBGAE TY HSA RZJYHFP. AKAY MTHSZJH B YAM GZJFRA ZL CZMAF HSA IAFXBY XTWTHBFP CWBYYAFG MTWW SBKA HSATF APA ZY GJCCWP WTYAG BYE HSA YZFMAITBY BWJXTYTJX RZXCBYTAG XJGH OA ZYA ZL HSATF CFTXA HBFIAHG. T HSZJISH T MZJWE EFZC TY BYE HFP HZ IAH B GAYGA ZL SZM MAWW EALAYEAE HSAGA CWBRAG BFA. HSAFA XBP BWFABEP SBKA OAAY BCCFZBRSAG LFZX IAFXBYP BG CBFH ZL HSATF BFXG OJTWE-JC BYE TH MZJWE OA IZZE HZ VYZM HSBH HZZ. TL HSA MZFGH SBCCAYG BYE YZFMBP TG TYKBEAE, HSAY T MBYH HZ SBKA GZXA BIAYHG BWFABEP AXOAEEAE TY HSA YBHTZYBW TYLFBGHFJRHJFA BYE MA YAAE HZ HSTYV BOZJH SZM MA MZJWE GARJFA RZXXJYTRBHTZYG TY BY ZRRJCTAE RZJYHFP. TL PZJ ZF HSA BIAYRP SBKA BYP RZYHBRHG HSAFA HSAY WAH XA VYZM. MTHS B WTHHWA WJRV T XBP AKAY IAH HZ GAA HSA YZFHSAFY WTISHG MSTWA T BX HSAFA."
 userCipher = tx.formatString((userCipherNoFormatBypass).lower())
+
+# add a english word length probablity ( take average word length and compare it to that of the plaintext)
+# add a way to manuallly manipulate the key 
+# add matplot lib graphs for frequency analysis
+# add a higher key count for the iterative solver
+# rewrite frequency function
 
 while True: #Loops the entire program   
     #userCipher = formatString((input(cipherSolverInputFormat)).lower()) # ensures all ciphertext given to functions is correclty formatted

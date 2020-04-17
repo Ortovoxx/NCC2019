@@ -264,7 +264,9 @@ def relationToEnglishFrequency(cipherTextFrequency): # Finds the difference betw
     score = sum(lists)
     return round(score,10)
 
-# Transposition specific functions
+#==============================================================================================================================================================
+#                                                            CIPHER SOLVING - EDITABLE
+#==============================================================================================================================================================
 
 def addPadding(cipher,key): # pads a transposition ciphertext with a padding character of X
     cipher = list(cipher)
@@ -275,30 +277,29 @@ def addPadding(cipher,key): # pads a transposition ciphertext with a padding cha
     else:
         addPad = 0
         while addPad <= remainder: # Loops round the cipher text array adding a padding character each time
-            cipher.append("x") # The padding character
+            cipher.append("x") #~~~~ The padding character ~~~~#
             addPad+=1
         return "".join(cipher)
 
-def textBlock(textIN): #Takes a plaintext string input and returns a list with a sublist of blocked characters
-    n = 3 #The size of the text blocks
-    text = list(textIN)
+def textBlock(textIn,blockSize): #Takes a plaintext string input and returns a list with a sublist of blocked characters
+    text = list(textIn)
     length = len(text)
     blockedText = []
-    remainder = length % n
+    remainder = length % blockSize
     index = addPad = 0
     if remainder != 0:
         while addPad <= remainder: # Loops round the cipher text array adding a padding character each time
             text.append("x") # The padding character
-            addPad+=1
+            addPad += 1
     while index < length:
         blocked = []
         blocking = 0
-        while blocking < n:
+        while blocking < blockSize:
             add = text[blocking + index]
             blocked.append(add)
-            blocking+=1
+            blocking += 1
         blockedText.append("".join(blocked))
-        index+=n
+        index += blockSize
     return blockedText
 
 def textReplace(textBlockIN,find,replace):#Takes an array with strings of blocked characters and repalces them with others
@@ -308,22 +309,19 @@ def textReplace(textBlockIN,find,replace):#Takes an array with strings of blocke
         textBlockOUT.append(new)
     return textBlockOUT
 
-def factors(textIN):
-    text = list(textIN)
-    length = len(text)
+def factors(textIn): # Finds the factors of the length of a ciphertext
+    length = len(list(textIn))
     factorList = [length]
     for i in range(1,length):
         if length % i == 0:
             factorList.append(int(i))
-    #print(sorted(factorList))
-    #print(length)
     return sorted(factorList)
-    
+
 #==============================================================================================================================================================
-#                                                            CIPHER SOLVING - EDITABLE
+#                                                               TRANSPOSITION SOLVERS
 #==============================================================================================================================================================
 
-def transpositionVertical(userCipherText,keyLength): # Transposes a ciphertext into a list of *keyLength* columns of equal length writes abcdef as a colum of abc then another colum of def. Vertical
+def readInVertical(userCipherText,keyLength): # Transposes a ciphertext into a list of *keyLength* columns of equal length writes abcdef as a colum of abc then another colum of def. Vertical
     columnLength = len(userCipherText) / keyLength # Finds how long each column needs to be << Should be integer if float then there will be unequal columns... padding needed
     cipher = list(userCipherText) 
     noColumns = index = 0
@@ -339,7 +337,7 @@ def transpositionVertical(userCipherText,keyLength): # Transposes a ciphertext i
         cipherShiftValue += 1
     return transposed # List with lists inside. Effectively just split up the ciphertext into *keylength* equal parts
 
-def transpositionHorizontal(userCipherText,keyLength): # Transposes a ciphertext into a list of *keyLength* columns of equal length writes abcdef as a row of abc then another row of def. Horizontal
+def readInHorizontal(userCipherText,keyLength): # Transposes a ciphertext into a list of *keyLength* columns of equal length writes abcdef as a row of abc then another row of def. Horizontal
     columnLength = len(userCipherText) / keyLength # Finds how long each column needs to be << Should be integer if float then there will be unequal columns... padding needed
     cipher = list(userCipherText) 
     noRows = index = 0
@@ -355,8 +353,22 @@ def transpositionHorizontal(userCipherText,keyLength): # Transposes a ciphertext
         cipherShiftValue += 1
     return transposed
 
+userCipher = "OOHSEERRWCOITUEIEHPIELTINFUTVEOGNRTWDENIIETIGCOATOTIETRCLTLRSESEBHCEOTEOTDONHNETTECNSNCVTAITTUEEUITLAUOTRYDHTLHNURCRITIOAFCMADVSESATIJSTTHNBDOANTTEEEAETHAHILRGEIEEGYNDFTOFREOSKNAHSRLELSTDOODAFLIIIAARNHELBYEEHLHLGHSCTHTBOIUNPTELTRLTESMSIGPTDAEECRAEUDCOLONSEGOFACVALMTBLJNBOHIOAIRNHTMPESRAFABARDGMOEXTESRIGHLSEDERPNGRTEIDEBOIOWRSOILTASRNJRHMTFOTTGNSLHCDSHITRTESLIHNCIWNOPRYEATLSIETEUOYAEEOTGQFNTLSMNEFNRABLWCMUEYHIREEIDEDUTTNNTAOSSNLRNLARBAHNHOERNHDTLOEMDLNNQFIHEECIRFAUARMAPAOEREMEEHSSGSPVRYEDETIIRTEOLYESHSIWCKHNTCOMHSFIOICELEICOADWLOUTCBHEORRATCPELREORPHAFAOETSNFITRSIETYNMIAENTHILAOVTMHHULICAPEIRPELHEOTFAFDOLRSHHYHAREQEHDFPIYTHOISTSOJRMTRUNEBHUHIRLENTLOEILSTICEAYTUNNITNNEAOTNEIGNEISIRLMPAHHSETDCRHNHARTHMWNFRFCSIDIEOIDIEEAVOEROELSEDDHRTTTTSEEHNNSIRIDPNOIIEPUORUEHDETTEOIGUTUYTOODIEEODCHREHHSEAOFMLEHWVSRTRHTSENANIPTVSRISHOEDRELTMTDTOUIDEYERATSERRLNHEGMAEELSETSAIDTLTETDOIHLFPRGAECEOPLHNTAOIEAEMVNPHOSPTIAPLNGSIERTCOEHOPHLTUDLFEKDSCEGEIFARTTLTRUTEPTENAIRCAITEAUHEFSEABIDATTTMUUMIIOTVLPPGYCRTOEOCSAOVRRPAIEIALAAQNEVFNOTRTNRIMFVAGINFRFRMMBNEUUAUTACNDATILMURCRDCOTALGNSAOYRNLHLMETBRDTLRIMFTNTGNTTUTEOEYOHIBWCAEDHEEECNTEUAYIRTONNCIITECLTEHETPTRPUEHMHLNROEYANSEVRDCALSTTUBEUSCTPESGONEHMNCOEIEDLSHWUCLNTAIEEIASITIEUTSGOAFCEESEAEULHVHEFEHHAARONIOFAEORSAOEIIAUNAISTLOTHUITAOTTNUNOPNRSENEIHONJIPYGTPLBEHOEOEOSSTNHXHTCEETRBAIILATYTIDTNMBEUEYFXBPSFLSEEROEIIEASEHYEIOEILADAOFSESETSFRONRNRNTEVUOOEYOISIHMUNEAECSUEOTLEJAEENELEBEGDENDOGSOEKMHRDATRTEYHNEDEHNROVQRRWOMROAACLOHACNHPGIMGUEBSTITCITCRLNTIHIPEUMUSASOEKAAIEMLTNCODSAERNHHNLEURGOAUIRTHGVWBSEARHHOCNLIOSRTOFMHHETETTSLTCEOTCODLIMNEAEHTVYWBSISSSEHHAPLSMIRHEAFASEOTIRIRTTLEAYHTUDREDTTFSIBNOITATSSEODHEPAXLAPFRCVSNIRAEDHROOSMOYPGRMECHWSSEAHTRHCCRRFLEPNMEVEENESAWEEEUESSRDTTHRDOISTMDIEHRNLBUVOOHXEDWESODARNNVOEINOWVASTTIOLOADLTALNHTEUNEETOTPOTSDMRRLTPIETSOWCNDHAANXFIRNSEHUARTTNTRCMNHAWVICTHGCBCIAIUTDVOITSAUKAENCEHDUAPAEEOOFMITCRIILTSERSLIATCIHRDOCEGALTSCINDLAORPTDDHTTOEGESOFGICOIIOVFGMETRISISYIDTARLERRGISEUULCMEETNITLAETUSBTITJMTYOFNSATEEIEAONHSTTELAOTFTNYEHWTOSASOCITTAEAOLPLEOCHLTRICSPNHGUBTOIEODITTIVRIIOORRPEOOMQNBRTSHUSTORRTEIAECLTIOTATEFNRTAEHDNRMUATTUBDIRDTFERSTROEIITSHEDOTREIMTMHEOOHUEIDGTHBMAUCTEIOTHEALOAPAEIESMSLADENKFTPOICPIHREAFCOMHLRLIEFFAYNDURSDAYDLDOAHGPERIRNRSGAISANFDOOEULEGICRRNIOLIILFRARRENIAMAESETNGUNAIOORTOIRSTSFUEOBHARSRIEDANNDDCHLIST"
+userCipher = "HTHESTHHRASWRASCSCRSSCWWWESWWEIITAIIT"
 
+x = readInHorizontal(userCipher,7)
 
+print(x)
+input("")
+for i in x:
+    print(i)
+input("")
+
+def readOffVertical():
+    pass
+
+def readOffHorizontal():
+    pass
 
 def columunlarSolve(array):
     arrayN=[]
@@ -426,7 +438,7 @@ while True: #Loops the entire program
     #########################################################
     while keyIterations < keyIterations + 1:
         if columunlarStart == True: #Iterative solver
-            cipherOut = columunlarSolve(userCipher, maxScoreIterative)
+            cipherOut = ""#columunlarSolve(userCipher)
             columularSolvingIndex += 1
         keyIterations += 1
         #########################################################

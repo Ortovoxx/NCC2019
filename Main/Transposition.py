@@ -410,8 +410,6 @@ input("")
 
 
 
-def transpositionSolver():
-    pass
 
 
 

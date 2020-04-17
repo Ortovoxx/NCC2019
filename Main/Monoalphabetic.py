@@ -496,7 +496,7 @@ ciphers = ["CSTW, T BX SABETYI HZ GMAEAY HZ GCABV MTHS WTGA XATHYAF. GSA MBG CBF
 
 #ciphers = jsonCipherIn() # comment out if just doing a single cipher
 
-while True: #Loops the entire program   
+while True == False: #Loops the entire program   
     #userCipher = formatString((input(cipherSolverInputFormat)).lower()) # ensures all ciphertext given to functions is correclty formatted
     #########################################################
     #           Calling different deciphering functions

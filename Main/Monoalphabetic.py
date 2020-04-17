@@ -418,8 +418,9 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
         convertASCIIIndex += 1
     return "".join(tx.convertToCHARACTER(englishIndexOrderList)) #converts the ASCII index to a plaintext string key with 26 characters
 
-def iterativeSolving(cipherText,maxScore):
+def iterativeSolving(cipherText): # Hill climb function which iterates slowly through keys until a good match is found
     global keyIterations
+    maxScore = -99e9
     parentKey = list(randomKey()) #parentKey = randomKey()#frequencyKey(userCipherText) #parent Key is generated using frequency analysis
     deciphered = substitionKeyCipher(cipherText,"".join(parentKey))
     parentScore = ngramFitness(deciphered)
@@ -468,7 +469,6 @@ def manualKeySwitch(cipherText): # Allows users to manurally switch letters arou
 
 userKey = "abcdefghijklmnopqrstuvwxyz" #Sets a defult user key ~~~~WARNING~~~~ Wont show error if there is not a key generated as this one will take over ~~~~WARNING~~~~
 keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = ceaserShifts = iterativeSolvingIndex = shiftNumber = REPLACEME123 = 0
-maxScoreIterative = -99e9
 
 #########  Turn each function on or off  #########
 
@@ -523,7 +523,7 @@ while True: #Loops the entire program
                 cipherOut = substitionKeyCipher(userCipher,userKey)
                 randomKeyIndex += 1
             elif iterativeSolvingStart == True: # Iterative key solving -- most efficient
-                userKey = iterativeSolving(userCipher,maxScoreIterative)
+                userKey = iterativeSolving(userCipher)
                 cipherOut = substitionKeyCipher(userCipher,userKey)
                 iterativeSolvingIndex += 1
             keyIterations += 1

@@ -323,27 +323,42 @@ def factors(textIN):
 #                                                            CIPHER SOLVING - EDITABLE
 #==============================================================================================================================================================
 
-def transposition(userCipherText):
-    keyLength = 7
-    charCount = 2303
-    colLen = charCount / keyLength
-    cipher = list(userCipherText)
-    perms = 0
-    index = 0
-    itera = 1
-    arrayL = []
-    while perms < keyLength:
-        array = []
-        while index < ((colLen*itera)):
-            new = cipher[index]
-            array.append(new)
-            index+=1
-        arrayL.append(array)
-        perms+=1
-        itera+=1
-    return arrayL
+def transpositionVertical(userCipherText,keyLength): # Transposes a ciphertext into a list of *keyLength* columns of equal length writes abcdef as a colum of abc then another colum of def. Vertical
+    columnLength = len(userCipherText) / keyLength # Finds how long each column needs to be << Should be integer if float then there will be unequal columns... padding needed
+    cipher = list(userCipherText) 
+    noColumns = index = 0
+    cipherShiftValue = 1
+    transposed = []
+    while noColumns < keyLength: # Iterates through entire ciphertext
+        column = []
+        while index < (columnLength * cipherShiftValue): # Iterates through each individual column and * by cipherShiftValue to ensure the previous letters are not counted
+            column.append(cipher[index])
+            index += 1
+        transposed.append(column)
+        noColumns += 1
+        cipherShiftValue += 1
+    return transposed # List with lists inside. Effectively just split up the ciphertext into *keylength* equal parts
 
-def solve(array):
+def transpositionHorizontal(userCipherText,keyLength): # Transposes a ciphertext into a list of *keyLength* columns of equal length writes abcdef as a row of abc then another row of def. Horizontal
+    columnLength = len(userCipherText) / keyLength # Finds how long each column needs to be << Should be integer if float then there will be unequal columns... padding needed
+    cipher = list(userCipherText) 
+    noRows = index = 0
+    cipherShiftValue = 1
+    transposed = []
+    while noRows < columnLength: # Iterates through entire ciphertext
+        row = []
+        while index < (keyLength * cipherShiftValue): # Iterates through each individual row and * by cipherShiftValue to ensure the previous letters are not counted
+            row.append(cipher[index])
+            index += 1
+        transposed.append(row)
+        noRows += 1
+        cipherShiftValue += 1
+    return transposed
+
+
+
+
+def columunlarSolve(array):
     arrayN=[]
     keyLength = 7
     charCount = 2303
@@ -393,13 +408,12 @@ def solve(array):
 #                                                   USER INPUT / OUTPUT                   MAIN PROGRAM
 #==============================================================================================================================================================
 
-keyIterations = keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = ceaserShifts = iterativeSolvingIndex = shiftNumber = REPLACEME123 = 0
-maxScoreIterative = -99e9
+keyIterations = columularSolvingIndex = REPLACEME123 = 0
 
 #########  Turn each function on or off  #########
 
 # KEY WORD:
-iterativeStart = True
+columunlarStart = True
 
 # DECLARE USERCIPHER HERE AND COMMENT OUT THE USER INPUT IF YOU ARE WORKING ON THE SAME CIPHER
 userCipherNoFormatBypass = "OOHSEERRWCOITUEIEHPIELTINFUTVEOGNRTWDENIIETIGCOATOTIETRCLTLRSESEBHCEOTEOTDONHNETTECNSNCVTAITTUEEUITLAUOTRYDHTLHNURCRITIOAFCMADVSESATIJSTTHNBDOANTTEEEAETHAHILRGEIEEGYNDFTOFREOSKNAHSRLELSTDOODAFLIIIAARNHELBYEEHLHLGHSCTHTBOIUNPTELTRLTESMSIGPTDAEECRAEUDCOLONSEGOFACVALMTBLJNBOHIOAIRNHTMPESRAFABARDGMOEXTESRIGHLSEDERPNGRTEIDEBOIOWRSOILTASRNJRHMTFOTTGNSLHCDSHITRTESLIHNCIWNOPRYEATLSIETEUOYAEEOTGQFNTLSMNEFNRABLWCMUEYHIREEIDEDUTTNNTAOSSNLRNLARBAHNHOERNHDTLOEMDLNNQFIHEECIRFAUARMAPAOEREMEEHSSGSPVRYEDETIIRTEOLYESHSIWCKHNTCOMHSFIOICELEICOADWLOUTCBHEORRATCPELREORPHAFAOETSNFITRSIETYNMIAENTHILAOVTMHHULICAPEIRPELHEOTFAFDOLRSHHYHAREQEHDFPIYTHOISTSOJRMTRUNEBHUHIRLENTLOEILSTICEAYTUNNITNNEAOTNEIGNEISIRLMPAHHSETDCRHNHARTHMWNFRFCSIDIEOIDIEEAVOEROELSEDDHRTTTTSEEHNNSIRIDPNOIIEPUORUEHDETTEOIGUTUYTOODIEEODCHREHHSEAOFMLEHWVSRTRHTSENANIPTVSRISHOEDRELTMTDTOUIDEYERATSERRLNHEGMAEELSETSAIDTLTETDOIHLFPRGAECEOPLHNTAOIEAEMVNPHOSPTIAPLNGSIERTCOEHOPHLTUDLFEKDSCEGEIFARTTLTRUTEPTENAIRCAITEAUHEFSEABIDATTTMUUMIIOTVLPPGYCRTOEOCSAOVRRPAIEIALAAQNEVFNOTRTNRIMFVAGINFRFRMMBNEUUAUTACNDATILMURCRDCOTALGNSAOYRNLHLMETBRDTLRIMFTNTGNTTUTEOEYOHIBWCAEDHEEECNTEUAYIRTONNCIITECLTEHETPTRPUEHMHLNROEYANSEVRDCALSTTUBEUSCTPESGONEHMNCOEIEDLSHWUCLNTAIEEIASITIEUTSGOAFCEESEAEULHVHEFEHHAARONIOFAEORSAOEIIAUNAISTLOTHUITAOTTNUNOPNRSENEIHONJIPYGTPLBEHOEOEOSSTNHXHTCEETRBAIILATYTIDTNMBEUEYFXBPSFLSEEROEIIEASEHYEIOEILADAOFSESETSFRONRNRNTEVUOOEYOISIHMUNEAECSUEOTLEJAEENELEBEGDENDOGSOEKMHRDATRTEYHNEDEHNROVQRRWOMROAACLOHACNHPGIMGUEBSTITCITCRLNTIHIPEUMUSASOEKAAIEMLTNCODSAERNHHNLEURGOAUIRTHGVWBSEARHHOCNLIOSRTOFMHHETETTSLTCEOTCODLIMNEAEHTVYWBSISSSEHHAPLSMIRHEAFASEOTIRIRTTLEAYHTUDREDTTFSIBNOITATSSEODHEPAXLAPFRCVSNIRAEDHROOSMOYPGRMECHWSSEAHTRHCCRRFLEPNMEVEENESAWEEEUESSRDTTHRDOISTMDIEHRNLBUVOOHXEDWESODARNNVOEINOWVASTTIOLOADLTALNHTEUNEETOTPOTSDMRRLTPIETSOWCNDHAANXFIRNSEHUARTTNTRCMNHAWVICTHGCBCIAIUTDVOITSAUKAENCEHDUAPAEEOOFMITCRIILTSERSLIATCIHRDOCEGALTSCINDLAORPTDDHTTOEGESOFGICOIIOVFGMETRISISYIDTARLERRGISEUULCMEETNITLAETUSBTITJMTYOFNSATEEIEAONHSTTELAOTFTNYEHWTOSASOCITTAEAOLPLEOCHLTRICSPNHGUBTOIEODITTIVRIIOORRPEOOMQNBRTSHUSTORRTEIAECLTIOTATEFNRTAEHDNRMUATTUBDIRDTFERSTROEIITSHEDOTREIMTMHEOOHUEIDGTHBMAUCTEIOTHEALOAPAEIESMSLADENKFTPOICPIHREAFCOMHLRLIEFFAYNDURSDAYDLDOAHGPERIRNRSGAISANFDOOEULEGICRRNIOLIILFRARRENIAMAESETNGUNAIOORTOIRSTSFUEOBHARSRIEDANNDDCHLIST"
@@ -411,9 +425,9 @@ while True: #Loops the entire program
     #           Calling different deciphering functions
     #########################################################
     while keyIterations < keyIterations + 1:
-        if iterativeStart == True: #Iterative solver
-            cipherOut = iterativeSolving(userCipher, maxScoreIterative)
-            iterativeSolvingIndex += 1
+        if columunlarStart == True: #Iterative solver
+            cipherOut = columunlarSolve(userCipher, maxScoreIterative)
+            columularSolvingIndex += 1
         keyIterations += 1
         #########################################################
         #                   Text statistics

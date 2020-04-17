@@ -474,7 +474,7 @@ English Frequency Relation  {printedRelationScore}
             jsonData = { 
                 "readablePlaintext": readablePlaintext,
                 "plaintext": cipherOut,
-                "key": userKey,
+                "keyLength": keyLength,
                 "noOfKeys": keyIterations, 
                 "ngramScore": ngramScore, 
                 "IOC": indexOfCoincidenceText, 
@@ -482,7 +482,7 @@ English Frequency Relation  {printedRelationScore}
                 "frequencyRelation": relationScore,
             }
             os.chdir(outputFilesHere)
-            with open("output.txt", "a") as f:
+            with open("outputTransposition.txt", "a") as f:
                 f.write(json.dumps(jsonData)+"\n")
 
                 

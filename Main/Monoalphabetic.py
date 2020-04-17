@@ -584,7 +584,7 @@ English Frequency Relation  {printedRelationScore}
                     "frequencyRelation": relationScore,
                 }
                 os.chdir(outputFilesHere)
-                with open("output.txt", "a") as f:
+                with open("outputMonoalphabetic.txt", "a") as f:
                     f.write(json.dumps(jsonData)+"\n")
 
                 

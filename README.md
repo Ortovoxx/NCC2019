@@ -1,28 +1,16 @@
 # National Cipher Challenge 2019
-### Ipswich School Team
-##### Software used for the National Cipher Challenge 2019 - Ipswich School
+##### Programs and tools used for the National Cipher Challenge
 
 ### BUGS:
-1. No current bugs
+- No currently known bugs
 
-### TODO:
-- [ ] Monoalphabetic Solver
-    - [ ] Functions to specifically decrypt common cipher algorithms
-- [ ] Transposition Solver
-- [ ] Polyalphabetic Solver
-- [ ] Improve ngram fitness efficiency
-- [ ] Find some typical log probabilities for english texts and for texts with different ciphers put through them to get a rough idea of ngram scores
-- [ ] Add a english word segmenter
-- [ ] Add functions to different files then import them into main program
-
-
-### Variable naming conventions
-- Please try to keep global variables to a minimum
-- Variables should look like this: variableNameFirst NOT Variable_Name_First
-
-### Please do this!
-- Before running the code change the directories to YOUR specific directory to find the NCC2019 folder
-- When adding new features all functions must take lower case strings as an input and output, unless there needs to be an exception
+### Features
+- Monoalphabetic brute force solver
+- Transposition brute force solver
+- .txt file JSON input and output for bulk solving and brute forcing
+- Various classical cipher algorithms such as the ceaser and keyed ceaser ciphers as well as the columnar transposition cipher
+- A plethora of highly customisable text manipulation functions
 
 #### Useful Links
 Getting started with github [here](https://guides.github.com/activities/hello-world/)
+Learn about [cryptography](http://practicalcryptography.com/)

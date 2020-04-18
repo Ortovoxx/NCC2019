@@ -72,6 +72,42 @@ ngramDitionaryEnglish = loadEnglishNgram()
 #                                                       Main command line functions
 #==============================================================================================================================================================
 
+def help():
+    print('''
+------------[CIPHER COMMAND HELP]-------------
+
+-- General useage commands
+
+    start // Starts solving
+    cipher.style [cipher type] // Used to change the style of cipher between the 3 main types
+        > cipher.style monoalphabetic
+    
+
+-- Monoalphabetic commands
+
+    mono.solve [cipher solving method] // Selects between the different monoalphabetic cipher types
+    
+
+-- Transposition commands
+
+-- Polyalphabetic commands
+
+-- Input and output commands
+
+    io.createOutput [output file name] // Creates a new text output file 
+    io.createInput [input file name] // Creates a new text input file
+    io.outputType [output structure type] // Sets the output type between: plain, JSON, array, [JSON output field]ONLY
+        > io.outputType JSON
+        > io.outputType keyONLY
+    io.deleteFile [i/o file name] // Deletes a specific i/o file
+
+-- Technical commands
+
+-- Config commands
+
+----------------------------------------------''')
+    
+
 def mainInput(): # returns a list with all the input commands
     inp = str(input("> ")).split()
     if len(inp) < 2:
@@ -85,15 +121,16 @@ def inputSmoothing(inp):
     if inp != str:
         print("no")
 
+print("Cipher Challenge command interface version 1")
+while 1:
+    inp = mainInput()
 
-inp = mainInput()
-    
-if inp[0] == "cipher.style":
-    if inp[1] == "monoalphabetic":
-        print("Cipher style change to monoalphabetic")
-    if inp[1] == "transposition":
-        print("Cipher style change to transposition")
-    if inp[1] == "polyalphabetic":
-        print("Cipher style change to polyalphabetic")
-elif 1 == 2:
-    pass
+    if inp[0] == "cipher.style":
+        if inp[1] == "monoalphabetic":
+            print("Cipher style change to monoalphabetic")
+        if inp[1] == "transposition":
+            print("Cipher style change to transposition")
+        if inp[1] == "polyalphabetic":
+            print("Cipher style change to polyalphabetic")
+    elif 1 == 2:
+        pass

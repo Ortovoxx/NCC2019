@@ -42,12 +42,6 @@ import sys
 #Custom modules to import
 import textManipulation as tx
 
-#Menu and input formats
-cipherSolverInputFormat = '''*************** CIPHERTEXT: **************
-'''
-textManipulationInputFormat = '''*********** INPUT YOUR TEXT: ***********
-'''
-
 ######## ALPHABET LISTS ########
 alphabetASCII = [97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122]
 alphabetCHARACTER = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
@@ -84,10 +78,9 @@ ngramDitionaryEnglish = loadEnglishNgram()
 #                                                       TEXT MANIPULATION AND REPEATED USE FUNCTIONS - DO NOT EDIT
 #==============================================================================================================================================================
 
-class wordScore(object):
+class wordScore(object): # Finds and segments words so that they can be readable
     os.chdir(wordScoreDir)
     def __init__(self):
-        ''' load a file containing ngrams and counts, calculate log probabilities '''
         self.Pw = {}
         with open('1word_counts.txt', "r") as f:
             lines  = f.readlines()
@@ -158,15 +151,14 @@ def substitionKeyCipher(userCipherText,userKey): #maps a ciphertext to plaintext
         textPerm += 1
     return "".join(tx.convertToCHARACTER(switchedCipher))
 
-def characterFrequency(cipherText):
+def characterFrequency(cipherText): # finds the character frequency of a inputted ciphertext
     frequency = []
     for letter in alphabetCHARACTER: # Iterates through the alphabet 
         total = re.findall(letter,cipherText) # Find each of the occurances of a letter and puts them into list total
         frequency.append(len(total)) # finds the length of the list and appends it to another list 
     return frequency
 
-
-def characterFrequencyProbability(cipherText):
+def characterFrequencyProbability(cipherText): # fidn the character frequency of an inputted ciphertext in probability of it occuring in said text ( % )
     probability = []
     frequency = characterFrequency(cipherText)
     for n in frequency:
@@ -204,7 +196,7 @@ def chiSquaredStat(text): #String input which calculates the chi-squared statist
         alphaIndex += 1
     return sum(chiSquaredLIST)
 
-def ngramFitness(userCiperText):
+def ngramFitness(userCiperText): # Finds the ngram fitness score of a an inputted ciphertext
 
     def ngramExtraction(userCiperText): #Finds quadgrams from a ciphertext
         cipherText = list(userCiperText)
@@ -227,7 +219,7 @@ def ngramFitness(userCiperText):
             index += 1
         return quadramDitionaryCiphertext
     
-    quadramDitionaryCiphertext = ngramExtraction(userCiperText)
+    quadramDitionaryCiphertext = ngramExtraction(userCiperText) # compares and tallys up the ciphertexts extracted from the text to those of enlgish to give a score
     logAB = []
     probQuadgram = 0
     for index in quadramDitionaryCiphertext:
@@ -251,10 +243,10 @@ def relationToEnglishFrequency(cipherTextFrequency): # Finds the difference betw
     score = sum(lists)
     return round(score,10)
 
-def jsonCipherIn():
+def jsonCipherIn(): # allows for text files containing JSON strings to be inputted
     output = []
     os.chdir(outputFilesHere)
-    with open("output.txt", "r") as f:
+    with open("outputMonoalphabetic.txt", "r") as f:
         jsonIN = f.readlines()
         for i in jsonIN:
             x = json.loads(i)
@@ -304,7 +296,7 @@ def keyWordRandom(index): #Keyword key generator - filled in bit being random ch
             perms += 1
     return "".join(tx.convertToCHARACTER(key))
 
-def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alphabet
+def keyWordAlphabet(index): #Keyword key generator - filled in bit being the alphabet - keyed ceaser
     lenFreq = len(keyWords)
     if index > lenFreq - 1:
         index = index - ( ( index // lenFreq ) * lenFreq )
@@ -426,8 +418,9 @@ def frequencyKey(cipherTextToBeFREQQED): #Function to return the key with accord
         convertASCIIIndex += 1
     return "".join(tx.convertToCHARACTER(englishIndexOrderList)) #converts the ASCII index to a plaintext string key with 26 characters
 
-def iterativeSolving(cipherText,maxScore):
+def iterativeSolving(cipherText): # Hill climb function which iterates slowly through keys until a good match is found
     global keyIterations
+    maxScore = -99e9
     parentKey = list(randomKey()) #parentKey = randomKey()#frequencyKey(userCipherText) #parent Key is generated using frequency analysis
     deciphered = substitionKeyCipher(cipherText,"".join(parentKey))
     parentScore = ngramFitness(deciphered)
@@ -476,7 +469,6 @@ def manualKeySwitch(cipherText): # Allows users to manurally switch letters arou
 
 userKey = "abcdefghijklmnopqrstuvwxyz" #Sets a defult user key ~~~~WARNING~~~~ Wont show error if there is not a key generated as this one will take over ~~~~WARNING~~~~
 keyWordAlphabetIndex = keyWordRandomIndex = frequencyKeyIndex = randomKeyIndex = ceaserShifts = iterativeSolvingIndex = shiftNumber = REPLACEME123 = 0
-maxScoreIterative = -99e9
 
 #########  Turn each function on or off  #########
 
@@ -531,7 +523,7 @@ while True == False: #Loops the entire program
                 cipherOut = substitionKeyCipher(userCipher,userKey)
                 randomKeyIndex += 1
             elif iterativeSolvingStart == True: # Iterative key solving -- most efficient
-                userKey = iterativeSolving(userCipher,maxScoreIterative)
+                userKey = iterativeSolving(userCipher)
                 cipherOut = substitionKeyCipher(userCipher,userKey)
                 iterativeSolvingIndex += 1
             keyIterations += 1

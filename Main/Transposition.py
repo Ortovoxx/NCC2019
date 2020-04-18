@@ -8,6 +8,20 @@
 #
 #==============================================================================================================================================================
 
+#Modules to imports
+import random
+import os
+import math
+from math import log10
+import time
+import re
+import json
+import sys
+from itertools import permutations
+
+#Custom modules to import
+import textManipulation as tx
+
 # Change this so it navigates to the directory with the github "NCC2019" folder in -- Automatically in the C drive
 toNCC2019 = "/Users/Euan/Desktop"
 
@@ -28,20 +42,6 @@ userCipherNoFormatBypass = "pmpafxaikkitprdsikcplifhwceigixkirradfeirdgkipgigudk
 #==============================================================================================================================================================
 #                                                                  VARIABLES, CONSTANTS AND FORMATTING - DO NOT EDIT
 #==============================================================================================================================================================
-
-#Modules to imports
-import random
-import os
-import math
-from math import log10
-import time
-import re
-import json
-import sys
-from itertools import permutations
-
-#Custom modules to import
-import textManipulation as tx
 
 ######## ALPHABET LISTS ########
 alphabetASCII = [97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122]

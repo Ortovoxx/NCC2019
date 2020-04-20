@@ -196,20 +196,21 @@ def chiSquaredStat(text): #String input which calculates the chi-squared statist
         alphaIndex += 1
     return sum(chiSquaredLIST)
 
-def ngramFitness(userCiperText): # Finds the ngram fitness score of a an inputted ciphertext
+def ngramFitness(userCiperText):
 
     def ngramExtraction(userCiperText): #Finds quadgrams from a ciphertext
         cipherText = list(userCiperText)
         quadramDitionaryCiphertext = {}
         index = 0
         n = 4 # the n in ngram -  change to 2 for bigrams and 3 for trigrams etc
-        while index < len(cipherText) - (n - 1):
+        lenCipherText = len(cipherText)
+        x = (n - 1)
+        while index < lenCipherText - x:
             quadIndex = 0
             singleQuadgram = []
-            while quadIndex < n and index < len(cipherText):
-                if index + quadIndex < len(cipherText):
-                    quaterQuadgramChar = cipherText[index + quadIndex]
-                    singleQuadgram.append(quaterQuadgramChar)
+            while quadIndex < n and index < lenCipherText:
+                if index + quadIndex < lenCipherText:
+                    singleQuadgram.append(cipherText[index + quadIndex])
                     quadIndex += 1
             quad = "".join(singleQuadgram)
             if quad in quadramDitionaryCiphertext:
@@ -219,18 +220,13 @@ def ngramFitness(userCiperText): # Finds the ngram fitness score of a an inputte
             index += 1
         return quadramDitionaryCiphertext
     
-    quadramDitionaryCiphertext = ngramExtraction(userCiperText) # compares and tallys up the ciphertexts extracted from the text to those of enlgish to give a score
-    logAB = []
-    probQuadgram = 0
-    for index in quadramDitionaryCiphertext:
+    quadramDitionaryCiphertext = ngramExtraction(userCiperText)
+    logAB = 0
+    for index in quadramDitionaryCiphertext: # adds up all the log probabilities of the ciphertext to produce a final score
         if index in ngramDitionaryEnglish:
-            probQuadgram = ngramDitionaryEnglish[index]
-            loggedProbQuadgram = math.log10(probQuadgram)
-            logAB.append(loggedProbQuadgram)
+            logAB + math.log10(ngramDitionaryEnglish[index])
         else:
-            probQuadgram = 1e-50 #floors it as / 0 should be -infinity but that cannot be logged -- smaller this number bigger gap between english and non english
-            loggedProbQuadgram = math.log10(probQuadgram)
-            logAB.append(loggedProbQuadgram)
+            logAB - 10000 # log10 of a small positive number approaches -infinity // the bigger this number bigger gap between english and non english words
     return sum(logAB)
 
 def relationToEnglishFrequency(cipherTextFrequency): # Finds the difference between a ciphertext frequency ( % ) and english frequency and outputs a score 

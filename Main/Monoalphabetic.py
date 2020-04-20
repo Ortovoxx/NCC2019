@@ -227,7 +227,7 @@ def ngramFitness(userCiperText):
             logAB + math.log10(ngramDitionaryEnglish[index])
         else:
             logAB - 10000 # log10 of a small positive number approaches -infinity // the bigger this number bigger gap between english and non english words
-    return sum(logAB)
+    return logAB
 
 def relationToEnglishFrequency(cipherTextFrequency): # Finds the difference between a ciphertext frequency ( % ) and english frequency and outputs a score 
     index = 0

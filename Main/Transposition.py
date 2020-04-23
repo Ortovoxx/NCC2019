@@ -212,13 +212,13 @@ def ngramFitness(userCiperText):
         return quadramDitionaryCiphertext
     
     quadramDitionaryCiphertext = ngramExtraction(userCiperText)
-    logAB = 0
+    score = 0
     for index in quadramDitionaryCiphertext: # adds up all the log probabilities of the ciphertext to produce a final score
         if index in ngramDitionaryEnglish:
-            logAB + math.log10(ngramDitionaryEnglish[index])
+            score = score + math.log10(ngramDitionaryEnglish[index])
         else:
-            logAB - 10000 # log10 of a small positive number approaches -infinity // the bigger this number bigger gap between english and non english words
-    return logAB
+            score = score - 10000 # log10 of a small positive number approaches -infinity // the bigger this number bigger gap between english and non english words
+    return score
 
 def relationToEnglishFrequency(cipherTextFrequency): # Finds the difference between a ciphertext frequency ( % ) and english frequency and outputs a score 
     index = 0
@@ -349,6 +349,19 @@ def columnarTranspositionKeySolver(userCipherArray): # Takes columns and swithce
         horz = readOffHorizontal(list(perm))
         if ngramFitness(horz) > -3000:
             return horz
+
+class t():
+    def __init__(self):
+        pass
+
+    def start(self):
+        startTime = time.time()
+
+    def end(self):
+        endTime = time.time()
+
+    def difference(self):
+        pass
 
 #==============================================================================================================================================================
 #                                                   USER INPUT / OUTPUT                   MAIN PROGRAM

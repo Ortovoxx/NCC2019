@@ -221,13 +221,13 @@ def ngramFitness(userCiperText):
         return quadramDitionaryCiphertext
     
     quadramDitionaryCiphertext = ngramExtraction(userCiperText)
-    logAB = 0
+    score = 0
     for index in quadramDitionaryCiphertext: # adds up all the log probabilities of the ciphertext to produce a final score
         if index in ngramDitionaryEnglish:
-            logAB + math.log10(ngramDitionaryEnglish[index])
+            score = score + math.log10(ngramDitionaryEnglish[index])
         else:
-            logAB - 10000 # log10 of a small positive number approaches -infinity // the bigger this number bigger gap between english and non english words
-    return logAB
+            score = score - 10000 # log10 of a small positive number approaches -infinity // the bigger this number bigger gap between english and non english words
+    return score
 
 def relationToEnglishFrequency(cipherTextFrequency): # Finds the difference between a ciphertext frequency ( % ) and english frequency and outputs a score 
     index = 0
@@ -480,18 +480,18 @@ ceaserStart = False
 randomKeyStart = True
 
 # DECLARE USERCIPHER HERE AND COMMENT OUT THE USER INPUT IF YOU ARE WORKING ON THE SAME CIPHER
-ciphers = ["CSTW, T BX SABETYI HZ GMAEAY HZ GCABV MTHS WTGA XATHYAF. GSA MBG CBFH ZL HSA HABX MSZ GCWTH HSA BHZX BYE HZIAHSAF MTHS LFTGRS SBG MZFVAE ZJH HSA EAHBTWG ZL SZM TH MZFVG. GSA TG B OFTWWTBYH RSAXTGH BG MAWW BG B CSPGTRTGH BYE T BX SZCTYI GSA RBY GSAE GZXA WTISH ZY SZM WTVAWP TH TG HSBH HSBH ETA BWRSAXTGHAY RZJWE EAKAWZC B YJRWABF CZMAF IAYAFBHTZY GPGHAX LFZX HSA CFZRAGG.ZY HSA MBP OBRV, T CWBY HZ BWGZ KTGTH GZXA CAZCWA T VYZM TY YZFMBP. B YAM CZMAF GZJFRA MTWW OA ZL YZ JGA HZ HSA YBQTG MTHSZJH HSA FBM XBHAFTBWG LZF XBYJLBRHJFTYI, BYE B WZH ZL HSA XBUZF OBJNTHA GXAWHAFG TY AJFZCA BFA OBGAE TY HSA RZJYHFP. AKAY MTHSZJH B YAM GZJFRA ZL CZMAF HSA IAFXBY XTWTHBFP CWBYYAFG MTWW SBKA HSATF APA ZY GJCCWP WTYAG BYE HSA YZFMAITBY BWJXTYTJX RZXCBYTAG XJGH OA ZYA ZL HSATF CFTXA HBFIAHG. T HSZJISH T MZJWE EFZC TY BYE HFP HZ IAH B GAYGA ZL SZM MAWW EALAYEAE HSAGA CWBRAG BFA. HSAFA XBP BWFABEP SBKA OAAY BCCFZBRSAG LFZX IAFXBYP BG CBFH ZL HSATF BFXG OJTWE-JC BYE TH MZJWE OA IZZE HZ VYZM HSBH HZZ. TL HSA MZFGH SBCCAYG BYE YZFMBP TG TYKBEAE, HSAY T MBYH HZ SBKA GZXA BIAYHG BWFABEP AXOAEEAE TY HSA YBHTZYBW TYLFBGHFJRHJFA BYE MA YAAE HZ HSTYV BOZJH SZM MA MZJWE GARJFA RZXXJYTRBHTZYG TY BY ZRRJCTAE RZJYHFP. TL PZJ ZF HSA BIAYRP SBKA BYP RZYHBRHG HSAFA HSAY WAH XA VYZM. MTHS B WTHHWA WJRV T XBP AKAY IAH HZ GAA HSA YZFHSAFY WTISHG MSTWA T BX HSAFA."]
+ciphers = ["BTUXY KHUEU FFAYQ UFZQD ESDAG BIMEH QDKUZ FQDQE FUZSM ZPBMU PARRU ZMZGZ QJBQO FQPIM KMEKA GEGEB QOFQP ZGOXQ MDQZQ DSKTM EEQDU AGEBA FQZFU MXMZP FTQDQ MDQMZ GYNQD ARSDA GBEIA DWUZS FADQM XUEQF TMFAZ QARYQ UFZQD EOAXX MNADM FADET MENQQ ZUZOA ZFMOF IUFTM SDAGB ARPUE EUPQZ FSQDY MZEOU QZFUE FEOXA EQFAQ UZEFQ UZMZP FTQKT MHQNQ QZBME EUZSU ZFQXX USQZO QOAZO QDZUZ SFTQZ MLUZG OXQMD BDASD MYYQF AFTQE IQPUE TFQMY ITUXQ UIMEF TQDQA ZQARF TQUDO AZFMO FEUZN QDXUZ EYGSS XQPAG FMOAB KARMX QFFQD EQZFN KFTQE OUQZF UEFEV AAEMZ PTMZX QFAIU XTQXY PMYQE MFFTQ DQUOT EQDLU QTGZS EYUZU EFQDU GYUFA GFXUZ QEFTQ BAFQZ FUMXY UXUFM DKMBB XUOMF UAZEA RZGOX QMDQZ QDSKM ZPMBB MDQZF XKFTQ YUZUE FQDIM EEAUY BDQEE QPNKU FEOAZ FQZFE FTMFI UFTUZ MIQQW TQTMP OAZHQ ZQPMF ABXQH QXSDA GBFAP QHQXA BFTQU PQMEI UFTUZ UFFTQ NAEEF QMYUZ NQDXU ZTMHQ DMYBQ PGBYA ZUFAD UZSAR OAYYG ZUOMF UAZEF AMZPR DAYFT QYUZU EFDKM ZPFTQ YAEFB DAYUE UZSXQ MPUEF TQMFF MOTQP YQYAF TQQZH QXABQ IMEYM DWQPP UQMXO TQYUE FQZUM YZAFE GDQTA IRDQQ KAGMD QFAFD MHQXN GFUTM HQFAY QQFGB IUFTY KZQIZ ADIQS UMZRD UQZPE MZPFT QZTQM PNMOW FAQZS XMZPO AGXPK AGYAH QKAGD NMEQF ARDMZ OQMZP YMWQO AZFMO FIUFT EAYQA RAGDM XXUQE UFTUZ WIQET AGXPA BQZPU EOGEE UAZEI UFTFT QRDQZ OTYUZ UEFQD ARMDY MYQZF EIQMD QSAUZ SFAZQ QPTUE TQXBT MDDK"]
 
 #ciphers = jsonCipherIn() # comment out if just doing a single cipher
 
-while True == False: #Loops the entire program   
+while 1: #Loops the entire program   
     #userCipher = formatString((input(cipherSolverInputFormat)).lower()) # ensures all ciphertext given to functions is correclty formatted
     #########################################################
     #           Calling different deciphering functions
     #########################################################
     for userCipherNoFormat in ciphers:
         userCipher = tx.formatString((userCipherNoFormat).lower())
-        while keyIterations < 10000: # how many key iterations you want to spend on one cipher
+        while keyIterations < 10000000: # how many key iterations you want to spend on one cipher
             if ceaserStart == True: #Ceaser shifts done 26 times
                 userKey = ceaser("abcdefghijklmnopqrstuvwxyz", 26 - ceaserShifts)
                 cipherOut = ceaser(userCipher, ceaserShifts)

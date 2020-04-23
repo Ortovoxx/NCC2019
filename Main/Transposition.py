@@ -126,6 +126,28 @@ class wordScore(object):
         return " ".join(max(ends)[1]).lower()
 defrag = wordScore()
 
+class timer():
+    def __init__(self):
+        pass
+    
+    def start(self):
+        self.startTime = time.time()
+    
+    def end(self):
+        self.endTime = time.time()
+
+    def elapsed_S(self):
+        return round(self.endTime - self.startTime)
+    
+    def elapsed_MS(self):
+        return round((self.endTime - self.startTime)*1000)
+    
+    def elapsed_US(self):
+        return round((self.endTime - self.startTime)*1000000)
+
+    def elapsed_NS(self):
+        return round((self.endTime - self.startTime)*1000000000)
+
 def characterFrequency(encryptedText):
     frequencies = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     letter = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
@@ -350,18 +372,16 @@ def columnarTranspositionKeySolver(userCipherArray): # Takes columns and swithce
         if ngramFitness(horz) > -3000:
             return horz
 
-class t():
-    def __init__(self):
-        pass
 
-    def start(self):
-        startTime = time.time()
 
-    def end(self):
-        endTime = time.time()
+t = t()
+t.start()
+time.sleep(1)
+t.end()
 
-    def difference(self):
-        pass
+print(t.elapsed_NS())
+
+input("")
 
 #==============================================================================================================================================================
 #                                                   USER INPUT / OUTPUT                   MAIN PROGRAM
